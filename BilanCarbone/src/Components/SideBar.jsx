@@ -1,4 +1,4 @@
-import { MoreVertical, ChevronLast, ChevronFirst,ChevronDown, ChevronUp} from "lucide-react"
+import { MoreVertical, ChevronLast, ChevronFirst,ChevronDown} from "lucide-react"
 import {useState } from "react"
 import keycloak from '../KeycloakConfig/keycloak';
 const items = [
@@ -105,7 +105,7 @@ export default function Sidebar({ children }) {
           >
             <div className="leading-10">
               <span className="text-white">Bonjour, <span className="text-white font-bold text-xl ">{keycloak.tokenParsed?.preferred_username}</span></span> 
-              <button className=" text-black bg-white hover:bg-gray-300 rounded-md border-solid border-transparent px-2 py1" onClick={() => keycloak.logout()}>Déconnexion</button>
+              <button className=" text-black bg-white hover:bg-gray-300 rounded-md border-solid border-transparent px-2 py-1" onClick={() => keycloak.logout()}>Déconnexion</button>
             </div>
             <MoreVertical className="text-white" size={20}/>
           </div>

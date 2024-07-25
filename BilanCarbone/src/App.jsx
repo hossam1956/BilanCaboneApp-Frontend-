@@ -1,10 +1,11 @@
 import React from 'react';
 import { ReactKeycloakProvider, useKeycloak } from '@react-keycloak/web';
 import keycloak from './KeycloakConfig/keycloak';
-import { createBrowserRouter,RouterProvider } from 'react-router-dom';
+import { createBrowserRouter,Navigate,RouterProvider } from 'react-router-dom';
 import Dashboard from './Pages/Dashboard';
-import NavBar from './Components/SideBar';
+import LandingPage from "./Pages/LandingPage"
 import { LoaderCircle } from 'lucide-react';
+import RegisterPage from './Pages/RegisterPage';
 
 const App = () => {
   const { keycloak, initialized } = useKeycloak();
@@ -17,13 +18,24 @@ const App = () => {
     )
   }
 
-  if (!keycloak.authenticated) {
+  /*if (!keycloak.authenticated) {
     keycloak.login();
-  }
+    const token=keycloak.token
+    localStorage.setItem(token)
+    
+  }*/
   const router = createBrowserRouter([
     {
       path:"/",
-      element:<Dashboard/>
+      element:keycloak.authenticated ? <Navigate to="/dashboard"/> : <LandingPage/>
+    },
+    {
+      path:"/register",
+      element:keycloak.authenticated ? <Navigate to="/dashboard"/> : <RegisterPage/>
+    }
+    ,{
+      path:"/dashboard",
+      element:keycloak.authenticated ? <Dashboard/> : <Navigate to="/"/>
     }
   ])
 
