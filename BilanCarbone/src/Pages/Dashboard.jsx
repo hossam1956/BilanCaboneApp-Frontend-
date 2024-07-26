@@ -10,15 +10,9 @@ const Dashboard=()=>{
      <div>
         <div className="md:overflow-x-hidden flex justify-normal overflow-y-hidden h-full">
           <SideBar2/>
-          {/*<div className='flex flex-col mx-auto my-5'>
-            <div className='flex justify-around mb-3 '> 
-            <DiagCirculaire/>
-            <DiagBar/>
-            </div>
-            <DiagLigne/>
-          </div>*/}
+        
         </div>  
       </div>
     )
+
 }
-export default Dashboard

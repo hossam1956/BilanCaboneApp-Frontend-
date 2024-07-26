@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-export default{
+module.exports = {
   darkMode: ["class"],
   content: [
     './pages/**/*.{js,jsx}',
@@ -9,6 +9,7 @@ export default{
     "./index.html",
   ],
   prefix:"",
+
   theme: {
     container: {
       center: true,
