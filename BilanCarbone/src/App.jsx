@@ -2,6 +2,7 @@ import { Dashboard } from './Pages/Dashboard';
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Main from './Static/Main';
+import { Listfct } from './Pages/Facteur/Listfct';
 
 function App() {
   const router = createBrowserRouter([
@@ -17,7 +18,7 @@ function App() {
           path: "facteur",
           children: [
             {  index: true, 
-              //element:<Listfct/>
+              element:<Listfct/>
             },
             {
               path: "ajouter",
