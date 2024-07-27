@@ -2,39 +2,41 @@ import {
   Card,
   CardContent,
 } from "@/components/ui/card";
-
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
-import  List_Facteur  from "./Layout/List_Facteur";
+import List_Facteur from "./Layout/List_Facteur";
 import List_Type from "./Layout/List_Type";
+import { useSearchParams } from "react-router-dom";
 
 export function Listfct() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab = searchParams.get("type")=="tout"||searchParams.get("type")=="parent"||searchParams.get("type")=="hierarchie"?"type":"facteur";
 
   return (
-    <Tabs defaultValue="Facteur" className="w-full">
+    <Tabs defaultValue={activeTab} className="w-full">
       <TabsList className="grid w-full grid-cols-2 border-b">
-        <TabsTrigger value="Facteur" className="w-full text-center">
+        <TabsTrigger value="facteur" className="w-full text-center"  onClick={() => setSearchParams({})}>
           Facteur
         </TabsTrigger>
-        <TabsTrigger value="Type" className="w-full text-center">
+        <TabsTrigger value="type" className="w-full text-center" onClick={() => setSearchParams({ type: "tout" })}>
           Type
         </TabsTrigger>
-      </TabsList >
-      <TabsContent value="Facteur" >
+      </TabsList>
+      <TabsContent value="facteur">
         <Card className="w-full bg-slate-100">
           <CardContent>
-            <List_Facteur/>
+            <List_Facteur />
           </CardContent>
         </Card>
       </TabsContent>
-      <TabsContent value="Type" className="w-full">
-      <Card className="w-full bg-slate-100">
-      <CardContent>
-            <List_Type/>
+      <TabsContent value="type" className="w-full">
+        <Card className="w-full bg-slate-100">
+          <CardContent>
+            <List_Type />
           </CardContent>
         </Card>
       </TabsContent>

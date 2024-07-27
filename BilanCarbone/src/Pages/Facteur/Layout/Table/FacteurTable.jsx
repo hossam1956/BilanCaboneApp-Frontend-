@@ -24,7 +24,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 
-const FacteurTable = React.memo(({ Facteurs, loading, setSortConfig, sortConfig, handledeletesoft, handleactivate, handledesactivate }) => {
+const FacteurTable = ({ Facteurs, loading, setSortConfig, sortConfig, handledeletesoft, handleactivate, handledesactivate }) => {
     const [showDialog, setShowDialog] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
 
@@ -83,13 +83,13 @@ const FacteurTable = React.memo(({ Facteurs, loading, setSortConfig, sortConfig,
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="cursor-pointer w-48"><span onClick={() => requestSort('nom')}>Nom</span> {getIconFor('nom')}</TableHead>
-                        <TableHead className="cursor-pointer w-32"><span onClick={() => requestSort('unit')}>Unité</span> {getIconFor('unit')}</TableHead>
-                        <TableHead className="cursor-pointer hidden md:table-cell w-32"><span onClick={() => requestSort('emissionFactor')}>Émission</span> {getIconFor('emissionFactor')}</TableHead>
-                        <TableHead className="cursor-pointer hidden md:table-cell w-24">Type</TableHead>
-                        <TableHead className="cursor-pointer hidden md:table-cell w-32"><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
-                        <TableHead className="cursor-pointer hidden md:table-cell w-48"><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
-                        <TableHead className="w-32">Actions</TableHead>
+                        <TableHead className="text-center w-1/6 cursor-pointer "><span onClick={() => requestSort('nom')}>Nom</span> {getIconFor('nom')}</TableHead>
+                        <TableHead className="text-center w-1/6 cursor-pointer "><span onClick={() => requestSort('unit')}>Unité</span> {getIconFor('unit')}</TableHead>
+                        <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell "><span onClick={() => requestSort('emissionFactor')}>Émission</span> {getIconFor('emissionFactor')}</TableHead>
+                        <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell ">Type</TableHead>
+                        <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell "><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
+                        <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell "><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
+                        <TableHead className="text-center w-32">Actions</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -114,16 +114,16 @@ const FacteurTable = React.memo(({ Facteurs, loading, setSortConfig, sortConfig,
                     ) : (
                         Facteurs.content.map((item, index) => (
                             <TableRow key={index}>
-                                <TableCell className="font-medium">{item.nom_facteur}</TableCell>
-                                <TableCell>{item.unit}</TableCell>
-                                <TableCell className="hidden md:table-cell">{item.emissionFactor}</TableCell>
-                                <TableCell className="hidden md:table-cell">{item.type}</TableCell>
-                                <TableCell className="hidden sm:table-cell">
-                                    <Badge variant="outline" className={item.active ? "bg-green-600 text-white" : "bg-red-600 text-white"}>
+                                <TableCell className=" text-center font-medium">{item.nom_facteur}</TableCell>
+                                <TableCell className=" text-center font-medium">{item.unit}</TableCell>
+                                <TableCell className="text-center hidden md:table-cell">{item.emissionFactor}</TableCell>
+                                <TableCell className="text-center hidden md:table-cell">{item.parent_type}</TableCell>
+                                <TableCell className="text-center hidden sm:table-cell">
+                                    <Badge variant="outline" className={item.active ? "bg-green-600  text-white" : "bg-red-600 text-white"}>
                                         {item.active ? "Activer" : "Désactiver"}
                                     </Badge>
                                 </TableCell>
-                                <TableCell className="hidden md:table-cell">{item.creat_at}</TableCell>
+                                <TableCell className="text-center hidden md:table-cell">{item.creat_at}</TableCell>
                                 <TableCell>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
@@ -164,6 +164,6 @@ const FacteurTable = React.memo(({ Facteurs, loading, setSortConfig, sortConfig,
             </Dialog>
         </>
     );
-});
+};
 
-export default FacteurTable;
+export default React.memo(FacteurTable);

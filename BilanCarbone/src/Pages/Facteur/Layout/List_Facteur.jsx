@@ -23,7 +23,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from 'sonner';
-import FacteurTable from "./FacteurTable"; // Import the new table component
+import FacteurTable from "./Table/FacteurTable"; // Import the new table component
 
 const List_Facteur = () => {
   const [Facteurs, setFacteurs] = useState({ content: [] });
