@@ -1,18 +1,12 @@
-import SideBar from '../Composant/SideBar'
-import DiagCirculaire from '../Composant/DiagCirculaire'
-import DiagBar from '../Composant/DiagBar'
-import DiagLigne from '../Composant/DiagLigne'
-import Footer from '../Composant/Footer'
-import { SideBar2 } from '@/Composant/SideBar2'
+import Navbar from "@/Static/Navbar";
+import Navheader from "@/Static/Navheader";
 const Dashboard=()=>{
 
     return(
-     <div>
-        <div className="md:overflow-x-hidden flex justify-normal overflow-y-hidden h-full">
-          <SideBar2/>
-        
-        </div>  
+     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr]">
+      <h1>Dashboard</h1>
       </div>
     )
 
 }
+ export default Dashboard;

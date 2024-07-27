@@ -1,10 +1,12 @@
 import Navbar from "@/Static/Navbar";
-import Navheader from "@/Static/Navheader";
+import Navheader  from "@/Static/Navheader";
 import { Outlet } from "react-router-dom";
 import { Toaster } from 'sonner'
+import SearchProvider from "./SearchProvider";
 
 const Main = () => {
   return (
+    <SearchProvider>
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <Navbar />
       <div className="flex flex-col">
@@ -15,6 +17,7 @@ const Main = () => {
       </div>
       <Toaster richColors closeButton  />
       </div>
+    </SearchProvider>
   );
 };
 

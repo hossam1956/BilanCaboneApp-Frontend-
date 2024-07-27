@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-<<<<<<< HEAD
-=======
 
 @layer base {
   :root {
@@ -71,4 +69,3 @@
     @apply bg-background text-foreground;
   }
 }
->>>>>>> origin/feature/facteurs_globaux

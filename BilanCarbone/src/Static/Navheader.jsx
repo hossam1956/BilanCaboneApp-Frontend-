@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { createContext, useContext, useState } from "react";
 import {
   CircleUser,
   Home,
@@ -27,11 +27,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Link } from "react-router-dom";
+import keycloak from "@/KeycloakConfig/keycloak";
+import { SearchContext } from "./SearchProvider";
+
 
 const Navheader = () => {
   const [isFacteurOpen, setIsFacteurOpen] = useState(false);
   const [isCustomersOpen, setIsCustomersOpen] = useState(false);
   const [isEntrepriseOpen, setIsEntrepriseOpen] = useState(false);
+
+  const { searchValue, handleSearching } = useContext(SearchContext);
+
 
   const toggleAccordion = (section) => {
     if (section === "facteur") setIsFacteurOpen(!isFacteurOpen);
@@ -73,15 +79,6 @@ const Navheader = () => {
               <Home className="h-5 w-5" />
               Tableau de bord
             </Link>
-            <span
-              className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
-            >
-              <ShoppingCart className="h-5 w-5" />
-              -----------
-              <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                6
-              </Badge>
-            </span>
 
             <div>
               <button
@@ -222,8 +219,9 @@ const Navheader = () => {
           <div className="relative">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
+              onChange={handleSearching}
               type="search"
-              placeholder="Search products..."
+              placeholder="Que voulez vous ?"
               className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
             />
           </div>
@@ -242,11 +240,10 @@ const Navheader = () => {
           <DropdownMenuItem>Settings</DropdownMenuItem>
           <DropdownMenuItem>Support</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
+          <DropdownMenuItem onClick={()=>{keycloak.logout()}}>Logout</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>
   );
 };
-
-export default Navheader;
+export default Navheader
