@@ -240,7 +240,7 @@ const Navheader = () => {
           <DropdownMenuItem>Settings</DropdownMenuItem>
           <DropdownMenuItem>Support</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={()=>{keycloak.logout()}}>Logout</DropdownMenuItem>
+          <DropdownMenuItem onClick={()=>{keycloak.logout();sessionStorage.setItem('token', "");}}>Logout</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>

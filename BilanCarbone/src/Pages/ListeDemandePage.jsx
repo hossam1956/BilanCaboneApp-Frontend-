@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import {apiClient} from "../KeycloakConfig/KeycloakConn"
 import {
   Check,
   X
@@ -25,27 +26,109 @@ import {
   Tabs,
   TabsContent,
 } from "@/components/ui/tabs";
-import Navheader from "@/Static/Navheader";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationPrevious,
+  PaginationLink,
+  PaginationNext,
+  PaginationEllipsis,
+
+} from "@/components/ui/pagination";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 import { SearchContext } from "@/Static/SearchProvider";
 
 function ListDemandePage() {
 
     const [demandes,setDemandes]=useState([]);
     const { searchValue, handleSearching } = useContext(SearchContext);
+    const [pageNum,setPageNum]=useState(0);
+    const [totalElements,setTotalElements]=useState(8);
+    const [size,setSize]=useState(8);
+    const [totalPages,setTotalPages]=useState(1);
+    const [first,setFirst]=useState(true);
+    const [last,setLast]=useState(true);
+    const [currentId,setcurrentId]=useState(0)    
+    const [currentIdAccept,setCurrentIdAccept]=useState(0)
 
     useEffect(()=>{
-        axios.get(`http://localhost:8081/api/demande?search=${searchValue}`)
+        axios.get(`http://localhost:8081/api/demande?page=${pageNum}&size=${size}&search=${searchValue}`)
         .then((response)=>{
             setDemandes(response.data.content)
-
+            setPageNum(response.data.number)
+            setTotalElements(response.data.totalElements)
+            setSize(response.data.size)
+            setTotalPages(response.data.totalPages)
+            setFirst(response.data.first)
+            setLast(response.data.last)
         }
     )
         .catch((error)=>{
             console.error('erreur1'+error)
         }
     )
-    },[searchValue])
+    },[searchValue,size,pageNum])
 
+    //useEffect pour annulation:
+
+    useEffect(()=>{
+      if(currentId){
+        apiClient.delete(`http://localhost:8081/api/demande/reject?id=${currentId}`)
+        .then(window.location.reload())
+        .catch((error)=>{
+          console.error('erreur1'+error)
+            }
+          
+        )
+      }
+
+    },[currentId])
+
+    //useEffect pour acceptation:
+    useEffect(()=>{
+      if(currentIdAccept){
+        apiClient.delete(`http://localhost:8081/api/demande/accept?id=${currentIdAccept}`)
+        .then(window.location.reload())
+        .catch((error)=>{
+          console.error('erreur1'+error)
+            }
+          
+        )
+      }
+
+    },[currentIdAccept])
+
+    const handlePageChange = (page) => {
+      setPageNum(parseInt(page));
+    };
+    const handleChange = (value) => {
+      handleSize(parseInt(value));
+    };
+    const handleSize = (size) => {
+      setSize(size);
+    };
+  
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
@@ -84,27 +167,62 @@ function ListDemandePage() {
                     <TableBody>
                         {demandes.map(
                             (demande)=>{
-                                const {id,nomUtilisateur, username, email, entreprise, sendDate } = demande;
+                                const {id,nom,prenom,nomUtilisateur, email, entreprise, sendDate } = demande;
                                 return(
                                 <TableRow key={id}>
                                 <TableCell className="font-medium">
-                                    {nomUtilisateur}
+                                    {prenom} {nom}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
-                                    {username}
+                                    {nomUtilisateur}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
                                     {email}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
-                                    {entreprise}
+                                    Norsys Afrique
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
                                     {sendDate}
                                 </TableCell>
                                 <TableCell className="flex justify-around ">
+                                <AlertDialog className="overflow-y-auto overflow-x-auto">
+                                  <AlertDialogTrigger asChild>
                                     <Button className="bg-black hover:bg-green-700 text-xs w-16 h-6 md:h-8 md:w-24"><Check size={28} color="#ffffff" />Accepter</Button>
-                                    <Button className="bg-black hover:bg-red-600 text-xs w-16 h-6 md:h-8 md:w-24 mx-2 md:mx-1"><X size={16} color="#ffffff" />Refuser</Button>
+                                  </AlertDialogTrigger>
+                                  <AlertDialogContent className="w-screen">
+                                    <AlertDialogHeader>
+                                      <AlertDialogTitle>Etes-vous absolument sûr ?</AlertDialogTitle>
+                                      <AlertDialogDescription>
+                                        Cette action ne peut pas être annulée. Cela acceptera définitivement cette demande.                                      
+                                      </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                      <AlertDialogCancel>Annuler</AlertDialogCancel>
+                                      <AlertDialogAction className="bg-black hover:bg-green-700" onClick={()=>{setCurrentIdAccept(parseInt(id));console.log(currentIdAccept)}}>Accepter</AlertDialogAction>
+                                    </AlertDialogFooter>
+                                  </AlertDialogContent>
+                                </AlertDialog>
+                                
+                                <AlertDialog className="overflow-y-auto overflow-x-auto">
+                                  <AlertDialogTrigger asChild>
+                                    <Button className="bg-black hover:bg-red-600 text-xs w-16 h-6 md:h-8 md:w-24 mx-2 md:mx-1">
+                                      <X size={16} color="#ffffff" />Refuser
+                                    </Button>
+                                  </AlertDialogTrigger>
+                                  <AlertDialogContent className="w-screen">
+                                    <AlertDialogHeader>
+                                      <AlertDialogTitle>Etes-vous absolument sûr ?</AlertDialogTitle>
+                                      <AlertDialogDescription>
+                                        Cette action ne peut pas être annulée. Cela supprimera définitivement cette demande.                                      
+                                      </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                      <AlertDialogCancel>Annuler</AlertDialogCancel>
+                                      <AlertDialogAction className="bg-black hover:bg-red-600" onClick={()=>{setcurrentId(parseInt(id));console.log(currentId)}}>Refuser</AlertDialogAction>
+                                    </AlertDialogFooter>
+                                  </AlertDialogContent>
+                                </AlertDialog>                                
                                 </TableCell>
                               </TableRow>
                               )
@@ -117,13 +235,57 @@ function ListDemandePage() {
                 </CardContent>
                 <CardFooter>
                   <div className="text-xs text-muted-foreground">
-                    Showing <strong>1-10</strong> of <strong>32</strong>{" "}
-                    products
+                    Total Des  
+                    Elements: <strong>{totalElements}</strong>
                   </div>
+                  <Select onValueChange={handleChange}>
+                    <SelectTrigger className="w-48 md=w-100">
+                      <SelectValue placeholder="Select..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Nombre Elements:</SelectLabel>
+                        <SelectItem value="2" >2</SelectItem>
+                        <SelectItem value="4" >4</SelectItem>
+                        <SelectItem value="16">16</SelectItem>
+                        <SelectItem value="24">24</SelectItem>
+                        <SelectItem value="50">50</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  <Pagination>
+                    
+                  <PaginationContent>
+
+                    <PaginationItem>
+                      <PaginationPrevious href="#" onClick={() => !first ? handlePageChange(pageNum-1):""}/>
+                    </PaginationItem>
+                     
+                      {
+                        [...Array(totalPages)].map((_, pageIndex) =>
+                        { 
+                        return(
+
+                            <PaginationItem key={pageIndex}>
+                              <PaginationLink href="#" onClick={() => handlePageChange(pageIndex)}>{pageIndex + 1}</PaginationLink>
+                            </PaginationItem>
+                           
+                          )
+                        }
+                        )
+                        
+                      }
+                    <PaginationItem>
+                          <PaginationNext href="#" onClick={() => !last ? handlePageChange(pageNum+1):""} />
+                    </PaginationItem>
+
+                  </PaginationContent>
+
+                </Pagination>
                 </CardFooter>
               </Card>
             </TabsContent>
-          </Tabs>
+          </Tabs>    
         </main>
       </div>
     </div>
@@ -131,3 +293,6 @@ function ListDemandePage() {
 
 }
 export default ListDemandePage
+
+
+//setcurrentId(parseInt(id))

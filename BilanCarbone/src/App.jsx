@@ -20,12 +20,9 @@ const App = () => {
     )
   }
 
-  /*if (!keycloak.authenticated) {
-    keycloak.login();
-    const token=keycloak.token
-    localStorage.setItem(token)
-    
-  }*/
+  if (keycloak.authenticated) {
+    sessionStorage.setItem('token', keycloak.token);
+  }
   const router = createBrowserRouter([
     {
       path:"/welcome",
