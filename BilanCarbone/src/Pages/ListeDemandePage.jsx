@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import {apiClient} from "../KeycloakConfig/KeycloakConn"
 import {
   Check,
-  X
+  X,
+  Terminal
 } from "lucide-react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
@@ -33,9 +34,13 @@ import {
   PaginationPrevious,
   PaginationLink,
   PaginationNext,
-  PaginationEllipsis,
 
 } from "@/components/ui/pagination";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert"
 import {
   Select,
   SelectContent,
@@ -71,6 +76,7 @@ function ListDemandePage() {
     const [last,setLast]=useState(true);
     const [currentId,setcurrentId]=useState(0)    
     const [currentIdAccept,setCurrentIdAccept]=useState(0)
+    const [alert,setAlert]=useState(false)
 
     useEffect(()=>{
         axios.get(`http://localhost:8081/api/demande?page=${pageNum}&size=${size}&search=${searchValue}`)
@@ -85,7 +91,7 @@ function ListDemandePage() {
         }
     )
         .catch((error)=>{
-            console.error('erreur1'+error)
+          console.error('Erreur : '+error)
         }
     )
     },[searchValue,size,pageNum])
@@ -94,30 +100,60 @@ function ListDemandePage() {
 
     useEffect(()=>{
       if(currentId){
-        apiClient.delete(`http://localhost:8081/api/demande/reject?id=${currentId}`)
-        .then(window.location.reload())
-        .catch((error)=>{
-          console.error('erreur1'+error)
-            }
-          
-        )
-      }
+        try{
+          const response =apiClient.delete(`demande/reject`,{
+            params:{id: currentId}
+          })
+          window.location.reload()
+        }
+        catch (error) {
+          console.error(error)
+        }finally {
+          setCurrentIdAccept(0);
+        }
 
+      }
+      
     },[currentId])
-
-    //useEffect pour acceptation:
-    useEffect(()=>{
-      if(currentIdAccept){
-        apiClient.delete(`http://localhost:8081/api/demande/accept?id=${currentIdAccept}`)
-        .then(window.location.reload())
-        .catch((error)=>{
-          console.error('erreur1'+error)
+     //useEffect pour acceptation:
+    useEffect(() => {
+      const acceptDemande = async () => {
+        if (currentIdAccept) {
+          try {
+            const response = await apiClient.delete(`/demande/accept`, {
+              params: { id: currentIdAccept }
+            });
+            if(response.data === true){
+              window.location.reload() 
+              
             }
-          
-        )
-      }
+            else{
+                setAlert(true)
+                console.log(alert)
+            }
+          } catch (error) {
+            console.error(error)
+          }finally {
+            setCurrentIdAccept(0);
+          }
+        }
+      };
+  
+      acceptDemande();
+    }, [currentIdAccept]);
 
-    },[currentIdAccept])
+    useEffect(() => {
+      if (alert) {
+        const timer = setTimeout(() => {
+          setAlert(false);
+        }, 4000);
+  
+        return () => {clearTimeout(timer)}
+      }
+    }, [alert]);
+    
+   
+ 
 
     const handlePageChange = (page) => {
       setPageNum(parseInt(page));
@@ -199,7 +235,7 @@ function ListDemandePage() {
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                       <AlertDialogCancel>Annuler</AlertDialogCancel>
-                                      <AlertDialogAction className="bg-black hover:bg-green-700" onClick={()=>{setCurrentIdAccept(parseInt(id));console.log(currentIdAccept)}}>Accepter</AlertDialogAction>
+                                      <AlertDialogAction className="bg-black hover:bg-green-700" onClick={()=>{setCurrentIdAccept(parseInt(id))}}>Accepter</AlertDialogAction>
                                     </AlertDialogFooter>
                                   </AlertDialogContent>
                                 </AlertDialog>
@@ -229,7 +265,7 @@ function ListDemandePage() {
                             }
                         )
                     }
-
+                    
                     </TableBody>
                   </Table>
                 </CardContent>
@@ -288,6 +324,17 @@ function ListDemandePage() {
           </Tabs>    
         </main>
       </div>
+     
+      {alert && (      <div className="fixed top-4 right-4 w-60 z-10 transition-transform transform translate-x-0">
+                      <Alert className="bg-red-400">
+                        <Terminal className="h-4 w-3" />
+                        <AlertTitle>Attention!</AlertTitle>
+                        <AlertDescription>
+                          Il ya un problème au niveau d'acceptation de la demande peut être ce email existe déja.
+                        </AlertDescription>
+                      </Alert>
+                      </div>)}
+        
     </div>
   )
 
@@ -295,4 +342,3 @@ function ListDemandePage() {
 export default ListDemandePage
 
 
-//setcurrentId(parseInt(id))
