@@ -7,7 +7,7 @@ import {
   ClipboardList,
   Package2,
   Search,
-  ShoppingCart,
+  Send,
   Users,
   PlusCircle,
   List,
@@ -142,26 +142,26 @@ const Navheader = () => {
                     transition={{ duration: 0.3 }}
                     className="pl-6 mt-2 overflow-hidden"
                   >
-                    <Link
-                      to="/customers/add"
+                     <Link
+                      to="/"
                       className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                     >
                       <PlusCircle className="h-4 w-4" />
-                      ajouter Utilisateur
+                      ajouter un Utilisateur
                     </Link>
                     <Link
-                      to="/customers"
+                      to="/"
                       className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                     >
                       <List className="h-4 w-4" />
-                      List Utilisateur
+                      Liste des Utilisateurs
                     </Link>
                     <Link
-                      to="/customers/trash"
+                      to="/utilisateur/demandes"
                       className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                     >
-                      <Trash2 className="h-4 w-4" />
-                      poubelle
+                      <Send className="h-4 w-4" />
+                      Liste des demandes
                     </Link>
                   </motion.div>
                 )}
@@ -235,10 +235,9 @@ const Navheader = () => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel>{keycloak.tokenParsed.preferred_username}</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Support</DropdownMenuItem>
+          <DropdownMenuItem>Parametres</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={()=>{keycloak.logout();sessionStorage.setItem('token', "");}}>Logout</DropdownMenuItem>
         </DropdownMenuContent>

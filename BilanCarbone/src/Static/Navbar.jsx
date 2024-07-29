@@ -2,7 +2,7 @@ import { useState } from "react";
 import {
   Home,
   Package2,
-  ShoppingCart,
+  Send,
   Users,
   ClipboardList,
   Building2,
@@ -111,31 +111,24 @@ const Navbar = () => {
                     className="pl-6 mt-2 overflow-hidden"
                   >
                     <Link
-                      to="/customers/add" // Example path
+                      to="/"
                       className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                     >
                       <PlusCircle className="h-4 w-4" />
-                      ajouter Utilisateur
+                      ajouter un Utilisateur
                     </Link>
                     <Link
-                      to="/customers"
+                      to="/"
                       className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                     >
                       <List className="h-4 w-4" />
-                      List Utilisateurs
-                    </Link>
-                    <Link
-                      to="/customers/trash" // Example path
-                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                      déchets
+                      Liste des Utilisateurs
                     </Link>
                     <Link
                       to="/utilisateur/demandes"
                       className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                     >
-                      <List className="h-4 w-4" />
+                      <Send className="h-4 w-4" />
                       Liste des demandes
                     </Link>
                   </motion.div>
