@@ -253,7 +253,11 @@ function ListeUtilisateur() {
                     <PaginationItem>
                       <PaginationPrevious href="#" onClick={
                         () =>{
-                          !first ? handlePageChange(pageNum-1):""
+                          if(!first){
+                            handlePageChange(pageNum-1)
+                            setPageClicked(pageNum)
+                          }
+                          
                         } 
                         }/>
                     </PaginationItem>
@@ -264,9 +268,9 @@ function ListeUtilisateur() {
                         {
                         
                         return(
-                          refreshPage &&( 
+                          ( 
                             <PaginationItem key={pageIndex}>
-                              <PaginationLink href="#"  onClick={() => {handlePageChange(pageIndex);setPageClicked(pageIndex)}} className={pageClicked==pageIndex? "bg-custom-color": ""}>{pageIndex + 1}</PaginationLink>
+                              <PaginationLink href="#"  onClick={() => {handlePageChange(pageIndex);setPageClicked(pageIndex)}} className={pageClicked==pageIndex && pageClicked == pageNum? "bg-custom-color": ""}>{pageIndex + 1}</PaginationLink>
                             </PaginationItem>)
                            
                           )
@@ -280,9 +284,7 @@ function ListeUtilisateur() {
                         onClick={() => {
                           if (pageNum < totalPages - 1) {
                             handlePageChange(pageNum + 1);
-                            setPageClicked(pageNum);
-                            setRefreshPage(!!refreshPage)
-                            console.log(pageNum)
+                            setPageClicked(pageNum)
                           }
                         }}
                       />

@@ -77,6 +77,8 @@ function ListDemandePage() {
     const [currentId,setcurrentId]=useState(0)    
     const [currentIdAccept,setCurrentIdAccept]=useState(0)
     const [alert,setAlert]=useState(false)
+    const [pageClicked,setPageClicked]=useState(0)
+
 
     useEffect(()=>{
       
@@ -306,17 +308,27 @@ function ListDemandePage() {
                   <PaginationContent>
 
                     <PaginationItem>
-                      <PaginationPrevious href="#" onClick={() => !first ? handlePageChange(pageNum-1):""}/>
+                      <PaginationPrevious href="#" onClick={
+                        () =>{
+                          if(!first){
+                            handlePageChange(pageNum-1)
+                            setPageClicked(pageNum)
+                          }
+                          
+                        } 
+                        }/>
                     </PaginationItem>
                      
                       {
+                        
                         [...Array(totalPages)].map((_, pageIndex) =>
-                        { 
+                        {
+                        
                         return(
-
+                           ( 
                             <PaginationItem key={pageIndex}>
-                              <PaginationLink href="#" onClick={() => handlePageChange(pageIndex)}>{pageIndex + 1}</PaginationLink>
-                            </PaginationItem>
+                              <PaginationLink href="#"  onClick={() => {handlePageChange(pageIndex);setPageClicked(pageIndex)}} className={pageClicked==pageIndex && pageClicked == pageNum? "bg-custom-color": ""}>{pageIndex + 1}</PaginationLink>
+                            </PaginationItem>)
                            
                           )
                         }
@@ -324,7 +336,15 @@ function ListDemandePage() {
                         
                       }
                     <PaginationItem>
-                          <PaginationNext href="#" onClick={() => !(pageNum==totalPages-1) ? handlePageChange(pageNum+1):""} />
+                    <PaginationNext
+                        href="#"
+                        onClick={() => {
+                          if (pageNum < totalPages - 1) {
+                            handlePageChange(pageNum + 1);
+                            setPageClicked(pageNum)
+                          }
+                        }}
+                      />
                     </PaginationItem>
 
                   </PaginationContent>
