@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronLeft } from 'lucide-react'; // Ensure this import is correct and lucide-react is installed
+import { ChevronLeft } from 'lucide-react'; 
 
 const RegisterPage = () => {
   return (

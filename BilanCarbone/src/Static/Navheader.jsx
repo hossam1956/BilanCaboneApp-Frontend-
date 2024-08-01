@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   CircleUser,
   Home,
@@ -32,6 +33,7 @@ import { SearchContext } from "./SearchProvider";
 
 
 const Navheader = () => {
+  const navigate=useNavigate()
   const [isFacteurOpen, setIsFacteurOpen] = useState(false);
   const [isCustomersOpen, setIsCustomersOpen] = useState(false);
   const [isEntrepriseOpen, setIsEntrepriseOpen] = useState(false);
@@ -237,7 +239,7 @@ const Navheader = () => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>{keycloak.tokenParsed.preferred_username}</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Parametres</DropdownMenuItem>
+          <DropdownMenuItem onClick={()=>{navigate("parameter")}}>Parametres</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={()=>{keycloak.logout();sessionStorage.setItem('token', "");}}>Logout</DropdownMenuItem>
         </DropdownMenuContent>

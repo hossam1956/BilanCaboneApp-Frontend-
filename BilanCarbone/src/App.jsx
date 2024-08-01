@@ -8,6 +8,8 @@ import { LoaderCircle } from 'lucide-react';
 import RegisterPage from './Pages/RegisterPage';
 import Main from './Static/Main';
 import ListDemandePage from './Pages/ListeDemandePage';
+import ParametresPages from './Pages/ParametresPage';
+import ListeUtilisateur from './Pages/ListeUtilisateur';
 
 const App = () => {
   const { keycloak, initialized } = useKeycloak();
@@ -20,9 +22,11 @@ const App = () => {
     )
   }
 
-  if (keycloak.authenticated) {
-    sessionStorage.setItem('token', keycloak.token);
-  }
+ 
+    
+  if(keycloak.authenticated){
+    sessionStorage.setItem('token',keycloak.token)
+}
   const router = createBrowserRouter([
     {
       path:"/welcome",
@@ -41,8 +45,16 @@ const App = () => {
             element:<Dashboard/>
         },
         {
+          path:"parameter",
+          element:<ParametresPages/>
+        },
+        {
           path:"utilisateur",
           children:[
+            { 
+              path:"liste",
+              element:<ListeUtilisateur/>
+            },
             { 
               path:"demandes",
               element:<ListDemandePage/>

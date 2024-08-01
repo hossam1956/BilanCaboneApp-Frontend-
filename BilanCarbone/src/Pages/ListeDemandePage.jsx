@@ -79,21 +79,32 @@ function ListDemandePage() {
     const [alert,setAlert]=useState(false)
 
     useEffect(()=>{
-        axios.get(`http://localhost:8081/api/demande?page=${pageNum}&size=${size}&search=${searchValue}`)
-        .then((response)=>{
-            setDemandes(response.data.content)
-            setPageNum(response.data.number)
-            setTotalElements(response.data.totalElements)
-            setSize(response.data.size)
-            setTotalPages(response.data.totalPages)
-            setFirst(response.data.first)
-            setLast(response.data.last)
-        }
-    )
-        .catch((error)=>{
-          console.error('Erreur : '+error)
-        }
-    )
+      
+      const getAllDemande=async()=>{
+        try{
+          const response=await apiClient.get(`/demande`,{
+            params:{
+              page:pageNum,
+              size:size,
+              search:searchValue
+            }
+  
+          })
+          console.log(response.data)
+              setDemandes(response.data.content)
+              setPageNum(response.data.number)
+              setTotalElements(response.data.totalElements)
+              setSize(response.data.size)
+              setTotalPages(response.data.totalPages)
+              setFirst(response.data.first)
+              setLast(response.data.last)
+         }
+        catch(error){
+            window.location.reload();   
+            console.error('Erreur : '+error)
+          }
+      }
+        getAllDemande()
     },[searchValue,size,pageNum])
 
     //useEffect pour annulation:
@@ -133,6 +144,7 @@ function ListDemandePage() {
             }
           } catch (error) {
             console.error(error)
+            setAlert(true)
           }finally {
             setCurrentIdAccept(0);
           }
@@ -312,7 +324,7 @@ function ListDemandePage() {
                         
                       }
                     <PaginationItem>
-                          <PaginationNext href="#" onClick={() => !last ? handlePageChange(pageNum+1):""} />
+                          <PaginationNext href="#" onClick={() => !(pageNum==totalPages-1) ? handlePageChange(pageNum+1):""} />
                     </PaginationItem>
 
                   </PaginationContent>
@@ -330,7 +342,7 @@ function ListDemandePage() {
                         <Terminal className="h-4 w-3" />
                         <AlertTitle>Attention!</AlertTitle>
                         <AlertDescription>
-                          Il ya un problème au niveau d'acceptation de la demande peut être ce email existe déja.
+                          Il ya un problème au niveau d'acceptation de la demande peut être ce email existe déja ou le nom d'utilisateur est invalide.
                         </AlertDescription>
                       </Alert>
                       </div>)}
