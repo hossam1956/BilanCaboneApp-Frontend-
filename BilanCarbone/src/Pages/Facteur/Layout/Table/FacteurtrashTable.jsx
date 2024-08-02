@@ -23,11 +23,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
-import { Link, useNavigate } from "react-router-dom";
 
-const FacteurTable = ({ Facteurs, loading, setSortConfig, sortConfig, handledeletesoft, handleactivate, handledesactivate }) => {
+const FacteurtrashTable = (
+    { Facteurs, loading, setSortConfig, sortConfig,handledestroy,handlerecovery }) => {
     const [showDialog, setShowDialog] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
+    const [showDialogreco, setShowDialogreco] = useState(false);
+
 
     const deletesort = (key) => {
         setSortConfig(prevConfig => prevConfig.filter(e => e.key !== key));
@@ -73,17 +75,24 @@ const FacteurTable = ({ Facteurs, loading, setSortConfig, sortConfig, handledele
 
     const confirmDelete = () => {
         if (selectedItem) {
-            handledeletesoft(selectedItem.id, selectedItem.nom_facteur);
+            handledestroy(selectedItem.id, selectedItem.nom_facteur);
         }
         setShowDialog(false);
         setSelectedItem(null);
     };
-    const navigate = useNavigate();
 
-    const handle_affichage=(id)=>{
-        navigate('/facteur/'+id);
+    const handleDeleteClickreco = (item) => {
+        setSelectedItem(item);
+        setShowDialogreco(true);
+    };
 
-    }
+    const confirmreco = () => {
+        if (selectedItem) {
+            handlerecovery(selectedItem.id, selectedItem.nom_facteur);
+        }
+        setShowDialogreco(false);
+        setSelectedItem(null);
+    };
 
     return (
         <>
@@ -96,6 +105,7 @@ const FacteurTable = ({ Facteurs, loading, setSortConfig, sortConfig, handledele
                         <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell ">Type</TableHead>
                         <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell "><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
                         <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell "><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
+                        <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell "><span onClick={() => requestSort('isDeleted')}>supprimé a</span> {getIconFor('isDeleted')}</TableHead>
                         <TableHead className="text-center w-32">Actions</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -121,10 +131,7 @@ const FacteurTable = ({ Facteurs, loading, setSortConfig, sortConfig, handledele
                     ) : (
                         Facteurs.content.map((item, index) => (
                             <TableRow key={index}>
-                                <TableCell className=" text-center font-medium">
-                                    
-                                    <Link to={"/facteur/"+item.type}>{item.nom_facteur}</Link>
-                                    </TableCell>
+                                <TableCell className=" text-center font-medium">{item.nom_facteur}</TableCell>
                                 <TableCell className=" text-center font-medium">{item.unit}</TableCell>
                                 <TableCell className="text-center hidden md:table-cell">{item.emissionFactor}</TableCell>
                                 <TableCell className="text-center hidden md:table-cell">{item.parent_type}</TableCell>
@@ -134,6 +141,7 @@ const FacteurTable = ({ Facteurs, loading, setSortConfig, sortConfig, handledele
                                     </Badge>
                                 </TableCell>
                                 <TableCell className="text-center hidden md:table-cell">{item.creat_at}</TableCell>
+                                <TableCell className="text-center hidden md:table-cell">{item.deleted}</TableCell>
                                 <TableCell>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
@@ -143,13 +151,8 @@ const FacteurTable = ({ Facteurs, loading, setSortConfig, sortConfig, handledele
                                             </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end" className="w-48">
-                                            <DropdownMenuItem className="text-blue-600" onClick={()=>{handle_affichage(item.type)}}>Afficher</DropdownMenuItem>
-                                            {item.active ? (
-                                                <DropdownMenuItem onClick={() => handledesactivate(item.id, item.nom_facteur)} className="text-red-950">Désactiver</DropdownMenuItem>
-                                            ) : (
-                                                <DropdownMenuItem onClick={() => handleactivate(item.id, item.nom_facteur)} className="text-green-600">Activer</DropdownMenuItem>
-                                            )}
-                                            <DropdownMenuItem onClick={() => handleDeleteClick(item)} className="text-red-600">Supprimer</DropdownMenuItem>
+                                            <DropdownMenuItem className="text-blue-600" onClick={() => handleDeleteClickreco(item)}>récupéree</DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => handleDeleteClick(item)} className="text-red-600">détruit</DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>
@@ -163,11 +166,23 @@ const FacteurTable = ({ Facteurs, loading, setSortConfig, sortConfig, handledele
                 <DialogContent>
                     <DialogTitle>Confirmer la suppression</DialogTitle>
                     <DialogDescription>
-                    Êtes-vous sûr de bien vouloir supprimer cet élément?    
+                    Êtes-vous sûr de bien vouloir détruit cet élément?    
                                     </DialogDescription>
                     <DialogFooter>
                         <Button onClick={() => setShowDialog(false)}>Annuler</Button>
-                        <Button variant="destructive" onClick={confirmDelete}>Supprimer</Button>
+                        <Button variant="destructive" onClick={confirmDelete}>détruit</Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+            <Dialog open={showDialogreco} onOpenChange={setShowDialogreco}>
+                <DialogContent>
+                    <DialogTitle>Confirmer la récupération</DialogTitle>
+                    <DialogDescription>
+                    Êtes-vous sûr de bien vouloir récupéree cet élément?    
+                                    </DialogDescription>
+                    <DialogFooter>
+                        <Button onClick={() => setShowDialogreco(false)}>Annuler</Button>
+                        <Button className="bg-green-900 text-white hover:bg-teal-950 "  onClick={confirmreco}>récupération</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
@@ -175,4 +190,4 @@ const FacteurTable = ({ Facteurs, loading, setSortConfig, sortConfig, handledele
     );
 };
 
-export default React.memo(FacteurTable);
+export default React.memo(FacteurtrashTable);

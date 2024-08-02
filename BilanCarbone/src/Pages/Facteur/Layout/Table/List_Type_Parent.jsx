@@ -33,6 +33,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const List_Type_Parent =({data, 
 loading, 
@@ -41,7 +42,7 @@ requestSort,
 handlePageChange, 
 currentPage, 
 setSortConfig, 
-handledeletesoft, 
+handleDelete, 
 handleactivate, 
 handledesactivate 
 }) => {
@@ -82,7 +83,7 @@ const handleActivationClick = (item) => {
 
 const confirmDelete = () => {
   if (selectedItem) {
-    handledeletesoft(selectedItem.id, selectedItem.nom_facteur);
+    handleDelete(selectedItem.id, selectedItem.nom_facteur);
   }
   setShowDeleteDialog(false);
   setSelectedItem(null);
@@ -95,6 +96,11 @@ const confirmActivation = (toggle) => {
   setShowActivateDialog(false);
   setSelectedItem(null);
 };
+const navigate = useNavigate();
+const handle_affichage=(id)=>{
+  navigate('/facteur/'+id);
+
+}
 
 return (
   <Card className="w-full">
@@ -128,7 +134,7 @@ return (
           ) : (
             data.content.map((item, index) => (
               <TableRow key={index}>
-                <TableCell className="text-center font-medium">{item.nom_type}</TableCell>
+                <TableCell className="text-center font-medium"><Link to={"/facteur/"+item.id}>{item.nom_type}</Link></TableCell>
                 <TableCell className="text-center hidden sm:table-cell">
                   <Badge variant="outline" className={item.active ? "bg-green-600 text-white" : "bg-red-600 text-white"}>
                     {item.active ? "Activer" : "Désactiver"}
@@ -144,8 +150,7 @@ return (
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">
-                      <DropdownMenuItem className="text-blue-600">Afficher</DropdownMenuItem>
-                      <DropdownMenuItem className="text-orange-600">Modifier</DropdownMenuItem>
+                      <DropdownMenuItem className="text-blue-600" onClick={()=>{handle_affichage(item.id)}}>Afficher</DropdownMenuItem>
                       {item.active ? (
                         <DropdownMenuItem onClick={() => handledesactivate(item.id, item.nom_facteur)} className="text-red-950">Désactiver</DropdownMenuItem>
                       ) : (

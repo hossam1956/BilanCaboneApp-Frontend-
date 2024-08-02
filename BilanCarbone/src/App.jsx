@@ -1,8 +1,11 @@
 import { Dashboard } from './Pages/Dashboard';
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Main from './Static/Main';
+import { Addfct } from './Pages/Facteur/Addfct';
 import { Listfct } from './Pages/Facteur/Listfct';
+import Trashfct from './Pages/Facteur/Trashfct';
+import Main from './Static/Main';
+import Affichagefct from './Pages/Facteur/Affichagefct';
 
 function App() {
   const router = createBrowserRouter([
@@ -21,12 +24,16 @@ function App() {
               element:<Listfct/>
             },
             {
+              path: ":id",
+              element: <Affichagefct/>,
+            },
+            {
               path: "ajouter",
-             // element: <Addfct />,
+              element: <Addfct />,
             },
             {
               path: "trash",
-              //element: <Trashfct />,
+              element: <Trashfct />,
             },
           ],
         },

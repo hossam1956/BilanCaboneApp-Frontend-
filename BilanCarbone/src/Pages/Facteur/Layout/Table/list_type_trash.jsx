@@ -10,11 +10,7 @@ import {
 import {
   MoreHorizontal, ChevronDown, CircleX, ChevronUp
 } from "lucide-react";
-import {
-  CardFooter,
-  CardContent,
-  Card,
-} from "@/components/ui/card";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -22,34 +18,24 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationPrevious,
-  PaginationLink,
-  PaginationNext,
-} from "@/components/ui/pagination";
+
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-const ListTypeAll = ({ 
+const list_type_trash = ({ 
   data, 
   loading, 
   sortConfig, 
-  requestSort, 
-  handlePageChange, 
-  currentPage, 
   setSortConfig, 
-  handleDelete, 
-  handleactivate, 
-  handledesactivate 
+  handledestroy,
+  handlerecovery
 }) => {
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [showActivateDialog, setShowActivateDialog] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
+    const [showDialog, setShowDialog] = useState(false);
+    const [selectedItem, setSelectedItem] = useState(null);
+    const [showDialogreco, setShowDialogreco] = useState(false);
+
 
   const deleteSort = (key) => {
     setSortConfig(prevConfig => prevConfig.filter(e => e.key !== key));
@@ -72,39 +58,47 @@ const ListTypeAll = ({
     );
   };
 
+  const requestSort = key => {
+    setSortConfig(prevConfig => {
+        const existingConfigIndex = prevConfig.findIndex(e => e.key === key);
+        let newConfig = [...prevConfig];
+
+        if (existingConfigIndex !== -1) {
+            let direction = newConfig[existingConfigIndex].direction === 'asc' ? 'desc' : 'asc';
+            newConfig[existingConfigIndex] = { key, direction };
+        } else {
+            newConfig.push({ key, direction: 'asc' });
+        }
+        return newConfig;
+    });
+};
+  
   const handleDeleteClick = (item) => {
     setSelectedItem(item);
-    setShowDeleteDialog(true);
-  };
-  
-  const handleActivationClick = (item) => {
-    setSelectedItem(item);
-    setShowActivateDialog(true);
-  };
+    setShowDialog(true);
+};
 
   const confirmDelete = () => {
     if (selectedItem) {
-      handleDelete(selectedItem.id, selectedItem.nom_facteur);
+        handledestroy(selectedItem.id, selectedItem.nom_facteur);
     }
-    setShowDeleteDialog(false);
+    setShowDialog(false);
     setSelectedItem(null);
-  };
+};
 
-  const confirmActivation = (toggle) => {
+  const handleDeleteClickreco = (item) => {
+    setSelectedItem(item);
+    setShowDialogreco(true);
+};
+  const confirmreco = () => {
     if (selectedItem) {
-      handleactivate(selectedItem.id, selectedItem.nom_facteur, toggle ? "all=true" : "");
+        handlerecovery(selectedItem.id, selectedItem.nom_facteur);
     }
-    setShowActivateDialog(false);
+    setShowDialogreco(false);
     setSelectedItem(null);
-  };
-  const navigate = useNavigate();
-  const handle_affichage=(id)=>{
-    navigate('/facteur/'+id);
-  
-  }
+};
   return (
-    <Card className="w-full">
-      <CardContent>
+    <>
         <Table>
           <TableHeader>
             <TableRow>
@@ -114,6 +108,7 @@ const ListTypeAll = ({
               <TableHead className="text-center	cursor-pointer hidden md:table-cell  w-1/6">Nomber de facteur</TableHead>
               <TableHead className="text-center	cursor-pointer hidden md:table-cell  w-1/6"><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
               <TableHead className="text-center	cursor-pointer hidden md:table-cell w-1/4"><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
+              <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell "><span onClick={() => requestSort('isDeleted')}>supprimé a</span> {getIconFor('isDeleted')}</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -121,7 +116,7 @@ const ListTypeAll = ({
             {loading ? (
               Array.from({ length: 2 }).map((_, index) => (
                 <TableRow key={index}>
-                  {Array.from({ length: 7 }).map((_, cellIndex) => (
+                  {Array.from({ length: 8 }).map((_, cellIndex) => (
                     <TableCell key={cellIndex}>
                       <Skeleton className="h-4 w-[70px] bg-slate-400 mx-auto" />
                     </TableCell>
@@ -137,7 +132,7 @@ const ListTypeAll = ({
             ) : (
               data.content.map((item, index) => (
                 <TableRow key={index}>
-                <TableCell className="text-center font-medium"><Link to={"/facteur/"+item.id}>{item.nom_type}</Link></TableCell>
+                <TableCell className="text-center font-medium">{item.nom_type}</TableCell>
                 <TableCell className="text-center	hidden md:table-cell">
                     <Badge variant="secondary" className={!item.parent ? "bg-slate-400" : "bg-emerald-200"}>
                       {!item.parent ? "Parent" : "enfant"}
@@ -151,6 +146,7 @@ const ListTypeAll = ({
                     </Badge>
                   </TableCell>
                   <TableCell className="text-center	hidden md:table-cell">{item.create}</TableCell>
+                  <TableCell className="text-center hidden md:table-cell">{item.deleted}</TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -160,13 +156,9 @@ const ListTypeAll = ({
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-48">
-                      <DropdownMenuItem className="text-blue-600" onClick={()=>{handle_affichage(item.id)}}>Afficher</DropdownMenuItem>
-                        {item.active ? (
-                          <DropdownMenuItem onClick={() => handledesactivate(item.id, item.nom_facteur)} className="text-red-950">Désactiver</DropdownMenuItem>
-                        ) : (
-                          <DropdownMenuItem onClick={() => handleActivationClick(item)} className="text-green-600">Activer</DropdownMenuItem>
-                        )}
-                        <DropdownMenuItem onClick={() => handleDeleteClick(item)} className="text-red-600">Supprimer</DropdownMenuItem>
+                     
+                      <DropdownMenuItem className="text-blue-600" onClick={() => handleDeleteClickreco(item)}>récupéree</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleDeleteClick(item)} className="text-red-600">détruit</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
@@ -175,60 +167,32 @@ const ListTypeAll = ({
             )}
           </TableBody>
         </Table>
-      </CardContent>
-      <CardFooter className="flex items-center justify-between">
-        {loading ? (
-          <Skeleton className="h-4 w-full bg-slate-200" />
-        ) : (
-          <>
-            <div className="text-xs text-muted-foreground">
-              Affichage <strong>{data.number * data.size + 1}-{Math.min((data.number + 1) * data.size, data.totalElements)}</strong> de <strong>{data.totalElements}</strong> Facteurs
-            </div>
-            <Pagination>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious href="#" onClick={() => handlePageChange(Math.max(currentPage - 1, 0))} />
-                </PaginationItem>
-                {Array.from({ length: data.totalPages }).map((_, pageIndex) => (
-                  <PaginationItem key={pageIndex}>
-                    <PaginationLink href="#" onClick={() => handlePageChange(pageIndex)}>{pageIndex + 1}</PaginationLink>
-                  </PaginationItem>
-                ))}
-                <PaginationItem>
-                  <PaginationNext href="#" onClick={() => handlePageChange(Math.min(currentPage + 1, data.totalPages - 1))} />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          </>
-        )}
-      </CardFooter>
-      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <DialogContent>
-          <DialogTitle>Confirmer la suppression</DialogTitle>
-          <DialogDescription>
-            Êtes-vous sûr de bien vouloir supprimer cet élément?    
-          </DialogDescription>
-          <DialogFooter>
-            <Button onClick={() => setShowDeleteDialog(false)}>Annuler</Button>
-            <Button variant="destructive" onClick={confirmDelete}>Supprimer</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-      <Dialog open={showActivateDialog} onOpenChange={setShowActivateDialog}>
-        <DialogContent>
-          <DialogTitle>Activation</DialogTitle>
-          <DialogDescription>
-            Comment voulez-vous activer?
-          </DialogDescription>
-          <DialogFooter>
-            <Button onClick={() => setShowActivateDialog(false)}>Annuler</Button>
-            <Button className="bg-green-600 text-white hover:bg-green-300 hover:text-black" onClick={() => confirmActivation(0)}>Seulement</Button>
-            <Button className="bg-emerald-900 text-white hover:bg-green-300 hover:text-black" onClick={() => confirmActivation(1)}>Tous avec des enfants</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </Card>
+        <Dialog open={showDialog} onOpenChange={setShowDialog}>
+                <DialogContent>
+                    <DialogTitle>Confirmer la suppression</DialogTitle>
+                    <DialogDescription>
+                    Êtes-vous sûr de bien vouloir détruit cet élément?    
+                                    </DialogDescription>
+                    <DialogFooter>
+                        <Button onClick={() => setShowDialog(false)}>Annuler</Button>
+                        <Button variant="destructive" onClick={confirmDelete}>détruit</Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+            <Dialog open={showDialogreco} onOpenChange={setShowDialogreco}>
+                <DialogContent>
+                    <DialogTitle>Confirmer la récupération</DialogTitle>
+                    <DialogDescription>
+                    Êtes-vous sûr de bien vouloir récupéree cet élément?    
+                                    </DialogDescription>
+                    <DialogFooter>
+                        <Button onClick={() => setShowDialogreco(false)}>Annuler</Button>
+                        <Button className="bg-green-900 text-white hover:bg-teal-950 "  onClick={confirmreco}>récupération</Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+        </>
   );
 };
 
-export default React.memo(ListTypeAll);
+export default React.memo(list_type_trash);

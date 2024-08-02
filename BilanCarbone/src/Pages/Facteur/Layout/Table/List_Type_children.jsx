@@ -34,6 +34,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { motion } from 'framer-motion';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const List_Type_children = ({ 
   data, 
@@ -43,7 +44,7 @@ export const List_Type_children = ({
   handlePageChange, 
   currentPage, 
   setSortConfig, 
-  handledeletesoft, 
+  handleDelete, 
   handleactivate, 
   handledesactivate 
 }) => {
@@ -86,7 +87,7 @@ export const List_Type_children = ({
 
   const confirmDelete = () => {
     if (selectedItem) {
-      handledeletesoft(selectedItem.id, selectedItem.nom_facteur);
+      handleDelete(selectedItem.id, selectedItem.nom_facteur);
     }
     setShowDeleteDialog(false);
     setSelectedItem(null);
@@ -110,15 +111,27 @@ export const List_Type_children = ({
     setExpandedRows(newExpandedRows);
   };
 
+  const navigate = useNavigate();
+
+  const handle_affichage = (id) => {
+    navigate('/facteur/' + id);
+  };
+
   return (
     <Card className="w-full">
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="cursor-pointer w-1/3"><span onClick={() => requestSort('name')}>Nom</span> {getIconFor('name')}</TableHead>
-              <TableHead className="cursor-pointer hidden md:table-cell w-1/3"><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
-              <TableHead className="cursor-pointer hidden md:table-cell w-1/3"><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
+              <TableHead className="cursor-pointer w-1/3">
+                <span onClick={() => requestSort('name')}>Nom</span> {getIconFor('name')}
+              </TableHead>
+              <TableHead className="cursor-pointer hidden md:table-cell w-1/3">
+                <span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}
+              </TableHead>
+              <TableHead className="cursor-pointer hidden md:table-cell w-1/3">
+                <span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}
+              </TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -143,7 +156,9 @@ export const List_Type_children = ({
               data.content.map((item, index) => (
                 <React.Fragment key={index}>
                   <TableRow onClick={() => handleRowClick(index)}>
-                    <TableCell className="font-medium">{item.nom_type}</TableCell>
+                    <TableCell className="font-medium">
+                      <Link to={"/facteur/" + item.id}>{item.nom_type}</Link>
+                    </TableCell>
                     <TableCell className="hidden sm:table-cell">
                       <Badge variant="outline" className={item.active ? "bg-green-600 text-white" : "bg-red-600 text-white"}>
                         {item.active ? "Activer" : "Désactiver"}
@@ -159,8 +174,7 @@ export const List_Type_children = ({
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-48">
-                          <DropdownMenuItem className="text-blue-600">Afficher</DropdownMenuItem>
-                          <DropdownMenuItem className="text-orange-600">Modifier</DropdownMenuItem>
+                          <DropdownMenuItem className="text-blue-600" onClick={() => { handle_affichage(item.id) }}>Afficher</DropdownMenuItem>
                           {item.active ? (
                             <DropdownMenuItem onClick={() => handledesactivate(item.id, item.nom_facteur)} className="text-red-950">Désactiver</DropdownMenuItem>
                           ) : (
@@ -172,7 +186,7 @@ export const List_Type_children = ({
                     </TableCell>
                   </TableRow>
                   {expandedRows.has(index) && item.files && Array.isArray(item.files) && (
-                      <motion.tr
+                    <motion.tr
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
@@ -244,7 +258,7 @@ export const List_Type_children = ({
         <DialogContent>
           <DialogTitle>Confirmer la suppression</DialogTitle>
           <DialogDescription>
-            Êtes-vous sûr de bien vouloir supprimer cet élément?    
+            Êtes-vous sûr de bien vouloir supprimer cet élément?
           </DialogDescription>
           <DialogFooter>
             <Button onClick={() => setShowDeleteDialog(false)}>Annuler</Button>
