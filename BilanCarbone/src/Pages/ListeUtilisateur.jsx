@@ -85,7 +85,9 @@ function ListeUtilisateur() {
     const [first,setFirst]=useState(true);
     const [last,setLast]=useState(true);
     const [pageClicked,setPageClicked]=useState(0)
-    //const [idUtilisateur,setIdUtilisateur]=useState("")
+    const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
+    const [utilisateurID, setUtilisateurID] = useState("");
+
     useEffect(
       ()=>{
       const getAllUtilisateur=async()=>{
@@ -134,9 +136,26 @@ function ListeUtilisateur() {
             console.error(error)
           }
       };
-      
-   
+      const DeleteUtilisateur=(idUtilisateur)=>
+    
+        {
+              try{
+                const response=apiClient.delete(`utilisateur?ID=${idUtilisateur}`)
+                window.location.reload()
+              }
+              catch(error){
+                console.error(error)
+              }
+              finally{
 
+                setIsAlertDialogOpen(false)
+                setUtilisateurID("")
+              }
+          };
+   
+      const handleDelete = () => {
+            setIsAlertDialogOpen(true);
+          };
     const handlePageChange = (page) => {
       setPageNum(parseInt(page));
     };
@@ -212,26 +231,45 @@ function ListeUtilisateur() {
                                           {enabled ? (<h1 className=" bg-green-700 border-solid rounded-sm text-white text-center p-1 text-xs">Active</h1>) : (<h1 className=" bg-red-600 border-solid rounded-sm text-white p-1 text-center text-xs">Désactive</h1>)}
                                 </TableCell>
                                 <TableCell>
-                                <DropdownMenu>
-                                  <DropdownMenuTrigger asChild>
-                                    <Button
-                                      aria-haspopup="true"
-                                      size="icon"
-                                      variant="ghost"
-                                    >
-                                      <MoreHorizontal className="h-4 w-4" />
-                                      <span className="sr-only">Toggle menu</span>
-                                    </Button>
-                                  </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="end">
-                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                    <DropdownMenuItem onClick={()=>{UtilisateurStatusUpdate(id);}}>{enabled ? "Blocker":"Deblocker"}</DropdownMenuItem>
-                                    <DropdownMenuItem >Modifer</DropdownMenuItem>
-                                    <DropdownMenuItem >Supprimer</DropdownMenuItem>
-                                  </DropdownMenuContent>
-                                </DropdownMenu>
-                                </TableCell>
+                                  <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                      <Button
+                                        aria-haspopup="true"
+                                        size="icon"
+                                        variant="ghost"
+                                      >
+                                        <MoreHorizontal className="h-4 w-4" />
+                                        <span className="sr-only">Toggle menu</span>
+                                      </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end">
+                                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                      <DropdownMenuItem onClick={()=>{UtilisateurStatusUpdate(id);}}>{enabled ? "Blocker":"Deblocker"}</DropdownMenuItem>
+                                      <DropdownMenuItem >Modifer</DropdownMenuItem>
+                                      {/*<AlertDialog className="overflow-y-auto overflow-x-auto">
+                                        <AlertDialogTrigger asChild>*/}
+                                          <DropdownMenuItem onClick={()=>{setUtilisateurID(id);setIsAlertDialogOpen(true)}}>Supprimer</DropdownMenuItem>
+                                        {/**</AlertDialogTrigger>
+                                        
+                                        <AlertDialogContent className="w-screen">
+                                          <AlertDialogHeader>
+                                            <AlertDialogTitle>Etes-vous absolument sûr ?</AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                            Cette action ne peut pas être annulée. Cela supprimera définitivement ce utilisateur.                                      
+                                            </AlertDialogDescription>
+                                          </AlertDialogHeader>
+                                          <AlertDialogFooter>
+                                            <AlertDialogCancel>Annuler</AlertDialogCancel>
+                                            <AlertDialogAction className="bg-black hover:bg-green-700" onClick={()=>{DeleteUtilisateur(id);}}>Accepter</AlertDialogAction>
+                                          </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                          
+                                      </AlertDialog> */}
+                                    </DropdownMenuContent>
+                                  </DropdownMenu>
+                                 </TableCell>
                               </TableRow>
+                              
                             )
                           }
                     )
@@ -309,7 +347,31 @@ function ListeUtilisateur() {
                 </CardFooter>
               </Card>
             </TabsContent>
-          </Tabs>    
+          </Tabs> 
+          <AlertDialog open={isAlertDialogOpen} onOpenChange={setIsAlertDialogOpen}>
+             <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Etes-vous absolument sûr ?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Cette action ne peut pas être annulée. Cela supprimera
+                    définitivement ce utilisateur.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel onClick={() => setIsAlertDialogOpen(false)}>
+                    Annuler
+                  </AlertDialogCancel>
+                  <AlertDialogAction
+                    className="bg-black hover:bg-red-600"
+                    onClick={()=>{DeleteUtilisateur(utilisateurID)}}
+                  >
+                    Supprimer
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+             </AlertDialogContent>
+            </AlertDialog>   
         </main>
       </div>
      
