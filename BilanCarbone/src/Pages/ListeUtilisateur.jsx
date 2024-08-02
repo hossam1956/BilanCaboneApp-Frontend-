@@ -76,7 +76,6 @@ import { SearchContext } from "@/Static/SearchProvider";
 
 function ListeUtilisateur() {
 
-    //const [demandes,setDemandes]=useState([]);
     const [utilisateurs,setUtilisateurs]=useState([]);
     const { searchValue, handleSearching } = useContext(SearchContext);
     const [pageNum,setPageNum]=useState(0);
@@ -86,7 +85,7 @@ function ListeUtilisateur() {
     const [first,setFirst]=useState(true);
     const [last,setLast]=useState(true);
     const [pageClicked,setPageClicked]=useState(0)
-    const [refreshPage,setRefreshPage]=useState(true)
+    //const [idUtilisateur,setIdUtilisateur]=useState("")
     useEffect(
       ()=>{
       const getAllUtilisateur=async()=>{
@@ -99,7 +98,6 @@ function ListeUtilisateur() {
             }
           })
           
-          console.log(response.data)
           setUtilisateurs(response.data.content)
           setPageNum(response.data.number)
           setTotalElements(response.data.totalElements)
@@ -110,7 +108,7 @@ function ListeUtilisateur() {
         }
         catch(error){  
             window.location.reload();          
-            console.log(error)
+            console.error(error)
             
         }
         finally{
@@ -122,8 +120,22 @@ function ListeUtilisateur() {
       }
       getAllUtilisateur()
        
-    },[searchValue,size,pageNum])   
- 
+    },[searchValue,size,pageNum]) ;
+    
+    
+    const UtilisateurStatusUpdate=(idUtilisateur)=>
+    
+    {
+          try{
+            const response=apiClient.put(`utilisateur?ID=${idUtilisateur}`)
+            window.location.reload()
+          }
+          catch(error){
+            console.error(error)
+          }
+      };
+      
+   
 
     const handlePageChange = (page) => {
       setPageNum(parseInt(page));
@@ -177,6 +189,7 @@ function ListeUtilisateur() {
                         {utilisateurs.map 
                         ((utilisateur)=>{
                             const {id,email,lastName,firstName,enabled,username}=utilisateur;
+                            
                             return(
                                     
                               <TableRow key={id} >
@@ -196,7 +209,7 @@ function ListeUtilisateur() {
                                           ADMIN
                                 </TableCell>
                                 <TableCell>
-                                          {enabled ? (<h1 className=" bg-green-700 border-solid rounded-sm text-white text-center">Active</h1>) : (<h1 className=" bg-red-600 border-solid rounded-sm text-white p-2">Désactive</h1>)}
+                                          {enabled ? (<h1 className=" bg-green-700 border-solid rounded-sm text-white text-center p-1 text-xs">Active</h1>) : (<h1 className=" bg-red-600 border-solid rounded-sm text-white p-1 text-center text-xs">Désactive</h1>)}
                                 </TableCell>
                                 <TableCell>
                                 <DropdownMenu>
@@ -212,7 +225,7 @@ function ListeUtilisateur() {
                                   </DropdownMenuTrigger>
                                   <DropdownMenuContent align="end">
                                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                    <DropdownMenuItem>Blocker</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={()=>{UtilisateurStatusUpdate(id);}}>{enabled ? "Blocker":"Deblocker"}</DropdownMenuItem>
                                     <DropdownMenuItem >Modifer</DropdownMenuItem>
                                     <DropdownMenuItem >Supprimer</DropdownMenuItem>
                                   </DropdownMenuContent>
@@ -317,3 +330,4 @@ function ListeUtilisateur() {
 export default ListeUtilisateur
 
 
+{/*onClick={()=>{UtilisateurStatusUpdate();window.location.reload()}}*/}

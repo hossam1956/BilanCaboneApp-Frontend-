@@ -92,7 +92,6 @@ function ListDemandePage() {
             }
   
           })
-          console.log(response.data)
               setDemandes(response.data.content)
               setPageNum(response.data.number)
               setTotalElements(response.data.totalElements)
