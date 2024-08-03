@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import {apiClient} from "../KeycloakConfig/KeycloakConn"
+import {apiClient, apikeycloak} from "../KeycloakConfig/KeycloakConn"
 import {
   Check,
   X,
   Terminal,
   MoreHorizontal
 } from "lucide-react";
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import {
@@ -77,6 +79,7 @@ import { SearchContext } from "@/Static/SearchProvider";
 function ListeUtilisateur() {
 
     const [utilisateurs,setUtilisateurs]=useState([]);
+    const [roles, setRoles] = useState({});
     const { searchValue, handleSearching } = useContext(SearchContext);
     const [pageNum,setPageNum]=useState(0);
     const [totalElements,setTotalElements]=useState(8);
@@ -87,6 +90,7 @@ function ListeUtilisateur() {
     const [pageClicked,setPageClicked]=useState(0)
     const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
     const [utilisateurID, setUtilisateurID] = useState("");
+
 
     useEffect(
       ()=>{
@@ -109,8 +113,8 @@ function ListeUtilisateur() {
           setLast(response.data.last)
         }
         catch(error){  
-            window.location.reload();          
-            console.error(error)
+            window.location.reload();
+            console.error(error);
             
         }
         finally{
@@ -120,11 +124,38 @@ function ListeUtilisateur() {
           
         }
       }
+      
       getAllUtilisateur()
-       
     },[searchValue,size,pageNum]) ;
+
+  
+      
+        const getRoleUtilisateur= async(id)=>{
+          try{
+            
+                const response= await apikeycloak.get(`/users/${id}/role-mappings/realm`)
+                return response.data[0].name
+                    
     
-    
+          }
+          catch(error){  
+            console.error(error);
+            
+        }
+          
+      }
+ 
+      useEffect(() => {
+        const fetchRoles = async () => {
+        const rolesData = {};
+          for (const utilisateur of utilisateurs) {
+            rolesData[utilisateur.id] = await getRoleUtilisateur(utilisateur.id);
+          }
+          setRoles(rolesData);
+        };
+        fetchRoles();
+      }, [utilisateurs]);
+  
     const UtilisateurStatusUpdate=(idUtilisateur)=>
     
     {
@@ -153,9 +184,7 @@ function ListeUtilisateur() {
               }
           };
    
-      const handleDelete = () => {
-            setIsAlertDialogOpen(true);
-          };
+     
     const handlePageChange = (page) => {
       setPageNum(parseInt(page));
     };
@@ -165,6 +194,7 @@ function ListeUtilisateur() {
     const handleSize = (size) => {
       setSize(size);
     };
+
   
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -207,8 +237,8 @@ function ListeUtilisateur() {
                     <TableBody>
                         {utilisateurs.map 
                         ((utilisateur)=>{
-                            const {id,email,lastName,firstName,enabled,username}=utilisateur;
-                            
+                            const {id,email,lastName,firstName,enabled,username,attributes}=utilisateur;
+                            const role = roles[id];
                             return(
                                     
                               <TableRow key={id} >
@@ -222,10 +252,10 @@ function ListeUtilisateur() {
                                           {email}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
-                                          Norsys Afrique
+                                          {attributes.entreprise}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
-                                          ADMIN
+                                  {role}
                                 </TableCell>
                                 <TableCell>
                                           {enabled ? (<h1 className=" bg-green-700 border-solid rounded-sm text-white text-center p-1 text-xs">Active</h1>) : (<h1 className=" bg-red-600 border-solid rounded-sm text-white p-1 text-center text-xs">Désactive</h1>)}
@@ -245,26 +275,8 @@ function ListeUtilisateur() {
                                     <DropdownMenuContent align="end">
                                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                       <DropdownMenuItem onClick={()=>{UtilisateurStatusUpdate(id);}}>{enabled ? "Blocker":"Deblocker"}</DropdownMenuItem>
-                                      <DropdownMenuItem >Modifer</DropdownMenuItem>
-                                      {/*<AlertDialog className="overflow-y-auto overflow-x-auto">
-                                        <AlertDialogTrigger asChild>*/}
-                                          <DropdownMenuItem onClick={()=>{setUtilisateurID(id);setIsAlertDialogOpen(true)}}>Supprimer</DropdownMenuItem>
-                                        {/**</AlertDialogTrigger>
-                                        
-                                        <AlertDialogContent className="w-screen">
-                                          <AlertDialogHeader>
-                                            <AlertDialogTitle>Etes-vous absolument sûr ?</AlertDialogTitle>
-                                            <AlertDialogDescription>
-                                            Cette action ne peut pas être annulée. Cela supprimera définitivement ce utilisateur.                                      
-                                            </AlertDialogDescription>
-                                          </AlertDialogHeader>
-                                          <AlertDialogFooter>
-                                            <AlertDialogCancel>Annuler</AlertDialogCancel>
-                                            <AlertDialogAction className="bg-black hover:bg-green-700" onClick={()=>{DeleteUtilisateur(id);}}>Accepter</AlertDialogAction>
-                                          </AlertDialogFooter>
-                                        </AlertDialogContent>
-                                          
-                                      </AlertDialog> */}
+                                      <DropdownMenuItem >Modifer</DropdownMenuItem>      
+                                      <DropdownMenuItem onClick={()=>{setUtilisateurID(id);setIsAlertDialogOpen(true)}}>Supprimer</DropdownMenuItem>
                                     </DropdownMenuContent>
                                   </DropdownMenu>
                                  </TableCell>

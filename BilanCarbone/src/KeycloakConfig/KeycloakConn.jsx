@@ -8,7 +8,14 @@ export const apiClient = axios.create({
   },
   withCredentials: true 
 });
-
+export const apikeycloak = axios.create({
+  baseURL: 'http://localhost:8080/admin/realms/BilanCarbone',
+  headers: {
+    Authorization: `Bearer ${token}`
+  
+  },
+  withCredentials: true 
+});
 
 
 
