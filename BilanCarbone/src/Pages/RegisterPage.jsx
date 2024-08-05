@@ -136,7 +136,7 @@ const RegisterPage = () => {
         setAlert(false);
         navigate("/welcome")
         
-      }, 4000);
+      }, 1000);
 
       return () => {clearTimeout(timer)}
     }

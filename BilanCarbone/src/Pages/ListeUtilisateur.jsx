@@ -149,9 +149,11 @@ function ListeUtilisateur() {
         const fetchRoles = async () => {
         const rolesData = {};
           for (const utilisateur of utilisateurs) {
-            rolesData[utilisateur.id] = await getRoleUtilisateur(utilisateur.id);
+            rolesData[utilisateur.userRepresentation.id] = await getRoleUtilisateur(utilisateur.userRepresentation.id);
+            
           }
           setRoles(rolesData);
+          
         };
         fetchRoles();
       }, [utilisateurs]);
@@ -237,7 +239,8 @@ function ListeUtilisateur() {
                     <TableBody>
                         {utilisateurs.map 
                         ((utilisateur)=>{
-                            const {id,email,lastName,firstName,enabled,username,attributes}=utilisateur;
+                            const {id,email,lastName,firstName,enabled,username,attributes}=utilisateur.userRepresentation;
+                            const{nomEntreprise}=utilisateur.entreprise
                             const role = roles[id];
                             return(
                                     
@@ -252,7 +255,7 @@ function ListeUtilisateur() {
                                           {email}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
-                                          Norsys
+                                      {nomEntreprise}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
                                   {role}
@@ -286,10 +289,11 @@ function ListeUtilisateur() {
                           }
                     )
                     }
+                    
                     </TableBody>
                   </Table>
                 </CardContent>
-                <CardFooter>
+               <CardFooter>
                   <div className="text-xs text-muted-foreground">
                     Total Des  
                     Elements: <strong>{totalElements}</strong>
@@ -384,6 +388,7 @@ function ListeUtilisateur() {
                 </AlertDialogFooter>
              </AlertDialogContent>
             </AlertDialog>   
+            
         </main>
       </div>
      

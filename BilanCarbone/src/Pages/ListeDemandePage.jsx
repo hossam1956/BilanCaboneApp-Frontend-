@@ -76,6 +76,7 @@ function ListDemandePage() {
     const [last,setLast]=useState(true);
     const [currentId,setcurrentId]=useState(0)    
     const [currentIdAccept,setCurrentIdAccept]=useState(0)
+    const [problemAlert,setProblemAlert]=useState(false)
     const [alert,setAlert]=useState(false)
     const [pageClicked,setPageClicked]=useState(0)
 
@@ -136,16 +137,16 @@ function ListDemandePage() {
               params: { id: currentIdAccept }
             });
             if(response.data === true){
-              window.location.reload() 
+              setAlert(true);
               
             }
             else{
-                setAlert(true)
+              setProblemAlert(true)
                 console.log(alert)
             }
           } catch (error) {
             console.error(error)
-            setAlert(true)
+            setProblemAlert(true)
           }finally {
             setCurrentIdAccept(0);
           }
@@ -156,10 +157,21 @@ function ListDemandePage() {
     }, [currentIdAccept]);
 
     useEffect(() => {
+      if (problemAlert) {
+        const timer = setTimeout(() => {
+          setProblemAlert(false);
+        }, 4000);
+  
+        return () => {clearTimeout(timer)}
+      }
+    }, [problemAlert]);
+
+    useEffect(() => {
       if (alert) {
         const timer = setTimeout(() => {
-          setAlert(false);
-        }, 4000);
+          setProblemAlert(false);
+          window.location.reload() 
+        }, 1000);
   
         return () => {clearTimeout(timer)}
       }
@@ -356,12 +368,22 @@ function ListDemandePage() {
         </main>
       </div>
      
-      {alert && (      <div className="fixed top-4 right-4 w-60 z-10 transition-transform transform translate-x-0">
+      {problemAlert && (      <div className="fixed top-4 right-4 w-60 z-10 transition-transform transform translate-x-0">
                       <Alert className="bg-red-400">
                         <Terminal className="h-4 w-3" />
                         <AlertTitle>Attention!</AlertTitle>
                         <AlertDescription>
-                          Il ya un problème au niveau d'acceptation de la demande peut être ce email existe déja ou un autre problème.
+                          Il ya un problème au niveau d'acceptation de la demande peut être ce nom utilisateur existe déja ou un autre problème.
+                        </AlertDescription>
+                      </Alert>
+                      </div>)}
+
+      {alert && (<div className="fixed top-4 right-4 w-60 z-10 transition-transform transform translate-x-0">
+                      <Alert className="bg-green-400">
+                        <Terminal className="h-4 w-3" />
+                        <AlertTitle>Demande Envoye!</AlertTitle>
+                        <AlertDescription>
+                          Votre demande est envoyé avec succès
                         </AlertDescription>
                       </Alert>
                       </div>)}
