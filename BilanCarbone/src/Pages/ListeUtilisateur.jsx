@@ -160,7 +160,7 @@ function ListeUtilisateur() {
     
     {
           try{
-            const response=apiClient.put(`utilisateur?ID=${idUtilisateur}`)
+            const response=apiClient.put(`utilisateur/block?ID=${idUtilisateur}`)
             window.location.reload()
           }
           catch(error){
@@ -252,7 +252,7 @@ function ListeUtilisateur() {
                                           {email}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
-                                          {attributes.entreprise}
+                                          Norsys
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
                                   {role}

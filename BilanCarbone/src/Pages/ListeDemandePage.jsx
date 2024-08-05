@@ -229,7 +229,7 @@ function ListDemandePage() {
                                     {email}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
-                                    Norsys Afrique
+                                    {entreprise.nomEntreprise}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
                                     {sendDate}
@@ -361,7 +361,7 @@ function ListDemandePage() {
                         <Terminal className="h-4 w-3" />
                         <AlertTitle>Attention!</AlertTitle>
                         <AlertDescription>
-                          Il ya un problème au niveau d'acceptation de la demande peut être ce email existe déja ou le nom d'utilisateur est invalide.
+                          Il ya un problème au niveau d'acceptation de la demande peut être ce email existe déja ou un autre problème.
                         </AlertDescription>
                       </Alert>
                       </div>)}
