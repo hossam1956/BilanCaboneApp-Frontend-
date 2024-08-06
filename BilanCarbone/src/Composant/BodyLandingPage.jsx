@@ -1,11 +1,11 @@
 import { useState } from "react";
+import bgImage from '../images/forest-3622519_1920.jpg';
 
 const BodyLandingPage = () => {
   const [extendText, setExtendText] = useState(false);
-  console.log(extendText);
 
   return (
-    <div className="bg-[url('https://cdn.glitch.global/0764a513-91e4-48ff-9473-54f2a3174dc7/forest-3622519_1920.jpg?v=1721836294491')] bg-cover bg-center h-screen md:h-screen">
+    <div className="bg-[url('src/images/forest-3622519_1920.jpg')] bg-cover bg-center h-screen md:h-screen">
       <div className="flex justify-center">
         <div className="w-1/2 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mt-11">
             <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-center">

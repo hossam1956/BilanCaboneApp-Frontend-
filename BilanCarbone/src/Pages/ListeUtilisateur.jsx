@@ -6,10 +6,10 @@ import {
   Terminal,
   MoreHorizontal
 } from "lucide-react";
-import { Input } from "@/Components/ui/input"
-import { Label } from "@/Components/ui/label"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import axios from "axios";
-import { Button } from "@/Components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -18,7 +18,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/Components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu"
 import {
   Card,
   CardContent,
@@ -26,7 +26,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/Components/ui/card";;
+} from "@/components/ui/card";;
 import {
   Table,
   TableBody,
@@ -34,11 +34,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/Components/ui/table";
+} from "@/components/ui/table";
 import {
   Tabs,
   TabsContent,
-} from "@/Components/ui/tabs";
+} from "@/components/ui/tabs";
 import {
   Pagination,
   PaginationContent,
@@ -47,12 +47,7 @@ import {
   PaginationLink,
   PaginationNext,
 
-} from "@/Components/ui/pagination";
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@/Components/ui/alert"
+} from "@/components/ui/pagination";
 import {
   Select,
   SelectContent,
@@ -61,7 +56,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/Components/ui/select"
+} from "@/components/ui/select"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -71,10 +66,11 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/Components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog"
 
+import Alerts from "@/Composant/Alerts";
 import { SearchContext } from "@/Static/SearchProvider";
+import ModifyForm from "@/Composant/ModifyForm";
 
 function ListeUtilisateur() {
 
@@ -90,6 +86,17 @@ function ListeUtilisateur() {
     const [pageClicked,setPageClicked]=useState(0)
     const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
     const [utilisateurID, setUtilisateurID] = useState("");
+    const [isModifyFormVisible, setIsModifyFormVisible] = useState(false);
+    const [problemAlert,setProblemAlert]=useState(false)
+    const [alertModifier,setAlertModifier]=useState(false)
+    const [alertSupprimer,setAlertSupprimer]=useState(false)
+    const [alertBlocker,setAlertBlocker]=useState(false)
+
+
+    
+    const handleModifyFormVisibility=()=>{
+      setIsModifyFormVisible(!isModifyFormVisible)
+    }
 
 
     useEffect(
@@ -115,6 +122,7 @@ function ListeUtilisateur() {
         catch(error){  
             window.location.reload();
             console.error(error);
+
             
         }
         finally{
@@ -148,9 +156,11 @@ function ListeUtilisateur() {
       useEffect(() => {
         const fetchRoles = async () => {
         const rolesData = {};
-          for (const utilisateur of utilisateurs) {
-            rolesData[utilisateur.id] = await getRoleUtilisateur(utilisateur.id);
-          }
+        const rolesPromises=utilisateurs.flatMap(utilisateur=>getRoleUtilisateur(utilisateur.userRepresentation.id)) 
+        const rolesResults=await Promise.all(rolesPromises)
+        rolesResults.forEach((role, index) => {
+            rolesData[utilisateurs[index].userRepresentation.id] = role;
+          });
           setRoles(rolesData);
         };
         fetchRoles();
@@ -160,11 +170,12 @@ function ListeUtilisateur() {
     
     {
           try{
-            const response=apiClient.put(`utilisateur?ID=${idUtilisateur}`)
-            window.location.reload()
+            const response=apiClient.put(`utilisateur/block?ID=${idUtilisateur}`)
+            setAlertBlocker(true);
           }
           catch(error){
             console.error(error)
+            setProblemAlert(true)
           }
       };
       const DeleteUtilisateur=(idUtilisateur)=>
@@ -172,10 +183,11 @@ function ListeUtilisateur() {
         {
               try{
                 const response=apiClient.delete(`utilisateur?ID=${idUtilisateur}`)
-                window.location.reload()
+                setAlertSupprimer(true)
               }
               catch(error){
                 console.error(error)
+                setProblemAlert(true)
               }
               finally{
 
@@ -195,11 +207,68 @@ function ListeUtilisateur() {
       setSize(size);
     };
 
+    useEffect(() => {
+      if (problemAlert) {
+        const timer = setTimeout(() => {
+          setProblemAlert(false);
+        }, 4000);
+  
+        return () => {clearTimeout(timer)}
+      }
+    }, [problemAlert]);
+  
+    useEffect(() => {
+      if (alertBlocker) {
+        const timer = setTimeout(() => {
+          setAlertBlocker(false);
+          window.location.reload() 
+          
+        }, 1000);
+  
+        return () => {clearTimeout(timer)}
+      }
+    }, [alertBlocker]);
+
+    useEffect(() => {
+      if (alertModifier) {
+        const timer = setTimeout(() => {
+          setAlertModifier(false);
+          window.location.reload() 
+          
+        }, 1000);
+  
+        return () => {clearTimeout(timer)}
+      }
+    }, [alertModifier]);
+
+    useEffect(() => {
+      if (alertBlocker) {
+        const timer = setTimeout(() => {
+          setAlertBlocker(false);
+          window.location.reload()
+        }, 1000);
+  
+        return () => {clearTimeout(timer)}
+      }
+    }, [alertBlocker]);
+
+    useEffect(() => {
+      if (alertSupprimer) {
+        const timer = setTimeout(() => {
+          setAlertModifier(false);
+          window.location.reload() 
+          
+        }, 1000);
+  
+        return () => {clearTimeout(timer)}
+      }
+    }, [alertSupprimer]);
   
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+          {isModifyFormVisible&& <ModifyForm onClose={handleModifyFormVisibility}/>}
           <Tabs defaultValue="all">
             <TabsContent value="all">
               <Card x-chunk="dashboard-06-chunk-0">
@@ -237,7 +306,8 @@ function ListeUtilisateur() {
                     <TableBody>
                         {utilisateurs.map 
                         ((utilisateur)=>{
-                            const {id,email,lastName,firstName,enabled,username,attributes}=utilisateur;
+                            const {id,email,lastName,firstName,enabled,username,attributes}=utilisateur.userRepresentation;
+                            const{nomEntreprise}=utilisateur.entreprise
                             const role = roles[id];
                             return(
                                     
@@ -252,7 +322,7 @@ function ListeUtilisateur() {
                                           {email}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
-                                          {attributes.entreprise}
+                                      {nomEntreprise}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
                                   {role}
@@ -275,7 +345,7 @@ function ListeUtilisateur() {
                                     <DropdownMenuContent align="end">
                                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                       <DropdownMenuItem onClick={()=>{UtilisateurStatusUpdate(id);}}>{enabled ? "Blocker":"Deblocker"}</DropdownMenuItem>
-                                      <DropdownMenuItem >Modifer</DropdownMenuItem>      
+                                      <DropdownMenuItem onClick={handleModifyFormVisibility} >Modifer</DropdownMenuItem>      
                                       <DropdownMenuItem onClick={()=>{setUtilisateurID(id);setIsAlertDialogOpen(true)}}>Supprimer</DropdownMenuItem>
                                     </DropdownMenuContent>
                                   </DropdownMenu>
@@ -286,10 +356,11 @@ function ListeUtilisateur() {
                           }
                     )
                     }
+                    
                     </TableBody>
                   </Table>
                 </CardContent>
-                <CardFooter>
+               <CardFooter>
                   <div className="text-xs text-muted-foreground">
                     Total Des  
                     Elements: <strong>{totalElements}</strong>
@@ -384,19 +455,12 @@ function ListeUtilisateur() {
                 </AlertDialogFooter>
              </AlertDialogContent>
             </AlertDialog>   
+            
         </main>
       </div>
-     
-      {/*alert && (      <div className="fixed top-4 right-4 w-60 z-10 transition-transform transform translate-x-0">
-                      <Alert className="bg-red-400">
-                        <Terminal className="h-4 w-3" />
-                        <AlertTitle>Attention!</AlertTitle>
-                        <AlertDescription>
-                          Il ya un problème au niveau d'action effectué.
-                        </AlertDescription>
-                      </Alert>
-                      </div>)*/}
-        
+        <Alerts alert={alertBlocker} alertProblem={problemAlert} titre_succes={"Operation Réussite"} message_succes={"Utilisateur est blocker ou deblocker avec succès" } message_erreur={"Une erreur est survenue lors de cette opêration"}/>
+        <Alerts alert={alertSupprimer} alertProblem={problemAlert} titre_succes={"Operation Réussite"} message_succes={"Utilisateur est supprimer  avec succès" } message_erreur={"Une erreur est survenue lors de cette opêration"}/>
+        <Alerts alert={alertModifier} alertProblem={problemAlert} titre_succes={"Operation Réussite"} message_succes={"Utilisateur est modifer avec succès" } message_erreur={"Une erreur est survenue lors de cette opêration"}/>
     </div>
   )
 
@@ -404,4 +468,3 @@ function ListeUtilisateur() {
 export default ListeUtilisateur
 
 
-{/*onClick={()=>{UtilisateurStatusUpdate();window.location.reload()}}*/}

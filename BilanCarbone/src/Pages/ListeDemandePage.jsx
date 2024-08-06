@@ -2,11 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import {apiClient} from "../KeycloakConfig/KeycloakConn"
 import {
   Check,
-  X,
-  Terminal
+  X
 } from "lucide-react";
 import axios from "axios";
-import { Button } from "@/Components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -14,7 +13,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/Components/ui/card";;
+} from "@/components/ui/card";;
 import {
   Table,
   TableBody,
@@ -22,11 +21,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/Components/ui/table";
+} from "@/components/ui/table";
 import {
   Tabs,
   TabsContent,
-} from "@/Components/ui/tabs";
+} from "@/components/ui/tabs";
 import {
   Pagination,
   PaginationContent,
@@ -35,12 +34,7 @@ import {
   PaginationLink,
   PaginationNext,
 
-} from "@/Components/ui/pagination";
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@/Components/ui/alert"
+} from "@/components/ui/pagination";
 import {
   Select,
   SelectContent,
@@ -49,7 +43,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/Components/ui/select"
+} from "@/components/ui/select"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -60,9 +54,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/Components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog"
 
 import { SearchContext } from "@/Static/SearchProvider";
+import Alerts from "@/Composant/Alerts";
 
 function ListDemandePage() {
 
@@ -76,6 +71,7 @@ function ListDemandePage() {
     const [last,setLast]=useState(true);
     const [currentId,setcurrentId]=useState(0)    
     const [currentIdAccept,setCurrentIdAccept]=useState(0)
+    const [problemAlert,setProblemAlert]=useState(false)
     const [alert,setAlert]=useState(false)
     const [pageClicked,setPageClicked]=useState(0)
 
@@ -136,16 +132,16 @@ function ListDemandePage() {
               params: { id: currentIdAccept }
             });
             if(response.data === true){
-              window.location.reload() 
+              setAlert(true);
               
             }
             else{
-                setAlert(true)
+              setProblemAlert(true)
                 console.log(alert)
             }
           } catch (error) {
             console.error(error)
-            setAlert(true)
+            setProblemAlert(true)
           }finally {
             setCurrentIdAccept(0);
           }
@@ -156,10 +152,21 @@ function ListDemandePage() {
     }, [currentIdAccept]);
 
     useEffect(() => {
+      if (problemAlert) {
+        const timer = setTimeout(() => {
+          setProblemAlert(false);
+        }, 4000);
+  
+        return () => {clearTimeout(timer)}
+      }
+    }, [problemAlert]);
+
+    useEffect(() => {
       if (alert) {
         const timer = setTimeout(() => {
-          setAlert(false);
-        }, 4000);
+          setProblemAlert(false);
+          window.location.reload() 
+        }, 1000);
   
         return () => {clearTimeout(timer)}
       }
@@ -229,7 +236,7 @@ function ListDemandePage() {
                                     {email}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
-                                    Norsys Afrique
+                                    {entreprise.nomEntreprise}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
                                     {sendDate}
@@ -355,17 +362,7 @@ function ListDemandePage() {
           </Tabs>    
         </main>
       </div>
-     
-      {alert && (      <div className="fixed top-4 right-4 w-60 z-10 transition-transform transform translate-x-0">
-                      <Alert className="bg-red-400">
-                        <Terminal className="h-4 w-3" />
-                        <AlertTitle>Attention!</AlertTitle>
-                        <AlertDescription>
-                          Il ya un problème au niveau d'acceptation de la demande peut être ce email existe déja ou le nom d'utilisateur est invalide.
-                        </AlertDescription>
-                      </Alert>
-                      </div>)}
-        
+     <Alerts alert={alert} alertProblem={problemAlert} titre_succes={"Demande Acceptée"} message_succes={"Demande Acceptée avec succès" } message_erreur={"Une erreur est survenue lors de traitement de la demande"} />
     </div>
   )
 
