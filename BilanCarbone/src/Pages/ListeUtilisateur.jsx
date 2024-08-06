@@ -6,10 +6,10 @@ import {
   Terminal,
   MoreHorizontal
 } from "lucide-react";
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Input } from "@/Components/ui/input"
+import { Label } from "@/Components/ui/label"
 import axios from "axios";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/Components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -18,7 +18,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/Components/ui/dropdown-menu"
 import {
   Card,
   CardContent,
@@ -26,7 +26,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";;
+} from "@/Components/ui/card";;
 import {
   Table,
   TableBody,
@@ -34,11 +34,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/Components/ui/table";
 import {
   Tabs,
   TabsContent,
-} from "@/components/ui/tabs";
+} from "@/Components/ui/tabs";
 import {
   Pagination,
   PaginationContent,
@@ -47,12 +47,12 @@ import {
   PaginationLink,
   PaginationNext,
 
-} from "@/components/ui/pagination";
+} from "@/Components/ui/pagination";
 import {
   Alert,
   AlertDescription,
   AlertTitle,
-} from "@/components/ui/alert"
+} from "@/Components/ui/alert"
 import {
   Select,
   SelectContent,
@@ -61,7 +61,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/Components/ui/select"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -72,7 +72,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/Components/ui/alert-dialog"
 
 import { SearchContext } from "@/Static/SearchProvider";
 

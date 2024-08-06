@@ -1,14 +1,14 @@
 import {
   Card,
   CardContent,
-} from "@/components/ui/card";
+} from "@/Components/ui/card";
 
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@/components/ui/tabs";
+} from "@/Components/ui/tabs";
 import { List_Trash_facteur } from "./Layout/List_Trash_facteur";
 import { List_Trash_type } from "./Layout/List_Trash_type";
 import { useSearchParams } from "react-router-dom";

@@ -1,6 +1,6 @@
 import { useCallback, useState, useEffect } from 'react';
 import { Position } from '@xyflow/react';
-import { Input } from "@/components/ui/input";
+import { Input } from "@/Components/ui/input";
 import {
   Select,
   SelectContent,
@@ -9,7 +9,7 @@ import {
   SelectGroup,
   SelectValue,
   SelectLabel
-} from "@/components/ui/select";
+} from "@/Components/ui/select";
 import CustomHandle from './CustomHandle';
 import axios from 'axios';
 import { API_FACTEUR } from '@/Api/FacteurApi';

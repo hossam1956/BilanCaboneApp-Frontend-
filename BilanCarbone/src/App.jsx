@@ -7,16 +7,12 @@ import LandingPage from "./Pages/LandingPage"
 import { LoaderCircle } from 'lucide-react';
 import RegisterPage from './Pages/RegisterPage';
 import Main from './Static/Main';
-import ListDemandePage from './Pages/ListeDemandePage';
 import ParametresPages from './Pages/ParametresPage';
 import ListeUtilisateur from './Pages/ListeUtilisateur';
-import { Dashboard } from './Pages/Dashboard';
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { TooltipProvider } from "@/Components/ui/tooltip";
 import { Addfct } from './Pages/Facteur/Addfct';
 import { Listfct } from './Pages/Facteur/Listfct';
 import Trashfct from './Pages/Facteur/Trashfct';
-import Main from './Static/Main';
 import Affichagefct from './Pages/Facteur/Affichagefct';
 
 const App = () => {

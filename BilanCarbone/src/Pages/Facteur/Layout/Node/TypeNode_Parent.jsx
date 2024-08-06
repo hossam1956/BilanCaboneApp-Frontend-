@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { Handle, Position } from '@xyflow/react';
-import { Input } from "@/components/ui/input";
+import { Input } from "@/Components/ui/input";
 import axios from 'axios';
 import {  API_TYPE } from '@/Api/FacteurApi';
 

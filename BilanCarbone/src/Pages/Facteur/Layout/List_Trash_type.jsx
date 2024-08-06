@@ -4,12 +4,12 @@ import {
   PlusCircle,
   Search
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/Components/ui/input";
 import {
   CardFooter,
   CardContent,
   Card,
-} from "@/components/ui/card";
+} from "@/Components/ui/card";
 import {
   Pagination,
   PaginationContent,
@@ -17,11 +17,11 @@ import {
   PaginationPrevious,
   PaginationLink,
   PaginationNext,
-} from "@/components/ui/pagination";
+} from "@/Components/ui/pagination";
 import {  API_TYPE } from "@/Api/FacteurApi";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/Components/ui/skeleton";
 import { toast } from 'sonner';
 import List_type_trash from "./Table/list_type_trash";
 

@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Handle, Position } from '@xyflow/react';
-import { Input } from "@/components/ui/input";
+import { Input } from "@/Components/ui/input";
 import axios from 'axios';
 import { API_TYPE } from '@/Api/FacteurApi';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/Components/ui/button';
 import { ShieldX, ShieldCheck } from 'lucide-react';
 
 export const TypeNode_Parent_Update = ({ data, isConnectable,editMode }) => {

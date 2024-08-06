@@ -6,7 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/Components/ui/table";
 import {
   MoreHorizontal, ChevronDown, CircleX, ChevronUp
 } from "lucide-react";
@@ -14,14 +14,14 @@ import {
   CardFooter,
   CardContent,
   Card,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+} from "@/Components/ui/card";
+import { Button } from "@/Components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/Components/ui/dropdown-menu";
 import {
   Pagination,
   PaginationContent,
@@ -29,10 +29,10 @@ import {
   PaginationPrevious,
   PaginationLink,
   PaginationNext,
-} from "@/components/ui/pagination";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+} from "@/Components/ui/pagination";
+import { Badge } from "@/Components/ui/badge";
+import { Skeleton } from "@/Components/ui/skeleton";
+import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from "@/Components/ui/dialog";
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -123,16 +123,16 @@ export const List_Type_children = ({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="cursor-pointer w-1/3">
+              <TableHead className="text-center cursor-pointer w-1/3">
                 <span onClick={() => requestSort('name')}>Nom</span> {getIconFor('name')}
               </TableHead>
-              <TableHead className="cursor-pointer hidden md:table-cell w-1/3">
+              <TableHead className="text-center cursor-pointer w-1/3">
                 <span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}
               </TableHead>
-              <TableHead className="cursor-pointer hidden md:table-cell w-1/3">
+              <TableHead className="text-center cursor-pointer w-1/3">
                 <span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}
               </TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead className="text-center cursor-pointer w-1/3">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -156,15 +156,15 @@ export const List_Type_children = ({
               data.content.map((item, index) => (
                 <React.Fragment key={index}>
                   <TableRow onClick={() => handleRowClick(index)}>
-                    <TableCell className="font-medium">
+                    <TableCell className="text-center font-medium">
                       <Link to={"/facteur/" + item.id}>{item.nom_type}</Link>
                     </TableCell>
-                    <TableCell className="hidden sm:table-cell">
+                    <TableCell className="text-center hidden sm:table-cell">
                       <Badge variant="outline" className={item.active ? "bg-green-600 text-white" : "bg-red-600 text-white"}>
                         {item.active ? "Activer" : "Désactiver"}
                       </Badge>
                     </TableCell>
-                    <TableCell className="hidden md:table-cell">{item.create}</TableCell>
+                    <TableCell className="text-center hidden md:table-cell">{item.create}</TableCell>
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>

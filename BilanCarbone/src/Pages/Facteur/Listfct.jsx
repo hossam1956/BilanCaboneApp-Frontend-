@@ -1,13 +1,13 @@
 import {
   Card,
   CardContent,
-} from "@/components/ui/card";
+} from "@/Components/ui/card";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@/components/ui/tabs";
+} from "@/Components/ui/tabs";
 import List_Facteur from "./Layout/List_Facteur";
 import List_Type from "./Layout/List_Type";
 import { useSearchParams } from "react-router-dom";

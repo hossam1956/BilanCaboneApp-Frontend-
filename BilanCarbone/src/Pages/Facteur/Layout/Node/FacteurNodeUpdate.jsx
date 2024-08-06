@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Position } from '@xyflow/react';
-import { Input } from "@/components/ui/input";
+import { Input } from "@/Components/ui/input";
 import {
   Select,
   SelectContent,
@@ -9,12 +9,12 @@ import {
   SelectGroup,
   SelectValue,
   SelectLabel
-} from "@/components/ui/select";
+} from "@/Components/ui/select";
 import CustomHandle from './CustomHandle';
 import axios from 'axios';
 import { API_FACTEUR } from '@/Api/FacteurApi';
 import { ShieldCheck, ShieldX } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/Components/ui/button';
 
 export const FacteurNodeUpdate = ({ data, isConnectable }) => {
   const [errorinput, setErrorinput] = useState(null);

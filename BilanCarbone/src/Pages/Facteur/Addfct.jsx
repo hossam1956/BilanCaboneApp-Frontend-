@@ -5,9 +5,9 @@ import SideBare from "./Layout/SideBare";
 import { FacteurNode } from "./Layout/Node/FacteurNode";
 import { TypeNode_Parent } from "./Layout/Node/TypeNode_Parent";
 import { TypeNode_child } from "./Layout/Node/TypeNode_child";
-import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from '@/Components/ui/dialog';
+import { Button } from '@/Components/ui/button';
+import { Card } from '@/Components/ui/card';
 import { Plus, Eraser } from 'lucide-react';
 import { transformData_json } from '@/Function/mapper';
 import axios from 'axios';
@@ -22,7 +22,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+} from "@/Components/ui/alert-dialog"
 import { useNavigate } from 'react-router-dom';
 
 const initialNodes =[

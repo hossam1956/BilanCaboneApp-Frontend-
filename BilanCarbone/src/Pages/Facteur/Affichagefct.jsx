@@ -7,9 +7,9 @@ import SideBare from "./Layout/SideBare";
 import { FacteurNodeUpdate } from "./Layout/Node/FacteurNodeUpdate";
 import { TypeNode_Parent_Update } from "./Layout/Node/TypeNode_Parent_Update";
 import { TypeNode_child_Update } from "./Layout/Node/TypeNode_child_Update";
-import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from '@/Components/ui/dialog';
+import { Button } from '@/Components/ui/button';
+import { Card } from '@/Components/ui/card';
 import { Plus, PencilOff, Pencil } from 'lucide-react';
 import { reverseTransformData, transformData_json } from '@/Function/mapper';
 import axios from 'axios';
@@ -20,7 +20,7 @@ import { toast } from 'sonner';
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogHeader, AlertDialogTitle,
   AlertDialogFooter, AlertDialogDescription
-} from '@/components/ui/alert-dialog';
+} from '@/Components/ui/alert-dialog';
 
 const initialNodes = [];
 const initialEdges = [];

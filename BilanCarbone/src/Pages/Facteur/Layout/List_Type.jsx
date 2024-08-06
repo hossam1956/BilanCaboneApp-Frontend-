@@ -3,10 +3,10 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@/components/ui/tabs";
+} from "@/Components/ui/tabs";
 import { PlusCircle, Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/Components/ui/input";
+import { Button } from "@/Components/ui/button";
 import List_type_all from "./Table/List_type_all";
 import List_Type_Parent from "./Table/List_Type_Parent";
 import List_Type_children from "./Table/List_Type_children";
