@@ -49,11 +49,6 @@ import {
 
 } from "@/components/ui/pagination";
 import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@/components/ui/alert"
-import {
   Select,
   SelectContent,
   SelectGroup,
@@ -71,10 +66,11 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
+import Alerts from "@/Composant/Alerts";
 import { SearchContext } from "@/Static/SearchProvider";
+import ModifyForm from "@/Composant/ModifyForm";
 
 function ListeUtilisateur() {
 
@@ -90,6 +86,17 @@ function ListeUtilisateur() {
     const [pageClicked,setPageClicked]=useState(0)
     const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
     const [utilisateurID, setUtilisateurID] = useState("");
+    const [isModifyFormVisible, setIsModifyFormVisible] = useState(false);
+    const [problemAlert,setProblemAlert]=useState(false)
+    const [alertModifier,setAlertModifier]=useState(false)
+    const [alertSupprimer,setAlertSupprimer]=useState(false)
+    const [alertBlocker,setAlertBlocker]=useState(false)
+
+
+    
+    const handleModifyFormVisibility=()=>{
+      setIsModifyFormVisible(!isModifyFormVisible)
+    }
 
 
     useEffect(
@@ -115,6 +122,7 @@ function ListeUtilisateur() {
         catch(error){  
             window.location.reload();
             console.error(error);
+
             
         }
         finally{
@@ -148,12 +156,12 @@ function ListeUtilisateur() {
       useEffect(() => {
         const fetchRoles = async () => {
         const rolesData = {};
-          for (const utilisateur of utilisateurs) {
-            rolesData[utilisateur.userRepresentation.id] = await getRoleUtilisateur(utilisateur.userRepresentation.id);
-            
-          }
+        const rolesPromises=utilisateurs.flatMap(utilisateur=>getRoleUtilisateur(utilisateur.userRepresentation.id)) 
+        const rolesResults=await Promise.all(rolesPromises)
+        rolesResults.forEach((role, index) => {
+            rolesData[utilisateurs[index].userRepresentation.id] = role;
+          });
           setRoles(rolesData);
-          
         };
         fetchRoles();
       }, [utilisateurs]);
@@ -163,10 +171,11 @@ function ListeUtilisateur() {
     {
           try{
             const response=apiClient.put(`utilisateur/block?ID=${idUtilisateur}`)
-            window.location.reload()
+            setAlertBlocker(true);
           }
           catch(error){
             console.error(error)
+            setProblemAlert(true)
           }
       };
       const DeleteUtilisateur=(idUtilisateur)=>
@@ -174,10 +183,11 @@ function ListeUtilisateur() {
         {
               try{
                 const response=apiClient.delete(`utilisateur?ID=${idUtilisateur}`)
-                window.location.reload()
+                setAlertSupprimer(true)
               }
               catch(error){
                 console.error(error)
+                setProblemAlert(true)
               }
               finally{
 
@@ -197,11 +207,68 @@ function ListeUtilisateur() {
       setSize(size);
     };
 
+    useEffect(() => {
+      if (problemAlert) {
+        const timer = setTimeout(() => {
+          setProblemAlert(false);
+        }, 4000);
+  
+        return () => {clearTimeout(timer)}
+      }
+    }, [problemAlert]);
+  
+    useEffect(() => {
+      if (alertBlocker) {
+        const timer = setTimeout(() => {
+          setAlertBlocker(false);
+          window.location.reload() 
+          
+        }, 1000);
+  
+        return () => {clearTimeout(timer)}
+      }
+    }, [alertBlocker]);
+
+    useEffect(() => {
+      if (alertModifier) {
+        const timer = setTimeout(() => {
+          setAlertModifier(false);
+          window.location.reload() 
+          
+        }, 1000);
+  
+        return () => {clearTimeout(timer)}
+      }
+    }, [alertModifier]);
+
+    useEffect(() => {
+      if (alertBlocker) {
+        const timer = setTimeout(() => {
+          setAlertBlocker(false);
+          window.location.reload()
+        }, 1000);
+  
+        return () => {clearTimeout(timer)}
+      }
+    }, [alertBlocker]);
+
+    useEffect(() => {
+      if (alertSupprimer) {
+        const timer = setTimeout(() => {
+          setAlertModifier(false);
+          window.location.reload() 
+          
+        }, 1000);
+  
+        return () => {clearTimeout(timer)}
+      }
+    }, [alertSupprimer]);
   
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+          {isModifyFormVisible&& <ModifyForm onClose={handleModifyFormVisibility}/>}
           <Tabs defaultValue="all">
             <TabsContent value="all">
               <Card x-chunk="dashboard-06-chunk-0">
@@ -278,7 +345,7 @@ function ListeUtilisateur() {
                                     <DropdownMenuContent align="end">
                                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                       <DropdownMenuItem onClick={()=>{UtilisateurStatusUpdate(id);}}>{enabled ? "Blocker":"Deblocker"}</DropdownMenuItem>
-                                      <DropdownMenuItem >Modifer</DropdownMenuItem>      
+                                      <DropdownMenuItem onClick={handleModifyFormVisibility} >Modifer</DropdownMenuItem>      
                                       <DropdownMenuItem onClick={()=>{setUtilisateurID(id);setIsAlertDialogOpen(true)}}>Supprimer</DropdownMenuItem>
                                     </DropdownMenuContent>
                                   </DropdownMenu>
@@ -391,17 +458,9 @@ function ListeUtilisateur() {
             
         </main>
       </div>
-     
-      {/*alert && (      <div className="fixed top-4 right-4 w-60 z-10 transition-transform transform translate-x-0">
-                      <Alert className="bg-red-400">
-                        <Terminal className="h-4 w-3" />
-                        <AlertTitle>Attention!</AlertTitle>
-                        <AlertDescription>
-                          Il ya un problème au niveau d'action effectué.
-                        </AlertDescription>
-                      </Alert>
-                      </div>)*/}
-        
+        <Alerts alert={alertBlocker} alertProblem={problemAlert} titre_succes={"Operation Réussite"} message_succes={"Utilisateur est blocker ou deblocker avec succès" } message_erreur={"Une erreur est survenue lors de cette opêration"}/>
+        <Alerts alert={alertSupprimer} alertProblem={problemAlert} titre_succes={"Operation Réussite"} message_succes={"Utilisateur est supprimer  avec succès" } message_erreur={"Une erreur est survenue lors de cette opêration"}/>
+        <Alerts alert={alertModifier} alertProblem={problemAlert} titre_succes={"Operation Réussite"} message_succes={"Utilisateur est modifer avec succès" } message_erreur={"Une erreur est survenue lors de cette opêration"}/>
     </div>
   )
 
@@ -409,4 +468,3 @@ function ListeUtilisateur() {
 export default ListeUtilisateur
 
 
-{/*onClick={()=>{UtilisateurStatusUpdate();window.location.reload()}}*/}

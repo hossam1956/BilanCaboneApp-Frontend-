@@ -2,8 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import {apiClient} from "../KeycloakConfig/KeycloakConn"
 import {
   Check,
-  X,
-  Terminal
+  X
 } from "lucide-react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
@@ -37,11 +36,6 @@ import {
 
 } from "@/components/ui/pagination";
 import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@/components/ui/alert"
-import {
   Select,
   SelectContent,
   SelectGroup,
@@ -63,6 +57,7 @@ import {
 } from "@/components/ui/alert-dialog"
 
 import { SearchContext } from "@/Static/SearchProvider";
+import Alerts from "@/Composant/Alerts";
 
 function ListDemandePage() {
 
@@ -367,27 +362,7 @@ function ListDemandePage() {
           </Tabs>    
         </main>
       </div>
-     
-      {problemAlert && (      <div className="fixed top-4 right-4 w-60 z-10 transition-transform transform translate-x-0">
-                      <Alert className="bg-red-400">
-                        <Terminal className="h-4 w-3" />
-                        <AlertTitle>Attention!</AlertTitle>
-                        <AlertDescription>
-                          Il ya un problème au niveau d'acceptation de la demande peut être ce nom utilisateur existe déja ou un autre problème.
-                        </AlertDescription>
-                      </Alert>
-                      </div>)}
-
-      {alert && (<div className="fixed top-4 right-4 w-60 z-10 transition-transform transform translate-x-0">
-                      <Alert className="bg-green-400">
-                        <Terminal className="h-4 w-3" />
-                        <AlertTitle>Demande Envoye!</AlertTitle>
-                        <AlertDescription>
-                          Votre demande est envoyé avec succès
-                        </AlertDescription>
-                      </Alert>
-                      </div>)}
-        
+     <Alerts alert={alert} alertProblem={problemAlert} titre_succes={"Demande Acceptée"} message_succes={"Demande Acceptée avec succès" } message_erreur={"Une erreur est survenue lors de traitement de la demande"} />
     </div>
   )
 

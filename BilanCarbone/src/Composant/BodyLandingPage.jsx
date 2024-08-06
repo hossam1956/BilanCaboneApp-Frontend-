@@ -5,7 +5,7 @@ const BodyLandingPage = () => {
   const [extendText, setExtendText] = useState(false);
 
   return (
-    <div className="bg-cover bg-center h-screen md:h-screen" style={{ backgroundImage: `url(${bgImage})` }}>
+    <div className="bg-[url('src/images/forest-3622519_1920.jpg')] bg-cover bg-center h-screen md:h-screen">
       <div className="flex justify-center">
         <div className="w-1/2 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mt-11">
             <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-center">

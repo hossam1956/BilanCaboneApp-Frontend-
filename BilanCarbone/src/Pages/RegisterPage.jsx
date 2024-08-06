@@ -1,24 +1,11 @@
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@/components/ui/alert"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
 import React,{useEffect, useState} from 'react';
 import { ChevronLeft,Eye,EyeOff,Terminal } from 'lucide-react'; 
 import bgImage from '../images/forest-3622519_1920.jpg';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import Alerts from "@/Composant/Alerts";
+import validate from '@/Validation/RegexValidation';
+
 const RegisterPage = () => {
   const navigate=useNavigate()
   const [username, setUsername] = useState('');
@@ -34,34 +21,13 @@ const RegisterPage = () => {
   const [showPassword,setShowPassword]=useState(false)
   const [problemAlert,setProblemAlert]=useState(false)
   const [alert,setAlert]=useState(false)
-  const validate=()=>{
-    const errors={}
-    if(!/^[A-Za-z0-9]{4,15}$/.test(username)){
-      errors.username = 'Nom Utilisateur doit être alphanumérique et contenir entre 4 et 15 caractères.';
-    }
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-      errors.email="Email est invalide"
-    }
-    if (!/^[a-zA-Z]{2,20}$/.test(prenom)) {
-      errors.prenom = 'Prenom doit contenir uniquement des lettres et avoir entre 2 et 20 caractères.';
-    }
-    if (!/^[a-zA-Z]{2,20}$/.test(nom)) {
-      errors.nom = 'Nom doit contenir uniquement des lettres et avoir entre 2 et 20 caractères.';
-    }
-    if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
-      errors.password = 'Mot de passe doit contenir au moins 8 caractères, une lettre et un chiffre et un caractère spèciale.';
-    }
-  
-    if (password !== confirmPassword) {
-      errors.confirmPassword = 'Les mots de passe ne correspondent pas.';
-    }
-    return errors;
-  }
+
+
   //récuperer les entreprises
   useEffect(() => {
     const getEntreprises = async () => {
       try{
-        const response = await axios.get("http://localhost:8081/api/entreprise");
+        const response = await axios.get(`${import.meta.env.VITE_AXIOS_URL}/entreprise`);
       setEntreprises(response.data);
       }
       catch(error){
@@ -80,7 +46,7 @@ const RegisterPage = () => {
   
   const handleSubmit=(e)=>{
     e.preventDefault();
-    const validationErrors = validate();
+    const validationErrors = validate({username,email,prenom,nom,password,confirmPassword});
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     }
@@ -98,7 +64,7 @@ const RegisterPage = () => {
       console.log(bodyRequest)
       try{
         const sendDemande=async()=>{
-          const response=await axios.post("http://localhost:8081/api/demande",bodyRequest)
+          const response=await axios.post(`${import.meta.env.VITE_AXIOS_URL}/demande`,bodyRequest)
           setAlert(true)
         }
         sendDemande()
@@ -302,24 +268,7 @@ const RegisterPage = () => {
           </form>
         </div>
       </div>
-      {problemAlert && (<div className="fixed top-4 right-4 w-60 z-10 transition-transform transform translate-x-0">
-                      <Alert className="bg-red-400">
-                        <Terminal className="h-4 w-3" />
-                        <AlertTitle>Attention!</AlertTitle>
-                        <AlertDescription>
-                          Il ya un problème au niveau d'acceptation de la demande peut être ce email existe déja ou un autre problème.
-                        </AlertDescription>
-                      </Alert>
-                      </div>)}
-      {alert && (<div className="fixed top-4 right-4 w-60 z-10 transition-transform transform translate-x-0">
-                      <Alert className="bg-green-400">
-                        <Terminal className="h-4 w-3" />
-                        <AlertTitle>Demande Envoye!</AlertTitle>
-                        <AlertDescription>
-                          Votre demande est envoyé avec succès
-                        </AlertDescription>
-                      </Alert>
-                      </div>)}
+    <Alerts alert={alert} alertProblem={problemAlert} titre_succes={"Demande Envoyé"} message_succes={"Demande Envoyé avec succès" } message_erreur={"Une erreur est survenue lors de l'envoi de la demande"}/>
     </div>
   );
 };
