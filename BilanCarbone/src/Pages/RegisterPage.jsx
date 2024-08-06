@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Alerts from "@/Composant/Alerts";
 import validate from '@/Validation/RegexValidation';
+import { apiClient } from '@/KeycloakConfig/KeycloakConn';
 
 const RegisterPage = () => {
   const navigate=useNavigate()
@@ -27,7 +28,7 @@ const RegisterPage = () => {
   useEffect(() => {
     const getEntreprises = async () => {
       try{
-        const response = await axios.get(`${import.meta.env.VITE_AXIOS_URL}/entreprise`);
+        const response = await apiClient.get('/entreprise');
       setEntreprises(response.data);
       }
       catch(error){
@@ -64,7 +65,7 @@ const RegisterPage = () => {
       console.log(bodyRequest)
       try{
         const sendDemande=async()=>{
-          const response=await axios.post(`${import.meta.env.VITE_AXIOS_URL}/demande`,bodyRequest)
+          const response=await apiClient.post('/demande',bodyRequest)
           setAlert(true)
         }
         sendDemande()
