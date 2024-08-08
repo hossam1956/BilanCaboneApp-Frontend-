@@ -16,7 +16,7 @@ export const validate=({username,email,prenom,nom,password,confirmPassword})=>{
     }
     
     if (!PASSWORD_REGEX.test(password)) {
-
+      
       errors.password = 'Mot de passe doit contenir au moins 8 caractères, une lettre et un chiffre et un caractère spèciale.';
     }
     

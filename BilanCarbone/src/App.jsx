@@ -18,6 +18,7 @@ import Trashfct from './Pages/Facteur/Trashfct';
 import Affichagefct from './Pages/Facteur/Affichagefct';
 
 
+
 const App = () => {
   const { keycloak, initialized } = useKeycloak();
 
@@ -62,7 +63,8 @@ const App = () => {
               path:"ajouter",
               element:<AddUtilisateurPage/>
             },
-            { 
+            {
+
               path:"liste",
               element:<ListeUtilisateur/>
             },
