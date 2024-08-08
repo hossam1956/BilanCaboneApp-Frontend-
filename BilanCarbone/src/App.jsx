@@ -3,14 +3,21 @@ import { ReactKeycloakProvider, useKeycloak } from '@react-keycloak/web';
 import keycloak from './KeycloakConfig/keycloak';
 import { createBrowserRouter,Navigate,RouterProvider } from 'react-router-dom';
 import Dashboard from "./Pages/Dashboard"
+import ListDemandePage from './Pages/ListeDemandePage';
 import LandingPage from "./Pages/LandingPage"
 import { LoaderCircle } from 'lucide-react';
 import RegisterPage from './Pages/RegisterPage';
 import Main from './Static/Main';
-import ListDemandePage from './Pages/ListeDemandePage';
 import ParametresPages from './Pages/ParametresPage';
 import ListeUtilisateur from './Pages/ListeUtilisateur';
 import AddUtilisateurPage from './Pages/AddUtilisateurPage';
+import { TooltipProvider } from "@/Components/ui/tooltip";
+import { Addfct } from './Pages/Facteur/Addfct';
+import { Listfct } from './Pages/Facteur/Listfct';
+import Trashfct from './Pages/Facteur/Trashfct';
+import Affichagefct from './Pages/Facteur/Affichagefct';
+
+
 
 const App = () => {
   const { keycloak, initialized } = useKeycloak();
@@ -23,8 +30,8 @@ const App = () => {
     )
   }
 
- 
-    
+
+
   if(keycloak.authenticated){
     sessionStorage.setItem('token',keycloak.token)
 }
@@ -56,7 +63,8 @@ const App = () => {
               path:"ajouter",
               element:<AddUtilisateurPage/>
             },
-            { 
+            {
+
               path:"liste",
               element:<ListeUtilisateur/>
             },
@@ -64,15 +72,36 @@ const App = () => {
               path:"demandes",
               element:<ListDemandePage/>
             }
-          ]
-        }
-
-      ]
-    }
-  ])
+          ],
+        },
+          {
+              path: "facteur",
+              children: [
+                {  index: true,
+                    element:<Listfct/>
+                },
+                {
+                    path: ":id",
+                    element: <Affichagefct/>,
+                },
+                {
+                    path: "ajouter",
+                    element: <Addfct />,
+                },
+                {
+                    path: "trash",
+                    element: <Trashfct />,
+                },
+            ],
+          },
+      ],
+    },
+  ]);
 
   return (
-      <RouterProvider router={router}/>
+    <TooltipProvider>
+          <RouterProvider router={router}/>
+    </TooltipProvider>
   );
 };
 
@@ -83,6 +112,7 @@ const WrappedApp = () => {
     </ReactKeycloakProvider>
   );
 };
+
 
 
 export default WrappedApp;
