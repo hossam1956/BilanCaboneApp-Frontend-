@@ -10,6 +10,7 @@ import Main from './Static/Main';
 import ListDemandePage from './Pages/ListeDemandePage';
 import ParametresPages from './Pages/ParametresPage';
 import ListeUtilisateur from './Pages/ListeUtilisateur';
+import AddUtilisateurPage from './Pages/AddUtilisateurPage';
 
 const App = () => {
   const { keycloak, initialized } = useKeycloak();
@@ -51,6 +52,10 @@ const App = () => {
         {
           path:"utilisateur",
           children:[
+            { 
+              path:"ajouter",
+              element:<AddUtilisateurPage/>
+            },
             { 
               path:"liste",
               element:<ListeUtilisateur/>

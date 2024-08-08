@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/Components/ui/badge";
 
 const Navbar = () => {
   const [isFacteurOpen, setIsFacteurOpen] = useState(false);
@@ -110,7 +110,7 @@ const Navbar = () => {
                     className="pl-6 mt-2 overflow-hidden"
                   >
                     <Link
-                      to="/"
+                      to="/utilisateur/ajouter"
                       className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                     >
                       <PlusCircle className="h-4 w-4" />

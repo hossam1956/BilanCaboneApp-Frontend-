@@ -4,7 +4,7 @@ import bgImage from '../images/forest-3622519_1920.jpg';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Alerts from "@/Composant/Alerts";
-import validate from '@/Validation/RegexValidation';
+import {validate} from '@/Validation/RegexValidation';
 import { apiClient } from '@/KeycloakConfig/KeycloakConn';
 
 const RegisterPage = () => {
