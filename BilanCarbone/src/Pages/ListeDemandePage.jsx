@@ -5,7 +5,7 @@ import {
   X
 } from "lucide-react";
 import axios from "axios";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/Components/ui/button";
 import {
   Card,
   CardContent,
@@ -13,7 +13,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";;
+} from "@/Components/ui/card";
 import {
   Table,
   TableBody,
@@ -21,11 +21,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/Components/ui/table";
 import {
   Tabs,
   TabsContent,
-} from "@/components/ui/tabs";
+} from "@/Components/ui/tabs";
 import {
   Pagination,
   PaginationContent,
@@ -34,7 +34,7 @@ import {
   PaginationLink,
   PaginationNext,
 
-} from "@/components/ui/pagination";
+} from "@/Components/ui/pagination";
 import {
   Select,
   SelectContent,
@@ -43,7 +43,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/Components/ui/select"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -54,7 +54,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/Components/ui/alert-dialog"
 
 import { SearchContext } from "@/Static/SearchProvider";
 import Alerts from "@/Composant/Alerts";

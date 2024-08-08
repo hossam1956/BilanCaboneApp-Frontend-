@@ -1,7 +1,4 @@
-import Navbar from "@/Static/Navbar";
-import Navheader from "@/Static/Navheader";
-import keycloak from '../KeycloakConfig/keycloak';
-import { useEffect,useState } from "react";
+
 const Dashboard=()=>{
 
 
