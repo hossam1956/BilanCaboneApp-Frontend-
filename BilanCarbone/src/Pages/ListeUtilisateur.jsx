@@ -6,10 +6,10 @@ import {
   Terminal,
   MoreHorizontal
 } from "lucide-react";
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Input } from "@/Components/ui/input"
+import { Label } from "@/Components/ui/label"
 import axios from "axios";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/Components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -18,7 +18,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/Components/ui/dropdown-menu"
 import {
   Card,
   CardContent,
@@ -26,7 +26,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";;
+} from "@/Components/ui/card";;
 import {
   Table,
   TableBody,
@@ -34,11 +34,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/Components/ui/table";
 import {
   Tabs,
   TabsContent,
-} from "@/components/ui/tabs";
+} from "@/Components/ui/tabs";
 import {
   Pagination,
   PaginationContent,
@@ -47,7 +47,7 @@ import {
   PaginationLink,
   PaginationNext,
 
-} from "@/components/ui/pagination";
+} from "@/Components/ui/pagination";
 import {
   Select,
   SelectContent,
@@ -56,7 +56,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/Components/ui/select"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -66,7 +66,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+} from "@/Components/ui/alert-dialog"
 
 import Alerts from "@/Composant/Alerts";
 import { SearchContext } from "@/Static/SearchProvider";
@@ -91,11 +91,15 @@ function ListeUtilisateur() {
     const [alertModifier,setAlertModifier]=useState(false)
     const [alertSupprimer,setAlertSupprimer]=useState(false)
     const [alertBlocker,setAlertBlocker]=useState(false)
+    const [utilisateurInfo,setUtilisateurInfo]=useState({})
+    const [selectedRole,setSelectedRole]=useState("")
 
 
     
     const handleModifyFormVisibility=()=>{
-      setIsModifyFormVisible(!isModifyFormVisible)
+      const timer = setTimeout(() => {
+        setIsModifyFormVisible(!isModifyFormVisible)
+      }, 100);
     }
 
 
@@ -136,7 +140,21 @@ function ListeUtilisateur() {
       getAllUtilisateur()
     },[searchValue,size,pageNum]) ;
 
-  
+    
+      const getUserInfo=async(id)=>{
+        try{
+          const response=await apiClient.get(`/utilisateur/id?ID=${id}`)
+          console.log(response.data)
+          setUtilisateurInfo(response.data)
+        }
+        catch(error){
+          console.error(error)
+        }
+        
+      }
+      
+      
+
       
         const getRoleUtilisateur= async(id)=>{
           try{
@@ -268,7 +286,7 @@ function ListeUtilisateur() {
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-          {isModifyFormVisible&& <ModifyForm onClose={handleModifyFormVisibility}/>}
+        {isModifyFormVisible&& <ModifyForm onClose={handleModifyFormVisibility} UtilisateurInfo={utilisateurInfo} UtilisateurRole={selectedRole}/>}
           <Tabs defaultValue="all">
             <TabsContent value="all">
               <Card x-chunk="dashboard-06-chunk-0">
@@ -310,7 +328,7 @@ function ListeUtilisateur() {
                             const{nomEntreprise}=utilisateur.entreprise
                             const role = roles[id];
                             return(
-                                    
+                              
                               <TableRow key={id} >
                                 <TableCell className="font-medium">
                                           {lastName} {firstName}
@@ -343,9 +361,9 @@ function ListeUtilisateur() {
                                       </Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end">
-                                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                      <DropdownMenuLabel >Actions</DropdownMenuLabel>
                                       <DropdownMenuItem onClick={()=>{UtilisateurStatusUpdate(id);}}>{enabled ? "Blocker":"Deblocker"}</DropdownMenuItem>
-                                      <DropdownMenuItem onClick={handleModifyFormVisibility} >Modifer</DropdownMenuItem>      
+                                      <DropdownMenuItem onClick={()=>{setSelectedRole(`${role}`);getUserInfo(id);handleModifyFormVisibility()}} >Modifer</DropdownMenuItem>      
                                       <DropdownMenuItem onClick={()=>{setUtilisateurID(id);setIsAlertDialogOpen(true)}}>Supprimer</DropdownMenuItem>
                                     </DropdownMenuContent>
                                   </DropdownMenu>
