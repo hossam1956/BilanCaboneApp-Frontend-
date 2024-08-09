@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ReactKeycloakProvider, useKeycloak } from '@react-keycloak/web';
 import keycloak from './KeycloakConfig/keycloak';
 import { createBrowserRouter,Navigate,RouterProvider } from 'react-router-dom';
@@ -20,6 +20,7 @@ import Affichagefct from './Pages/Facteur/Affichagefct';
 
 
 const App = () => {
+  const [reload,setReload]=useState(true)
   const { keycloak, initialized } = useKeycloak();
 
   if (!initialized) {
@@ -33,8 +34,13 @@ const App = () => {
 
 
   if(keycloak.authenticated){
+    
     sessionStorage.setItem('token',keycloak.token)
-}
+    sessionStorage.getItem('token').length>10?console.log("token is present"):window.location.reload()
+  }
+  else{
+    sessionStorage.setItem('token',undefined)
+  }
   const router = createBrowserRouter([
     {
       path:"/welcome",

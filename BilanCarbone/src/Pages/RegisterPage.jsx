@@ -28,7 +28,7 @@ const RegisterPage = () => {
   useEffect(() => {
     const getEntreprises = async () => {
       try{
-        const response = await apiClient.get('/entreprise');
+        const response = await axios.get('http://localhost:8081/api/entreprise');
       setEntreprises(response.data);
       }
       catch(error){
@@ -65,7 +65,7 @@ const RegisterPage = () => {
       console.log(bodyRequest)
       try{
         const sendDemande=async()=>{
-          const response=await apiClient.post('/demande',bodyRequest)
+          const response=await axios.post('http://localhost:8081/api/demande',bodyRequest)
           setAlert(true)
         }
         sendDemande()

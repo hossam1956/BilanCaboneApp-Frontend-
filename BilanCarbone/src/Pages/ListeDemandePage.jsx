@@ -76,51 +76,52 @@ function ListDemandePage() {
     const [pageClicked,setPageClicked]=useState(0)
 
 
-    useEffect(()=>{
-      
-      const getAllDemande=async()=>{
-        try{
-          const response=await apiClient.get(`/demande`,{
-            params:{
-              page:pageNum,
-              size:size,
-              search:searchValue
-            }
-  
-          })
-              setDemandes(response.data.content)
-              setPageNum(response.data.number)
-              setTotalElements(response.data.totalElements)
-              setSize(response.data.size)
-              setTotalPages(response.data.totalPages)
-              setFirst(response.data.first)
-              setLast(response.data.last)
-         }
-        catch(error){
-            window.location.reload();   
-            console.error('Erreur : '+error)
+    const getAllDemande=async()=>{
+      try{
+        const response=await apiClient.get(`/demande`,{
+          params:{
+            page:pageNum,
+            size:size,
+            search:searchValue
           }
-      }
+
+        })
+            setDemandes(response.data.content)
+            setPageNum(response.data.number)
+            setTotalElements(response.data.totalElements)
+            setSize(response.data.size)
+            setTotalPages(response.data.totalPages)
+            setFirst(response.data.first)
+            setLast(response.data.last)
+       }
+      catch(error){  
+          console.error('Erreur : '+error)
+        }
+    }
+
+    useEffect(()=>{
         getAllDemande()
     },[searchValue,size,pageNum])
 
     //useEffect pour annulation:
 
     useEffect(()=>{
-      if(currentId){
-        try{
-          const response =apiClient.delete(`demande/reject`,{
-            params:{id: currentId}
-          })
-          window.location.reload()
+      const rejectDemande = async () => {
+        if (currentId) {
+          try {
+            const response = await apiClient.delete(`/demande/reject`, {
+              params: { id: currentId },
+            });
+            await getAllDemande();
+          } catch (error) {
+            console.error(error);
+          } finally {
+            setcurrentId(0);
+          }
         }
-        catch (error) {
-          console.error(error)
-        }finally {
-          setCurrentIdAccept(0);
-        }
-
-      }
+      };
+    
+      rejectDemande();
       
     },[currentId])
      //useEffect pour acceptation:
@@ -130,10 +131,11 @@ function ListDemandePage() {
           try {
             const response = await apiClient.delete(`/demande/accept`, {
               params: { id: currentIdAccept }
+              
             });
             if(response.data === true){
               setAlert(true);
-              
+              await getAllDemande()
             }
             else{
               setProblemAlert(true)
@@ -165,7 +167,6 @@ function ListDemandePage() {
       if (alert) {
         const timer = setTimeout(() => {
           setProblemAlert(false);
-          window.location.reload() 
         }, 1000);
   
         return () => {clearTimeout(timer)}
@@ -216,6 +217,9 @@ function ListDemandePage() {
                           Envoyée le
                         </TableHead>
                         <TableHead className="hidden md:table-cell">
+                          Rôle
+                        </TableHead>
+                        <TableHead className="hidden md:table-cell">
                             Action
                         </TableHead>
                       </TableRow>
@@ -223,7 +227,7 @@ function ListDemandePage() {
                     <TableBody>
                         {demandes.map(
                             (demande)=>{
-                                const {id,nom,prenom,nomUtilisateur, email, entreprise, sendDate } = demande;
+                                const {id,nom,prenom,nomUtilisateur, email, entreprise, sendDate,role } = demande;
                                 return(
                                 <TableRow key={id}>
                                 <TableCell className="font-medium">
@@ -240,6 +244,9 @@ function ListDemandePage() {
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
                                     {sendDate}
+                                </TableCell>
+                                <TableCell className="hidden md:table-cell">
+                                    {role}
                                 </TableCell>
                                 <TableCell className="flex justify-around ">
                                 <AlertDialog className="overflow-y-auto overflow-x-auto">
