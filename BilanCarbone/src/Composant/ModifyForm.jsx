@@ -80,12 +80,11 @@ const ModifyForm=({onClose,UtilisateurInfo,UtilisateurRole})=>{
         password: "string"
       }
       console.log(bodyRequest)
-      
+      const update=async()=>{
+        const response=await apiClient.put(`/utilisateur?ID=${UtilisateurInfo.userRepresentation.id}`,bodyRequest)
+        setAlert(true)
+      }
       try{
-        const update=async()=>{
-          const response=await apiClient.put(`/utilisateur?ID=${UtilisateurInfo.userRepresentation.id}`,bodyRequest)
-          setAlert(true)
-        }
         update()}
         catch(error){
           console.error("Erreur :"+error)
@@ -98,8 +97,9 @@ const ModifyForm=({onClose,UtilisateurInfo,UtilisateurRole})=>{
   useEffect(() => {
     if (alert) {
       const timer = setTimeout(() => {
-        setAlert(false); 
-        window.location.reload();       
+        setAlert(false);
+        onClose() 
+
       }, 500);
 
       return () => {clearTimeout(timer)}

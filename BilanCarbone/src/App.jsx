@@ -36,7 +36,6 @@ const App = () => {
   if(keycloak.authenticated){
     
     sessionStorage.setItem('token',keycloak.token)
-    sessionStorage.getItem('token').length>10?console.log("token is present"):window.location.reload()
   }
   else{
     sessionStorage.setItem('token',undefined)
