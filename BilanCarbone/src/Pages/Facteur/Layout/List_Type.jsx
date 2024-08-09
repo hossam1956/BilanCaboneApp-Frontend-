@@ -41,7 +41,7 @@ const List_Type = () => {
   const fetchData = () => {
     const sortString = sortConfig.map(e => `&sortBy=${e.key}&sortBy=${e.direction}`).join("");
     setLoading(true);
-    axios.get(`${API_TYPE.Type}?${filterParam}&page=${currentPage}&search=${search}${sortString}`)
+    apiClient.get(`${API_TYPE.Type}?${filterParam}&page=${currentPage}&search=${search}${sortString}`)
       .then(response => response.data)
       .then(response => {
         setFacteurs(response);
@@ -79,7 +79,7 @@ const List_Type = () => {
   };
 
   const handleDelete = (id, name) => {
-    axios.delete(`${API_TYPE.Type}/${id}`)
+    apiClient.delete(`${API_TYPE.Type}/${id}`)
       .then(response => response.data)
       .then(response => {
         showToast('success', `Le type ${response.nom_type} a été supprimé`);
@@ -92,7 +92,7 @@ const List_Type = () => {
   };
 
   const handleActivate = (id, name, txt) => {
-    axios.put(`${API_TYPE.Type}/${id}/activate?${txt}`)
+    apiClient.put(`${API_TYPE.Type}/${id}/activate?${txt}`)
       .then(response => response.data)
       .then(response => {
         showToast('success', `Le type ${response.nom_type} a été activé`);
@@ -105,7 +105,7 @@ const List_Type = () => {
   };
 
   const handleDeactivate = (id, name) => {
-    axios.put(`${API_TYPE.Type}/${id}/desactivate`)
+    apiClient.put(`${API_TYPE.Type}/${id}/desactivate`)
       .then(response => response.data)
       .then(response => {
         showToast('success', `Le type ${response.nom_type} a été désactivé`);

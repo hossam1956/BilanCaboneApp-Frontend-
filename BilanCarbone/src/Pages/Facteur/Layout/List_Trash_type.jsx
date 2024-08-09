@@ -43,7 +43,7 @@ export const List_Trash_type = () => {
       sorted += `&sortBy=${e.key}&sortBy=${e.direction}`;
     });
     setLoading(true);
-    axios.get(`${API_TYPE.Type_trash}?page=${currentPage}&search=${search}${sorted}`)
+    apiClient.get(`${API_TYPE.Type_trash}?page=${currentPage}&search=${search}${sorted}`)
       .then(response => response.data)
       .then(response => {
         setFacteurs(response);
@@ -67,7 +67,7 @@ export const List_Trash_type = () => {
   };
 
   const handlerecovery = (id, nom) => {
-    axios.post(`${API_TYPE.Type_trash}/${id}`)
+    apiClient.post(`${API_TYPE.Type_trash}/${id}`)
       .then(response => response.data)
       .then(response => {
         const currentdate = new Date();
@@ -86,7 +86,7 @@ export const List_Trash_type = () => {
   };
 
   const handledestroy = (id, nom) => {
-    axios.delete(`${API_TYPE.Type_trash}/${id}`)
+    apiClient.delete(`${API_TYPE.Type_trash}/${id}`)
       .then(response => response.data)
       .then(response => {
         const currentdate = new Date();

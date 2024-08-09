@@ -21,6 +21,9 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogHeader, AlertDialogTitle,
   AlertDialogFooter, AlertDialogDescription
 } from '@/Components/ui/alert-dialog';
+import Page404 from '../error/Page404';
+import Page403 from '../error/Page403';
+import keycloak from "@/KeycloakConfig/keycloak";
 
 const initialNodes = [];
 const initialEdges = [];
@@ -44,20 +47,40 @@ export function Affichagefct() {
   const [editMode, setEditMode] = useState(false);
   const [showCard, setShowCard] = useState(false);
   const [showAlertDialog, setShowAlertDialog] = useState(false);
+  const [errorStatus, setErrorStatus] = useState(null);
+  const [global,setglobal]=useState(true)
+  const userRoles = keycloak.tokenParsed?.realm_access?.roles;
 
   const getData = useCallback(() => {
     axios
       .get(`${API_TYPE.Type}/${id}?all=true`)
       .then((response) => response.data)
       .then((data) => {
+        const isAdmin = userRoles?.includes("ADMIN");
+        console.log(isAdmin)
+        console.log(global)
+        if (isAdmin) {
+          setglobal(true);
+        } else {
+          setglobal(data.entreprise !== undefined && data.entreprise !== null);
+        }
         const { nodes_res, edges_res } = reverseTransformData(data, handleDataChange);
-        console.log("Nodes received:", nodes_res); // Add logging
-        console.log("Edges received:", edges_res); // Add logging
         setNodes(nodes_res);
         setEdges(edges_res);
         setLoading(false);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        setLoading(false)
+        if (error.response) {
+          if (error.response.status === 500) {
+            setErrorStatus(500);
+          } else if (error.response.status === 403) {
+            setErrorStatus(403);
+          }
+        } else {
+          console.error(error);
+        }
+      });
   }, [id]);
   
 
@@ -243,7 +266,7 @@ export function Affichagefct() {
 
   useEffect(() => {
     getData();
-  }, [id]);
+  }, [id,errorStatus]);
 
   useEffect(() => {
     toogleedit();
@@ -260,7 +283,13 @@ export function Affichagefct() {
       }))
     );
   };
+  if (errorStatus === 500) {
+    return <Page404 />;
+  }
 
+  if (errorStatus === 403) {
+    return <Page403 />;
+  }
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
@@ -339,9 +368,11 @@ export function Affichagefct() {
             </AlertDialog>
           </>
         )}
-        <Button onClick={toggleEditMode} className="absolute top-2 right-2">
-          {editMode ? <PencilOff /> : <Pencil />} {editMode ? 'Quitter' : 'Activer'}
-        </Button>
+          {userRoles?.includes("ADMIN") || (global) ? (
+      <Button onClick={toggleEditMode} className="absolute top-2 right-2">
+        {editMode ? <PencilOff /> : <Pencil />} {editMode ? 'Quitter' : 'Activer'}
+      </Button>
+    ) : null}
       </div>
     </ReactFlowProvider>
   );

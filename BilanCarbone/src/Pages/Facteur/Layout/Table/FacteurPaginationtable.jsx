@@ -7,7 +7,9 @@ import {
     TableRow,
   } from "@/Components/ui/table";
   import {
-    MoreHorizontal, ChevronDown, CircleX, ChevronUp
+    MoreHorizontal, ChevronDown, CircleX, ChevronUp,
+    EyeIcon,
+    Eye
   } from "lucide-react";
   import {
     CardFooter,
@@ -34,7 +36,12 @@ import {
   import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from "@/Components/ui/dialog";
   import React, { useState } from "react";
   import { Link, useNavigate } from "react-router-dom";
-  
+  import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+  } from "@/Components/ui/tooltip"  
   const FacteurPaginationtable = ({
     Facteurs,
     loading,
@@ -150,8 +157,9 @@ import {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-center md:table-cell">{item.creat_at}</TableCell>
-                    <TableCell>
-                      <DropdownMenu>
+                    <TableCell className="text-center md:table-cell">
+                    {(!isGlobal)?
+                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button aria-haspopup="true" size="icon" variant="ghost">
                             <MoreHorizontal className="h-4 w-4" />
@@ -159,19 +167,26 @@ import {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-48">
-                          <DropdownMenuItem className="text-blue-600" onClick={() => { handle_affichage(item.type) }}>Afficher</DropdownMenuItem>
-                          {!isGlobal && ( // condition pour masquer les actions pour les facteurs globaux
-                            <>
+                          <DropdownMenuItem className="text-blue-600" onClick={() => { handle_affichage(item.id) }}>Afficher</DropdownMenuItem>
                               {item.active ? (
                                 <DropdownMenuItem onClick={() => handledesactivate(item.id, item.nom_facteur)} className="text-red-950">Désactiver</DropdownMenuItem>
                               ) : (
-                                <DropdownMenuItem onClick={() => handleactivate(item.id, item.nom_facteur)} className="text-green-600">Activer</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => handleActivationClick(item)} className="text-green-600">Activer</DropdownMenuItem>
                               )}
                               <DropdownMenuItem onClick={() => handleDeleteClick(item)} className="text-red-600">Supprimer</DropdownMenuItem>
-                            </>
-                          )}
                         </DropdownMenuContent>
-                      </DropdownMenu>
+                      </DropdownMenu> 
+                      :
+                      
+                                <Tooltip>
+              <TooltipTrigger><Link to={"/facteur/" + item.type}><Eye/></Link></TooltipTrigger>
+              <TooltipContent>
+                <p>affichage</p>
+              </TooltipContent>
+            </Tooltip>
+
+                      }
+                      
                     </TableCell>
                   </TableRow>
                 ))

@@ -24,6 +24,7 @@ import {
   AlertDialogTitle,
 } from "@/Components/ui/alert-dialog"
 import { useNavigate } from 'react-router-dom';
+import { apiClient } from '@/KeycloakConfig/KeycloakConn';
 
 const initialNodes =[
 ]
@@ -122,6 +123,8 @@ export function Addfct() {
         position,
         data: {
           label: `${type} node`,
+          onDataChange: (newData) => handleDataChange((nodes.length + 1).toString(), newData), // Pass onDataChange
+
         },
       };
       setNodes((nds) => nds.concat(newNode));
@@ -142,8 +145,9 @@ export function Addfct() {
   };
 
   const handlesave = () => {
-    const res = transformData_json(nodes, edges);  
-    axios.post(API_TYPE.Type, JSON.stringify(res[0], null, 2), {
+    console.log(nodes)
+   /* const res = transformData_json(nodes, edges);  
+    apiClient.post(API_TYPE.Type, JSON.stringify(res[0], null, 2), {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -159,7 +163,7 @@ export function Addfct() {
         toast.error(`Problème d'ajoute facteur avec le type `, {
           description: `${currentdate.getDate()}/${currentdate.getMonth() + 1}/${currentdate.getFullYear()} - - - ${currentdate.getHours()}:${currentdate.getMinutes()}:${currentdate.getSeconds()}`,
         });
-      });
+      });*/
   };
   const handleAlertDialogAction = (action) => {
     setShowAlertDialog(false);

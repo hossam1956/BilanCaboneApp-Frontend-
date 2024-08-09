@@ -5,7 +5,7 @@ import { apiClient } from '@/KeycloakConfig/KeycloakConn';
 const Dashboard=()=>{
 console.log(keycloak.tokenParsed) 
 useEffect(()=>{
-  axios.get("http://localhost:8081/api/compte/my")
+  apiClient.get("http://localhost:8081/api/compte/my")
   .then((e)=>console.log(e))
 },[])
     return(

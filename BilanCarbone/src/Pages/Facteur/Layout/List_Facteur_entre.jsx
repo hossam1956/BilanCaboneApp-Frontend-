@@ -36,7 +36,7 @@ import { apiClient } from "@/KeycloakConfig/KeycloakConn";
       sorted += `&sortBy=${e.key}&sortBy=${e.direction}`;
     });
     setLoading(true);
-    axios.get(`${API_FACTEUR.Facteur}?${filterParam}&page=${currentPage}&search=${search}${sorted}`)
+    apiClient.get(`${API_FACTEUR.Facteur}?${filterParam}&page=${currentPage}&search=${search}${sorted}`)
       .then(response => response.data)
       .then(response => {
         setFacteurs(response);
@@ -52,7 +52,7 @@ import { apiClient } from "@/KeycloakConfig/KeycloakConn";
       });
   };
   const handledeletesoft = (id, nom) => {
-    axios.delete(`${API_FACTEUR.Facteur}/${id}`)
+    apiClient.delete(`${API_FACTEUR.Facteur}/${id}`)
       .then(response => response.data)
       .then(response => {
         const currentdate = new Date();
@@ -71,7 +71,7 @@ import { apiClient } from "@/KeycloakConfig/KeycloakConn";
   };
 
   const handleactivate = (id, nom) => {
-    axios.put(`${API_FACTEUR.Facteur}/${id}/activate`)
+    apiClient.put(`${API_FACTEUR.Facteur}/${id}/activate`)
       .then(response => response.data)
       .then(response => {
         const currentdate = new Date();
@@ -90,7 +90,7 @@ import { apiClient } from "@/KeycloakConfig/KeycloakConn";
   };
 
   const handledesactivate = (id, nom) => {
-    axios.put(`${API_FACTEUR.Facteur}/${id}/desactivate`)
+    apiClient.put(`${API_FACTEUR.Facteur}/${id}/desactivate`)
       .then(response => response.data)
       .then(response => {
         const currentdate = new Date();
@@ -177,7 +177,6 @@ import { apiClient } from "@/KeycloakConfig/KeycloakConn";
               currentPage={currentPage}
               setSortConfig={setSortConfig}
               isGlobal={true} // ou false selon le contexte
-
             />
           </TabsContent>
         

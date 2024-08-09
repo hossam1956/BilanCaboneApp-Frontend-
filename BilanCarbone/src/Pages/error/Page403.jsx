@@ -2,7 +2,7 @@ import access_denied from "@/assets/access_denied.svg";
 import { Button } from "@/Components/ui/button";
 import { useNavigate } from 'react-router-dom';
 
-const Page404 = () => {
+const Page403 = () => {
   const navigate = useNavigate();
 
   return (
@@ -28,4 +28,4 @@ const Page404 = () => {
   );
 };
 
-export default Page404;
+export default Page403;

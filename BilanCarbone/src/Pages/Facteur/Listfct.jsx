@@ -17,7 +17,7 @@ import List_type_entre from "./Layout/List_type_entre";
 
 export function Listfct() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const activeTab = searchParams.get("type")=="tout"||searchParams.get("type")=="parent"||searchParams.get("type")=="hierarchie"?"type":"facteur";
+  const activeTab = searchParams.get("type")=="tout"||searchParams.get("type")=="parent"||searchParams.get("type")=="global"||searchParams.get("type")=="personnalise"?"type":"facteur";
   const userRoles = keycloak.tokenParsed?.realm_access?.roles;
 
   return (
