@@ -15,6 +15,7 @@ import axios from 'axios';
 import { API_FACTEUR } from '@/Api/FacteurApi';
 import { ShieldCheck, ShieldX } from 'lucide-react';
 import { Button } from '@/Components/ui/button';
+import { apiClient } from '@/KeycloakConfig/KeycloakConn';
 
 export const FacteurNodeUpdate = ({ data, isConnectable }) => {
   const [errorinput, setErrorinput] = useState(null);

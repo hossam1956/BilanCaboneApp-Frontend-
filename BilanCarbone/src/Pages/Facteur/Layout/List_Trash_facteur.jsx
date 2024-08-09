@@ -23,6 +23,7 @@ import axios from "axios";
 import { Skeleton } from "@/Components/ui/skeleton";
 import { toast } from 'sonner';
 import FacteurtrashTable from "./Table/FacteurtrashTable";
+import { apiClient } from "@/KeycloakConfig/KeycloakConn";
 
 export const List_Trash_facteur = () => {
   const [Facteurs, setFacteurs] = useState({ content: [] });

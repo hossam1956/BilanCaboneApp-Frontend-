@@ -3,6 +3,7 @@ import { Handle, Position } from '@xyflow/react';
 import { Input } from "@/Components/ui/input";
 import axios from 'axios';
 import {  API_TYPE } from '@/Api/FacteurApi';
+import { axios } from '@/KeycloakConfig/KeycloakConn';
 
 export const TypeNode_Parent = ({ data, isConnectable }) => {
   const [error, setError] = useState  (null);

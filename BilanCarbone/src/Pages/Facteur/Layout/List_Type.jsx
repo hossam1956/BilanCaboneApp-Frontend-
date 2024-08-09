@@ -15,6 +15,7 @@ import axios from "axios";
 import { API_TYPE } from "@/Api/FacteurApi";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { apiClient } from "@/KeycloakConfig/KeycloakConn";
 
 const List_Type = () => {
   const navigate = useNavigate();

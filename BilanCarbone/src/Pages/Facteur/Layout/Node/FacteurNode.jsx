@@ -16,6 +16,7 @@ import { API_FACTEUR } from '@/Api/FacteurApi';
 import { MoonLoader } from 'react-spinners';
 import { ShieldX } from 'lucide-react';
 import React from 'react';
+import { apiClient } from '@/KeycloakConfig/KeycloakConn';
 
 export const FacteurNode = ({ data, isConnectable }) => {
   const [loading, setLoading] = useState(true);

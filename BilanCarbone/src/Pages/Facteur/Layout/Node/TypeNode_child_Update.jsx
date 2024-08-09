@@ -8,6 +8,7 @@ import axios from 'axios';
 import { API_TYPE } from '@/Api/FacteurApi';
 import { ShieldCheck, ShieldX } from 'lucide-react';
 import { Button } from '@/Components/ui/button';
+import { apiClient } from '@/KeycloakConfig/KeycloakConn';
 
 
 export const TypeNode_child_Update = ({ data,isConnectable,editMode }) => {

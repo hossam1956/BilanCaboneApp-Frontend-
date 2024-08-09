@@ -24,6 +24,7 @@ import axios from "axios";
 import { Skeleton } from "@/Components/ui/skeleton";
 import { toast } from 'sonner';
 import List_type_trash from "./Table/list_type_trash";
+import { apiClient } from "@/KeycloakConfig/KeycloakConn";
 
 export const List_Trash_type = () => {
   const [Facteurs, setFacteurs] = useState({ content: [] });

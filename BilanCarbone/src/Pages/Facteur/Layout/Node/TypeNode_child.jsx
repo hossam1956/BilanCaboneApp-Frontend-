@@ -6,6 +6,7 @@ import { Input } from "@/Components/ui/input";
 import CustomHandle from './CustomHandle';
 import axios from 'axios';
 import { API_TYPE } from '@/Api/FacteurApi';
+import { apiClient } from '@/KeycloakConfig/KeycloakConn';
 
 
 export const TypeNode_child = ({ data,isConnectable }) => {
