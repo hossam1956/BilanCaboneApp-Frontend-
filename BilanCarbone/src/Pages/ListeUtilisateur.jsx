@@ -102,41 +102,35 @@ function ListeUtilisateur() {
       }, 100);
     }
 
+    const getAllUtilisateur=async()=>{
+      try{
+        const response=await apiClient.get("utilisateur",{
+          params:{
+            page:pageNum,
+            size:size,
+            search:searchValue
+          }
+        })
+        
+        setUtilisateurs(response.data.content)
+        setPageNum(response.data.number)
+        setTotalElements(response.data.totalElements)
+        setSize(response.data.size)
+        setTotalPages(response.data.totalPages)
+        setFirst(response.data.first)
+        setLast(response.data.last)
+      }
+      catch(error){  
+        console.error(error);
+
+          
+      }
+    
+    }
+
 
     useEffect(
       ()=>{
-      const getAllUtilisateur=async()=>{
-        try{
-          const response=await apiClient.get("utilisateur",{
-            params:{
-              page:pageNum,
-              size:size,
-              search:searchValue
-            }
-          })
-          
-          setUtilisateurs(response.data.content)
-          setPageNum(response.data.number)
-          setTotalElements(response.data.totalElements)
-          setSize(response.data.size)
-          setTotalPages(response.data.totalPages)
-          setFirst(response.data.first)
-          setLast(response.data.last)
-        }
-        catch(error){  
-            window.location.reload();
-            console.error(error);
-
-            
-        }
-        finally{
-          if(!sessionStorage.getItem('token')){
-            window.location.reload()
-          }
-          
-        }
-      }
-      
       getAllUtilisateur()
     },[searchValue,size,pageNum]) ;
 
@@ -483,6 +477,6 @@ function ListeUtilisateur() {
   )
 
 }
-export default ListeUtilisateur
+export default React.memo(ListeUtilisateur)
 
 

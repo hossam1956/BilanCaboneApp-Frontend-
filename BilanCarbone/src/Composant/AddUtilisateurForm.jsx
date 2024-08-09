@@ -58,6 +58,26 @@ const AddUtilisateurForm=()=>{
     }
     else{
       setErrors({});
+      const bodyRequest={
+        username: username,
+        email: email,
+        firstName: prenom,
+        lastName: nom,
+        role: role,
+        password: password,
+        entreprise_id: entreprise
+
+      }
+      try{
+          const createUtilisateur=async()=>{
+            const response=await apiClient.post('/utilisateur',bodyRequest)
+            console.log(response)
+          }
+          createUtilisateur()
+      }
+      catch(error){
+        console.error(error)
+      }
     }
   }
 
