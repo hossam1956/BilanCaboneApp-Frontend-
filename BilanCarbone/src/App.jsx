@@ -20,7 +20,6 @@ import Affichagefct from './Pages/Facteur/Affichagefct';
 
 
 const App = () => {
-  const [reload,setReload]=useState(true)
   const { keycloak, initialized } = useKeycloak();
 
   if (!initialized) {
