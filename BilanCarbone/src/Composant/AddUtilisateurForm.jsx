@@ -1,10 +1,11 @@
 import { useState,useEffect } from "react";
 import {validate,validateWithoutPassword} from "@/Validation/RegexValidation";
 import { Eye,EyeOff } from "lucide-react";
-import axios from "axios";
 import { apiClient } from "@/KeycloakConfig/KeycloakConn";
-
+import Alerts from "@/Composant/Alerts";
+import { useNavigate } from "react-router-dom";
 const AddUtilisateurForm=()=>{
+  const navigate=useNavigate()
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [prenom, setPrenom] = useState('');
@@ -16,7 +17,8 @@ const AddUtilisateurForm=()=>{
   const [entreprises,setEntreprises]=useState([])
   const [entreprise,setEntreprise]=useState(entreprises.length > 0 ? entreprises[0].id:1)
   const [showPassword,setShowPassword]=useState(false)
-
+  const [alert,setAlert]=useState(false)
+  const [problemAlert,setProblemAlert]=useState(false)
   
   useEffect(() => {
     const getEntreprises = async () => {
@@ -26,7 +28,7 @@ const AddUtilisateurForm=()=>{
       }
       catch(error){
         console.error(error)
-        //setProblemAlert(true);
+        setProblemAlert(true);
       }
       
     };
@@ -71,7 +73,7 @@ const AddUtilisateurForm=()=>{
       try{
           const createUtilisateur=async()=>{
             const response=await apiClient.post('/utilisateur',bodyRequest)
-            console.log(response)
+            setAlert(true)
           }
           createUtilisateur()
       }
@@ -80,7 +82,16 @@ const AddUtilisateurForm=()=>{
       }
     }
   }
+  useEffect(() => {
+    if (alert) {
+      const timer = setTimeout(() => {
+        setAlert(false);
+        navigate('../../utilisateur/liste')
+      }, 500);
 
+      return () => {clearTimeout(timer)}
+    }
+  }, [alert]);
     return(
     <div className="flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg shadow-lg relative w-1/2">
@@ -236,6 +247,7 @@ const AddUtilisateurForm=()=>{
 
         </div>
       </div>
+      <Alerts alert={alert} alertProblem={problemAlert} titre_succes={"Utilisateur Ajouté"} message_succes={"Utilisateur Ajouté avec succès" } message_erreur={"Une erreur est survenue lors de l'envoi de l'opération"}/>
     </div>  
     )
 }

@@ -96,11 +96,7 @@ function ListeUtilisateur() {
 
 
     
-    const handleModifyFormVisibility=()=>{
-      const timer = setTimeout(() => {
-        setIsModifyFormVisible(!isModifyFormVisible)
-      }, 100);
-    }
+    
 
     const getAllUtilisateur=async()=>{
       try{
@@ -164,9 +160,7 @@ function ListeUtilisateur() {
         }
           
       }
- 
-      useEffect(() => {
-        const fetchRoles = async () => {
+      const fetchRoles = async () => {
         const rolesData = {};
         const rolesPromises=utilisateurs.flatMap(utilisateur=>getRoleUtilisateur(utilisateur.userRepresentation.id)) 
         const rolesResults=await Promise.all(rolesPromises)
@@ -175,6 +169,8 @@ function ListeUtilisateur() {
           });
           setRoles(rolesData);
         };
+
+      useEffect(() => {
         fetchRoles();
       }, [utilisateurs]);
   
@@ -184,6 +180,7 @@ function ListeUtilisateur() {
           try{
             const response=apiClient.put(`utilisateur/block?ID=${idUtilisateur}`)
             setAlertBlocker(true);
+
           }
           catch(error){
             console.error(error)
@@ -195,7 +192,9 @@ function ListeUtilisateur() {
         {
               try{
                 const response=apiClient.delete(`utilisateur?ID=${idUtilisateur}`)
-                setAlertSupprimer(true)
+                setAlertSupprimer(true);
+                
+                
               }
               catch(error){
                 console.error(error)
@@ -207,7 +206,13 @@ function ListeUtilisateur() {
                 setUtilisateurID("")
               }
           };
-   
+    const handleModifyFormVisibility=()=>{
+        const timer = setTimeout(() => {
+          getAllUtilisateur()
+          fetchRoles()
+          setIsModifyFormVisible(!isModifyFormVisible)
+        }, 100);
+    }
      
     const handlePageChange = (page) => {
       setPageNum(parseInt(page));
@@ -233,9 +238,10 @@ function ListeUtilisateur() {
       if (alertBlocker) {
         const timer = setTimeout(() => {
           setAlertBlocker(false);
-          window.location.reload() 
+          getAllUtilisateur()
+          fetchRoles() 
           
-        }, 1000);
+        }, 500);
   
         return () => {clearTimeout(timer)}
       }
@@ -245,32 +251,24 @@ function ListeUtilisateur() {
       if (alertModifier) {
         const timer = setTimeout(() => {
           setAlertModifier(false);
-          window.location.reload() 
+          getAllUtilisateur()
+          fetchRoles()  
           
-        }, 1000);
+        }, 500);
   
         return () => {clearTimeout(timer)}
       }
     }, [alertModifier]);
 
-    useEffect(() => {
-      if (alertBlocker) {
-        const timer = setTimeout(() => {
-          setAlertBlocker(false);
-          window.location.reload()
-        }, 1000);
-  
-        return () => {clearTimeout(timer)}
-      }
-    }, [alertBlocker]);
+
 
     useEffect(() => {
       if (alertSupprimer) {
         const timer = setTimeout(() => {
-          setAlertModifier(false);
-          window.location.reload() 
+          setAlertSupprimer(false);
+          getAllUtilisateur()
           
-        }, 1000);
+        }, 500);
   
         return () => {clearTimeout(timer)}
       }

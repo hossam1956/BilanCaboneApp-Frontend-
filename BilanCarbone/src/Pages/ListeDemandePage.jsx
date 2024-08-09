@@ -167,7 +167,7 @@ function ListDemandePage() {
       if (alert) {
         const timer = setTimeout(() => {
           setProblemAlert(false);
-        }, 1000);
+        }, 500);
   
         return () => {clearTimeout(timer)}
       }

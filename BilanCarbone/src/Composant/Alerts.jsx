@@ -29,7 +29,6 @@ else if(alertProblem){
             <AlertTitle>Attention!</AlertTitle>
             <AlertDescription>
                 {message_erreur}
-                Il ya un problème au niveau d'acceptation de la demande peut être ce nom utilisateur existe déja ou un autre problème.
             </AlertDescription>
             </Alert>
         </div>
