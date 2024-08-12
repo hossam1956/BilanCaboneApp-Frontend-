@@ -145,8 +145,8 @@ export function Addfct() {
   };
 
   const handlesave = () => {
-    console.log(nodes)
-   /* const res = transformData_json(nodes, edges);  
+    const res = transformData_json(nodes, edges);  
+    console.log(res)
     apiClient.post(API_TYPE.Type, JSON.stringify(res[0], null, 2), {
       headers: {
         'Content-Type': 'application/json'
@@ -163,7 +163,7 @@ export function Addfct() {
         toast.error(`Problème d'ajoute facteur avec le type `, {
           description: `${currentdate.getDate()}/${currentdate.getMonth() + 1}/${currentdate.getFullYear()} - - - ${currentdate.getHours()}:${currentdate.getMinutes()}:${currentdate.getSeconds()}`,
         });
-      });*/
+      });
   };
   const handleAlertDialogAction = (action) => {
     setShowAlertDialog(false);
