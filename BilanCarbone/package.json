@@ -33,6 +33,7 @@
     "clsx": "^2.1.1",
     "file-saver": "^2.0.5",
     "framer-motion": "^11.3.17",
+    "jwt-decode": "^4.0.0",
     "keycloak-js": "^25.0.1",
     "keycloakify": "^10.0.0-rc.115",
     "lucide-react": "^0.408.0",
