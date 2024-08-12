@@ -11,7 +11,6 @@ import List_type_all from "./Table/List_type_all";
 import List_Type_Parent from "./Table/List_Type_Parent";
 import List_Type_children from "./Table/List_Type_children";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import axios from "axios";
 import { API_TYPE } from "@/Api/FacteurApi";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";

@@ -12,7 +12,6 @@ import { Button } from '@/Components/ui/button';
 import { Card } from '@/Components/ui/card';
 import { Plus, PencilOff, Pencil } from 'lucide-react';
 import { reverseTransformData, transformData_json } from '@/Function/mapper';
-import axios from 'axios';
 import { API_TYPE } from '@/Api/FacteurApi';
 import { useParams } from 'react-router-dom';
 import { MoonLoader } from 'react-spinners';
@@ -24,6 +23,8 @@ import {
 import Page404 from '../error/Page404';
 import Page403 from '../error/Page403';
 import keycloak from "@/KeycloakConfig/keycloak";
+import { isAdmin } from '@/hooks/useUserRole';
+import { apiClient } from '@/KeycloakConfig/KeycloakConn';
 
 const initialNodes = [];
 const initialEdges = [];
@@ -49,17 +50,14 @@ export function Affichagefct() {
   const [showAlertDialog, setShowAlertDialog] = useState(false);
   const [errorStatus, setErrorStatus] = useState(null);
   const [global,setglobal]=useState(true)
-  const userRoles = keycloak.tokenParsed?.realm_access?.roles;
+  const userIsAdmin = isAdmin();
 
   const getData = useCallback(() => {
-    axios
+    apiClient
       .get(`${API_TYPE.Type}/${id}?all=true`)
       .then((response) => response.data)
       .then((data) => {
-        const isAdmin = userRoles?.includes("ADMIN");
-        console.log(isAdmin)
-        console.log(global)
-        if (isAdmin) {
+        if (userIsAdmin) {
           setglobal(true);
         } else {
           setglobal(data.entreprise !== undefined && data.entreprise !== null);
@@ -232,7 +230,7 @@ export function Affichagefct() {
   const handleSave = () => {
     const res = transformData_json(nodes, edges);
     console.log(res)
-    axios
+    apiClient
       .put(`${API_TYPE.Type}/${id}`, JSON.stringify(res[0], null, 2), {
         headers: { 'Content-Type': 'application/json' },
       })
@@ -368,7 +366,7 @@ export function Affichagefct() {
             </AlertDialog>
           </>
         )}
-          {userRoles?.includes("ADMIN") || (global) ? (
+          {userIsAdmin|| (global) ? (
       <Button onClick={toggleEditMode} className="absolute top-2 right-2">
         {editMode ? <PencilOff /> : <Pencil />} {editMode ? 'Quitter' : 'Activer'}
       </Button>

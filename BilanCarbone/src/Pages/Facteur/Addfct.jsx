@@ -10,7 +10,6 @@ import { Button } from '@/Components/ui/button';
 import { Card } from '@/Components/ui/card';
 import { Plus, Eraser } from 'lucide-react';
 import { transformData_json } from '@/Function/mapper';
-import axios from 'axios';
 import { API_TYPE } from '@/Api/FacteurApi';
 import { toast } from 'sonner';
 import {

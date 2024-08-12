@@ -19,7 +19,6 @@ import {
 } from "@/Components/ui/pagination";
 import { API_FACTEUR } from "@/Api/FacteurApi";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Skeleton } from "@/Components/ui/skeleton";
 import { toast } from 'sonner';
 import FacteurtrashTable from "./Table/FacteurtrashTable";

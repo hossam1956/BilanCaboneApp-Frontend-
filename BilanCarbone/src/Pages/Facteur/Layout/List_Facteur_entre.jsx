@@ -8,7 +8,6 @@ import {
   import { Input } from "@/Components/ui/input";
   import { Button } from "@/Components/ui/button";
   import { useNavigate, useSearchParams } from "react-router-dom";
-  import axios from "axios";
   import { API_FACTEUR } from "@/Api/FacteurApi";
   import { useState, useEffect } from "react";
   import { toast } from "sonner";

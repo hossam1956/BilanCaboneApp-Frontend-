@@ -11,7 +11,6 @@ import {
   SelectLabel
 } from "@/Components/ui/select";
 import CustomHandle from './CustomHandle';
-import axios from 'axios';
 import { API_FACTEUR } from '@/Api/FacteurApi';
 import { MoonLoader } from 'react-spinners';
 import { ShieldX } from 'lucide-react';
@@ -36,7 +35,7 @@ export const FacteurNode = ({ data, isConnectable }) => {
 
   const getData = async () => {
     try {
-      const response = await axios.get(API_FACTEUR.Facteur_type);
+      const response = await apiClient.get(API_FACTEUR.Facteur_type);
       setListType(response.data);
       setLoading(false);
     } catch (err) {
@@ -77,7 +76,7 @@ export const FacteurNode = ({ data, isConnectable }) => {
 
 
   const check_data=(txt)=>{
-    axios.get(`${API_FACTEUR.Facteur_Search}?search=${txt}`)
+    apiClient.get(`${API_FACTEUR.Facteur_Search}?search=${txt}`)
     .then((e)=>e.data)
     .then((e)=>{
       if (e) {

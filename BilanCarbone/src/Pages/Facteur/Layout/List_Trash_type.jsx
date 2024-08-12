@@ -20,7 +20,6 @@ import {
 } from "@/Components/ui/pagination";
 import {  API_TYPE } from "@/Api/FacteurApi";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Skeleton } from "@/Components/ui/skeleton";
 import { toast } from 'sonner';
 import List_type_trash from "./Table/list_type_trash";
