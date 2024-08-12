@@ -4,8 +4,8 @@ import { useCallback, useState } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { Input } from "@/Components/ui/input";
 import CustomHandle from './CustomHandle';
-import axios from 'axios';
 import { API_TYPE } from '@/Api/FacteurApi';
+import { apiClient } from '@/KeycloakConfig/KeycloakConn';
 
 
 export const TypeNode_child = ({ data,isConnectable }) => {
@@ -14,7 +14,7 @@ export const TypeNode_child = ({ data,isConnectable }) => {
     data.onDataChange({ label: evt.target.value });
   }, [data]);
   const check_data=(txt)=>{
-    axios.get(`${API_TYPE.Type_Search}?search=${txt}`)
+    apiClient.get(`${API_TYPE.Type_Search}?search=${txt}`)
     .then((e)=>e.data)
     .then((e)=>{
       if (e) {

@@ -11,10 +11,10 @@ import {
   SelectLabel
 } from "@/Components/ui/select";
 import CustomHandle from './CustomHandle';
-import axios from 'axios';
 import { API_FACTEUR } from '@/Api/FacteurApi';
 import { ShieldCheck, ShieldX } from 'lucide-react';
 import { Button } from '@/Components/ui/button';
+import { apiClient } from '@/KeycloakConfig/KeycloakConn';
 
 export const FacteurNodeUpdate = ({ data, isConnectable }) => {
   const [errorinput, setErrorinput] = useState(null);
@@ -36,7 +36,7 @@ export const FacteurNodeUpdate = ({ data, isConnectable }) => {
   }, [data]);
 
   const checkData = useCallback((txt) => {
-    axios.get(`${API_FACTEUR.Facteur_Search}?search=${txt}`)
+    apiClient.get(`${API_FACTEUR.Facteur_Search}?search=${txt}`)
       .then((response) => {
         if (response.data) {
           setErrorinput('Ce facteur existe déjà');

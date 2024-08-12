@@ -16,6 +16,7 @@ import { Addfct } from './Pages/Facteur/Addfct';
 import { Listfct } from './Pages/Facteur/Listfct';
 import Trashfct from './Pages/Facteur/Trashfct';
 import Affichagefct from './Pages/Facteur/Affichagefct';
+import Page404 from './Pages/error/Page404';
 import { getRolesFromToken } from './KeycloakConfig/UserRole';
 import NoAutorisePage from './Pages/NoAutorisePage';
 
@@ -108,6 +109,11 @@ const App = () => {
           },
       ],
     },
+    
+    {
+      path: "*", // Catch-all route for 404 errors
+      element: <Page404 />
+    }
   ]);
 
   return (

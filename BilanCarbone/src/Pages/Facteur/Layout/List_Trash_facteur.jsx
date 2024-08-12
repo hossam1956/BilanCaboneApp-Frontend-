@@ -19,10 +19,10 @@ import {
 } from "@/Components/ui/pagination";
 import { API_FACTEUR } from "@/Api/FacteurApi";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Skeleton } from "@/Components/ui/skeleton";
 import { toast } from 'sonner';
 import FacteurtrashTable from "./Table/FacteurtrashTable";
+import { apiClient } from "@/KeycloakConfig/KeycloakConn";
 
 export const List_Trash_facteur = () => {
   const [Facteurs, setFacteurs] = useState({ content: [] });
@@ -41,7 +41,7 @@ export const List_Trash_facteur = () => {
       sorted += `&sortBy=${e.key}&sortBy=${e.direction}`;
     });
     setLoading(true);
-    axios.get(`${API_FACTEUR.Facteur_trash}?page=${currentPage}&search=${search}${sorted}`)
+    apiClient.get(`${API_FACTEUR.Facteur_trash}?page=${currentPage}&search=${search}${sorted}`)
       .then(response => response.data)
       .then(response => {
         setFacteurs(response);
@@ -65,7 +65,7 @@ export const List_Trash_facteur = () => {
   };
 
   const handlerecovery = (id, nom) => {
-    axios.post(`${API_FACTEUR.Facteur_trash}/${id}`)
+    apiClient.post(`${API_FACTEUR.Facteur_trash}/${id}`)
       .then(response => response.data)
       .then(response => {
         const currentdate = new Date();
@@ -84,7 +84,7 @@ export const List_Trash_facteur = () => {
   };
 
   const handledestroy = (id, nom) => {
-    axios.delete(`${API_FACTEUR.Facteur_trash}/${id}`)
+    apiClient.delete(`${API_FACTEUR.Facteur_trash}/${id}`)
       .then(response => response.data)
       .then(response => {
         const currentdate = new Date();

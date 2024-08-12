@@ -7,14 +7,13 @@ import {
 import { PlusCircle, Search } from "lucide-react";
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
-import List_type_all from "./Table/List_type_all";
-import List_Type_Parent from "./Table/List_Type_Parent";
 import List_Type_children from "./Table/List_Type_children";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { API_TYPE } from "@/Api/FacteurApi";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { apiClient } from "@/KeycloakConfig/KeycloakConn";
+import List_type_all from "./Table/List_type_all";
 
 const List_Type = () => {
   const navigate = useNavigate();
@@ -104,7 +103,7 @@ const List_Type = () => {
   };
 
   const handleDeactivate = (id, name) => {
-    apiClient.put(`${API_TYPE.Type}/${id}/desactivate`)
+    apiClient.ent.put(`${API_TYPE.Type}/${id}/desactivate`)
       .then(response => response.data)
       .then(response => {
         showToast('success', `Le type ${response.nom_type} a été désactivé`);
@@ -120,11 +119,11 @@ const List_Type = () => {
     <main className="mt-4">
       <Tabs defaultValue={activeTab}>
         <div className="flex items-center mb-4">
-          <TabsList>
-            <TabsTrigger onClick={() => { setFilterParam(""); setSearchParams({ type: "tout" }) }} value="tout">Tout</TabsTrigger>
-            <TabsTrigger onClick={() => { setFilterParam("parent=true"); setSearchParams({ type: "parent" }) }} value="parent">Parent</TabsTrigger>
-            <TabsTrigger onClick={() => { setFilterParam("detail=true"); setSearchParams({ type: "hierarchie" }) }} value="hierarchie">Hierarchie</TabsTrigger>
-          </TabsList>
+        <TabsList>
+        <TabsTrigger onClick={() => { setFilterParam("my=true"); setSearchParams({ type: "tout" }) }} value="tout"> Tout </TabsTrigger>
+            <TabsTrigger onClick={() => { setFilterParam("my=true&detail=true"); setSearchParams({ type: "personnalise" }) }} value="personnalise">personnalisé</TabsTrigger>
+              <TabsTrigger onClick={() => { setFilterParam("detail=true"); setSearchParams({ type: "global" }) }} value="global">global</TabsTrigger>
+            </TabsList>
           <div className="relative ml-auto flex items-center gap-2">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
@@ -142,9 +141,8 @@ const List_Type = () => {
             </Button>
           </div>
         </div>
-
         <TabsContent value="tout">
-          <div className="text-lg font-semibold text-sapphire-700 m-3">Les types Globaux</div>
+          <div className="text-lg font-semibold text-sapphire-700 m-3">Tous types personnalisée</div>
           <List_type_all
             data={facteurs}
             loading={loading}
@@ -158,23 +156,8 @@ const List_Type = () => {
             handleDeactivate={handleDeactivate}
           />
         </TabsContent>
-        <TabsContent value="parent">
-          <div className="text-lg font-semibold text-sapphire-700 m-3">Les Parents globaux</div>
-          <List_Type_Parent
-            data={facteurs}
-            loading={loading}
-            sortConfig={sortConfig}
-            requestSort={handleSortRequest}
-            handlePageChange={setCurrentPage}
-            currentPage={currentPage}
-            setSortConfig={setSortConfig}
-            handleDelete={handleDelete}
-            handleActivate={handleActivate}
-            handleDeactivate={handleDeactivate}
-          />
-        </TabsContent>
-        <TabsContent value="hierarchie">
-          <div className="text-lg font-semibold text-sapphire-700 m-3">Les types globaux avec des enfants</div>
+        <TabsContent value="personnalise">
+          <div className="text-lg font-semibold text-sapphire-700 m-3">Hiérarchie des types personnalisés</div>
           <List_Type_children
             data={facteurs}
             loading={loading}
@@ -186,6 +169,20 @@ const List_Type = () => {
             handleDelete={handleDelete}
             handleActivate={handleActivate}
             handleDeactivate={handleDeactivate}
+            isGlobal={false} // ou false selon le contexte
+          />
+        </TabsContent>
+        <TabsContent value="global">
+          <div className="text-lg font-semibold text-sapphire-700 m-3">Hiérarchie des types globale</div>
+          <List_Type_children
+            data={facteurs}
+            loading={loading}
+            sortConfig={sortConfig}
+            requestSort={handleSortRequest}
+            handlePageChange={setCurrentPage}
+            currentPage={currentPage}
+            setSortConfig={setSortConfig}
+            isGlobal={true}
           />
         </TabsContent>
       </Tabs>

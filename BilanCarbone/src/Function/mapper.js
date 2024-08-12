@@ -41,14 +41,15 @@ export function transformData_json(nodes, edges) {
       if (parentEdge) {
         const parentTypeId = parentEdge.source;
         const parentType = nodes.find(item => item.id === parentTypeId);
-
         if (parentType) {
           let grandparentTypeId = parentTypeId;
           let childType = typeMap[grandparentTypeId];
           if (parentType.type === 'Type_child') {
             grandparentTypeId = edges.find(edge => edge.target === parentTypeId)?.source;
             let child_node=nodes.find(file=>file.id==parentTypeId)
+            
             childType = typeMap[grandparentTypeId]?.types.find(file => file.nom_type === child_node.data.label);
+
 
           }
           if (childType) {
@@ -82,7 +83,8 @@ const transformToRequestFormat = (data) => {
     active: type.active,
     id: type.id,
   }));
-};export function reverseTransformData(json, handleDataChange) {
+};
+export function reverseTransformData(json, handleDataChange) {
   const nodes_res = [];
   const edges_res = [];
 
