@@ -29,9 +29,7 @@ export const validate=({username,email,prenom,nom,password,confirmPassword})=>{
 export const validateWithoutPassword=({username,email,prenom,nom})=>{
   const errors={}
 
-    if(!USERNAME_REGEX.test(username)){
-      errors.username = 'Nom Utilisateur doit être alphanumérique et contenir entre 4 et 15 caractères.';
-    }
+   
     if(!EMAIL_REGEX.test(email)){
       errors.email="Email est invalide"
     }

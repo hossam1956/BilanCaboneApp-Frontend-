@@ -17,11 +17,11 @@ import { Listfct } from './Pages/Facteur/Listfct';
 import Trashfct from './Pages/Facteur/Trashfct';
 import Affichagefct from './Pages/Facteur/Affichagefct';
 import Page404 from './Pages/error/Page404';
-
+import { getRolesFromToken } from './KeycloakConfig/UserRole';
+import NoAutorisePage from './Pages/NoAutorisePage';
 
 
 const App = () => {
-  const [reload,setReload]=useState(true)
   const { keycloak, initialized } = useKeycloak();
 
   if (!initialized) {
@@ -37,7 +37,13 @@ const App = () => {
   if(keycloak.authenticated){
     
     sessionStorage.setItem('token',keycloak.token)
-    sessionStorage.getItem('token').length>10?console.log("token is present"):window.location.reload()
+    const roles=getRolesFromToken(sessionStorage.getItem("token"))
+    if(roles.includes("ADMIN")){sessionStorage.setItem('roleUser','ADMIN')}
+    else if(roles.includes("MANAGER")){sessionStorage.setItem('roleUser','MANAGER')}
+    else if(roles.includes("RESPONSABLE")){sessionStorage.setItem('roleUser','RESPONSABLE')}
+    else if(roles.includes("EMPLOYE")){sessionStorage.setItem('roleUser','EMPLOYE')}
+    console.log(sessionStorage.getItem("roleUser"))
+    
   }
   else{
     sessionStorage.setItem('token',undefined)
@@ -68,16 +74,16 @@ const App = () => {
           children:[
             { 
               path:"ajouter",
-              element:<AddUtilisateurPage/>
+              element:(sessionStorage.getItem("roleUser")=="ADMIN" || sessionStorage.getItem("roleUser")=="MANAGER")?<AddUtilisateurPage/>:<NoAutorisePage/>
             },
             {
 
               path:"liste",
-              element:<ListeUtilisateur/>
+              element:(sessionStorage.getItem("roleUser")=="ADMIN" || sessionStorage.getItem("roleUser")=="MANAGER")?<ListeUtilisateur/>:<NoAutorisePage/>
             },
             { 
               path:"demandes",
-              element:<ListDemandePage/>
+              element:(sessionStorage.getItem("roleUser")=="ADMIN" || sessionStorage.getItem("roleUser")=="MANAGER")?<ListDemandePage/>:<NoAutorisePage/>
             }
           ],
         },
@@ -85,19 +91,19 @@ const App = () => {
               path: "facteur",
               children: [
                 {  index: true,
-                    element:<Listfct/>
+                    element:(sessionStorage.getItem("roleUser")=="ADMIN" || sessionStorage.getItem("roleUser")=="MANAGER")?<Listfct/>:<NoAutorisePage/>
                 },
                 {
                     path: ":id",
-                    element: <Affichagefct/>,
+                    element:(sessionStorage.getItem("roleUser")=="ADMIN" || sessionStorage.getItem("roleUser")=="MANAGER")?<Affichagefct/>:<NoAutorisePage/>,
                 },
                 {
                     path: "ajouter",
-                    element: <Addfct />,
+                    element:(sessionStorage.getItem("roleUser")=="ADMIN" || sessionStorage.getItem("roleUser")=="MANAGER")?<Addfct />:<NoAutorisePage/>,
                 },
                 {
                     path: "trash",
-                    element: <Trashfct />,
+                    element:(sessionStorage.getItem("roleUser")=="ADMIN" || sessionStorage.getItem("roleUser")=="MANAGER")?<Trashfct />:<NoAutorisePage/>,
                 },
             ],
           },
