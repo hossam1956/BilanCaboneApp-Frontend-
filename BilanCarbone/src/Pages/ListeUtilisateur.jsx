@@ -91,52 +91,64 @@ function ListeUtilisateur() {
     const [alertModifier,setAlertModifier]=useState(false)
     const [alertSupprimer,setAlertSupprimer]=useState(false)
     const [alertBlocker,setAlertBlocker]=useState(false)
+    const [utilisateurInfo,setUtilisateurInfo]=useState({})
+    const [selectedRole,setSelectedRole]=useState("")
 
 
     
     const handleModifyFormVisibility=()=>{
-      setIsModifyFormVisible(!isModifyFormVisible)
+      const timer = setTimeout(() => {
+        setIsModifyFormVisible(!isModifyFormVisible)
+      }, 100);
+    }
+
+    const getAllUtilisateur=async()=>{
+      try{
+        const response=await apiClient.get("utilisateur",{
+          params:{
+            page:pageNum,
+            size:size,
+            search:searchValue
+          }
+        })
+        
+        setUtilisateurs(response.data.content)
+        setPageNum(response.data.number)
+        setTotalElements(response.data.totalElements)
+        setSize(response.data.size)
+        setTotalPages(response.data.totalPages)
+        setFirst(response.data.first)
+        setLast(response.data.last)
+      }
+      catch(error){  
+        console.error(error);
+
+          
+      }
+    
     }
 
 
     useEffect(
       ()=>{
-      const getAllUtilisateur=async()=>{
-        try{
-          const response=await apiClient.get("utilisateur",{
-            params:{
-              page:pageNum,
-              size:size,
-              search:searchValue
-            }
-          })
-          
-          setUtilisateurs(response.data.content)
-          setPageNum(response.data.number)
-          setTotalElements(response.data.totalElements)
-          setSize(response.data.size)
-          setTotalPages(response.data.totalPages)
-          setFirst(response.data.first)
-          setLast(response.data.last)
-        }
-        catch(error){  
-            window.location.reload();
-            console.error(error);
-
-            
-        }
-        finally{
-          if(!sessionStorage.getItem('token')){
-            window.location.reload()
-          }
-          
-        }
-      }
-      
       getAllUtilisateur()
     },[searchValue,size,pageNum]) ;
 
-  
+    
+      const getUserInfo=async(id)=>{
+        try{
+          const response=await apiClient.get(`/utilisateur/id?ID=${id}`)
+          console.log(response.data)
+          setUtilisateurInfo(response.data)
+        }
+        catch(error){
+          console.error(error)
+        }
+        
+      }
+      
+      
+
       
         const getRoleUtilisateur= async(id)=>{
           try{
@@ -268,7 +280,7 @@ function ListeUtilisateur() {
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-          {isModifyFormVisible&& <ModifyForm onClose={handleModifyFormVisibility}/>}
+        {isModifyFormVisible&& <ModifyForm onClose={handleModifyFormVisibility} UtilisateurInfo={utilisateurInfo} UtilisateurRole={selectedRole}/>}
           <Tabs defaultValue="all">
             <TabsContent value="all">
               <Card x-chunk="dashboard-06-chunk-0">
@@ -310,7 +322,7 @@ function ListeUtilisateur() {
                             const{nomEntreprise}=utilisateur.entreprise
                             const role = roles[id];
                             return(
-                                    
+                              
                               <TableRow key={id} >
                                 <TableCell className="font-medium">
                                           {lastName} {firstName}
@@ -343,9 +355,9 @@ function ListeUtilisateur() {
                                       </Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end">
-                                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                      <DropdownMenuLabel >Actions</DropdownMenuLabel>
                                       <DropdownMenuItem onClick={()=>{UtilisateurStatusUpdate(id);}}>{enabled ? "Blocker":"Deblocker"}</DropdownMenuItem>
-                                      <DropdownMenuItem onClick={handleModifyFormVisibility} >Modifer</DropdownMenuItem>      
+                                      <DropdownMenuItem onClick={()=>{setSelectedRole(`${role}`);getUserInfo(id);handleModifyFormVisibility()}} >Modifer</DropdownMenuItem>      
                                       <DropdownMenuItem onClick={()=>{setUtilisateurID(id);setIsAlertDialogOpen(true)}}>Supprimer</DropdownMenuItem>
                                     </DropdownMenuContent>
                                   </DropdownMenu>
@@ -465,6 +477,6 @@ function ListeUtilisateur() {
   )
 
 }
-export default ListeUtilisateur
+export default React.memo(ListeUtilisateur)
 
 

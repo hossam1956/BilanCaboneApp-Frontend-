@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ReactKeycloakProvider, useKeycloak } from '@react-keycloak/web';
 import keycloak from './KeycloakConfig/keycloak';
 import { createBrowserRouter,Navigate,RouterProvider } from 'react-router-dom';
 import Dashboard from "./Pages/Dashboard"
+import ListDemandePage from './Pages/ListeDemandePage';
 import LandingPage from "./Pages/LandingPage"
 import { LoaderCircle } from 'lucide-react';
 import RegisterPage from './Pages/RegisterPage';
 import Main from './Static/Main';
 import ParametresPages from './Pages/ParametresPage';
 import ListeUtilisateur from './Pages/ListeUtilisateur';
+import AddUtilisateurPage from './Pages/AddUtilisateurPage';
 import { TooltipProvider } from "@/Components/ui/tooltip";
 import { Addfct } from './Pages/Facteur/Addfct';
 import { Listfct } from './Pages/Facteur/Listfct';
@@ -16,7 +18,10 @@ import Trashfct from './Pages/Facteur/Trashfct';
 import Affichagefct from './Pages/Facteur/Affichagefct';
 import Page404 from './Pages/error/Page404';
 
+
+
 const App = () => {
+  const [reload,setReload]=useState(true)
   const { keycloak, initialized } = useKeycloak();
 
   if (!initialized) {
@@ -30,8 +35,13 @@ const App = () => {
 
 
   if(keycloak.authenticated){
+    
     sessionStorage.setItem('token',keycloak.token)
-}
+    sessionStorage.getItem('token').length>10?console.log("token is present"):window.location.reload()
+  }
+  else{
+    sessionStorage.setItem('token',undefined)
+  }
   const router = createBrowserRouter([
     {
       path:"/welcome",
@@ -56,35 +66,40 @@ const App = () => {
         {
           path:"utilisateur",
           children:[
+            { 
+              path:"ajouter",
+              element:<AddUtilisateurPage/>
+            },
             {
+
               path:"liste",
               element:<ListeUtilisateur/>
             },
-            {
-              path: "trash",
-              //element: <Trashfct />,
-            },
+            { 
+              path:"demandes",
+              element:<ListDemandePage/>
+            }
           ],
         },
           {
               path: "facteur",
               children: [
-                  {  index: true,
-                      element:<Listfct/>
-                  },
-                  {
-                      path: ":id",
-                      element: <Affichagefct/>,
-                  },
-                  {
-                      path: "ajouter",
-                      element: <Addfct />,
-                  },
-                  {
-                      path: "trash",
-                      element: <Trashfct />,
-                  },
-              ],
+                {  index: true,
+                    element:<Listfct/>
+                },
+                {
+                    path: ":id",
+                    element: <Affichagefct/>,
+                },
+                {
+                    path: "ajouter",
+                    element: <Addfct />,
+                },
+                {
+                    path: "trash",
+                    element: <Trashfct />,
+                },
+            ],
           },
       ],
     },
@@ -96,9 +111,9 @@ const App = () => {
   ]);
 
   return (
-<TooltipProvider>
-      <RouterProvider router={router}/>
-     </TooltipProvider>
+    <TooltipProvider>
+          <RouterProvider router={router}/>
+    </TooltipProvider>
   );
 };
 
