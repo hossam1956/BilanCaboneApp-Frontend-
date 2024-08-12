@@ -314,7 +314,10 @@ function ListeUtilisateur() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {utilisateurs.map 
+                        {
+                        
+                        utilisateurs.length==0?(<TableRow><TableCell colSpan="7" className="font-medium text-3xl text-center" >Pas Utilisateurs</TableCell></TableRow>):
+                        utilisateurs.map 
                         ((utilisateur)=>{
                             const {id,email,lastName,firstName,enabled,username,attributes}=utilisateur.userRepresentation;
                             const{nomEntreprise}=utilisateur.entreprise
@@ -366,6 +369,7 @@ function ListeUtilisateur() {
                           }
                     )
                     }
+                    
                     
                     </TableBody>
                   </Table>

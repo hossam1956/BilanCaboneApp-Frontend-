@@ -61,20 +61,19 @@ import Alerts from "@/Composant/Alerts";
 
 function ListDemandePage() {
 
-    const [demandes,setDemandes]=useState([]);
+    const [demandes,setDemandes]=useState([])
     const { searchValue, handleSearching } = useContext(SearchContext);
-    const [pageNum,setPageNum]=useState(0);
+    const [pageNum,setPageNum]=useState(0)
     const [totalElements,setTotalElements]=useState(8);
     const [size,setSize]=useState(8);
     const [totalPages,setTotalPages]=useState(1);
-    const [first,setFirst]=useState(true);
-    const [last,setLast]=useState(true);
+    const [first,setFirst]=useState(true)
+    const [last,setLast]=useState(true)
     const [currentId,setcurrentId]=useState(0)    
     const [currentIdAccept,setCurrentIdAccept]=useState(0)
     const [problemAlert,setProblemAlert]=useState(false)
     const [alert,setAlert]=useState(false)
     const [pageClicked,setPageClicked]=useState(0)
-
 
     const getAllDemande=async()=>{
       try{
@@ -93,11 +92,13 @@ function ListDemandePage() {
             setTotalPages(response.data.totalPages)
             setFirst(response.data.first)
             setLast(response.data.last)
+            
        }
       catch(error){  
           console.error('Erreur : '+error)
         }
     }
+
 
     useEffect(()=>{
         getAllDemande()
@@ -111,10 +112,13 @@ function ListDemandePage() {
           try {
             const response = await apiClient.delete(`/demande/reject`, {
               params: { id: currentId },
+              
             });
+            setAlert(true);
             await getAllDemande();
           } catch (error) {
             console.error(error);
+            setProblemAlert(true);
           } finally {
             setcurrentId(0);
           }
@@ -133,14 +137,8 @@ function ListDemandePage() {
               params: { id: currentIdAccept }
               
             });
-            if(response.data === true){
-              setAlert(true);
-              await getAllDemande()
-            }
-            else{
-              setProblemAlert(true)
-                console.log(alert)
-            }
+            setAlert(true);
+            await getAllDemande()
           } catch (error) {
             console.error(error)
             setProblemAlert(true)
@@ -157,16 +155,17 @@ function ListDemandePage() {
       if (problemAlert) {
         const timer = setTimeout(() => {
           setProblemAlert(false);
-        }, 4000);
+        }, 3000);
   
         return () => {clearTimeout(timer)}
       }
     }, [problemAlert]);
 
+
     useEffect(() => {
       if (alert) {
         const timer = setTimeout(() => {
-          setProblemAlert(false);
+          setAlert(false);
         }, 500);
   
         return () => {clearTimeout(timer)}
@@ -225,7 +224,9 @@ function ListDemandePage() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {demandes.map(
+                        {
+                        demandes.length==0?(<TableRow><TableCell colSpan="7" className="font-medium text-3xl text-center" >Pas de Demandes</TableCell></TableRow>):
+                        demandes.map(
                             (demande)=>{
                                 const {id,nom,prenom,nomUtilisateur, email, entreprise, sendDate,role } = demande;
                                 return(
@@ -369,7 +370,16 @@ function ListDemandePage() {
           </Tabs>    
         </main>
       </div>
-     <Alerts alert={alert} alertProblem={problemAlert} titre_succes={"Demande Acceptée"} message_succes={"Demande Acceptée avec succès" } message_erreur={"Une erreur est survenue lors de traitement de la demande"} />
+     <Alerts alert={alert} alertProblem={problemAlert} titre_succes={"Demande Acceptée"} message_succes={"Demande Acceptée avec succès" } message_erreur={`Une erreur est survenue lors de traitement de la demande \n ->Peut être un compte manager existant pour cette entreprise. \n ->Peut être ce username déja existant `
+      .split('\n')
+      .map((line, index) => (
+        <React.Fragment key={index}>
+          {line}
+          <br />
+          <br />
+        </React.Fragment>
+      ))
+     } />
     </div>
   )
 

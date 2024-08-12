@@ -1,23 +1,18 @@
 import { useState,useEffect } from "react";
-import {validate,validateWithoutPassword} from "@/Validation/RegexValidation";
+import {validateWithoutPassword} from "@/Validation/RegexValidation";
 import { Eye,EyeOff } from "lucide-react";
 import axios from "axios";
 import { apiClient } from "@/KeycloakConfig/KeycloakConn";
 import Alerts from "@/Composant/Alerts";
 import { Checkbox } from "@/Components/ui/checkbox";
 const ModifyForm=({onClose,UtilisateurInfo,UtilisateurRole})=>{
-  const [username, setUsername] = useState(UtilisateurInfo.userRepresentation.username);
   const [email, setEmail] = useState(UtilisateurInfo.userRepresentation.email);
   const [prenom, setPrenom] = useState(UtilisateurInfo.userRepresentation.firstName);
   const [nom, setNom] = useState(UtilisateurInfo.userRepresentation.firstName);
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState({});
   const [role,setRole]=useState('MANAGER')
   const [entreprises,setEntreprises]=useState([])
   const [entreprise,setEntreprise]=useState(UtilisateurInfo.entreprise.id)
-  const [showPassword,setShowPassword]=useState(false)
-  const [updatePaasword,setUpdatePassword]=useState(false)
   const [alert,setAlert]=useState(false)
   const [problemAlert,setProblemAlert]=useState(false)
 
@@ -39,9 +34,7 @@ const ModifyForm=({onClose,UtilisateurInfo,UtilisateurRole})=>{
    
   }, []);
 
-  const handleShowPassword=()=>{
-    setShowPassword(!showPassword)
-  }
+  
   const handleRoleChange = (e) => {
     setRole(e.target.value);
   };
@@ -52,19 +45,9 @@ const ModifyForm=({onClose,UtilisateurInfo,UtilisateurRole})=>{
   const handleSubmit=(e)=>{
     e.preventDefault();
 
-    const validationErrors=validateWithoutPassword({username,email,prenom,nom});
+    const validationErrors=validateWithoutPassword({email,prenom,nom});
 
-    if(updatePaasword){
-
-   
-    if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
-      validationErrors.password = 'Mot de passe doit contenir au moins 8 caractères, une lettre et un chiffre et un caractère spèciale.';
-    }
     
-    if (password !== confirmPassword) {
-      validationErrors.confirmPassword = 'Les mots de passe ne correspondent pas.';
-    }
-    }
    
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -76,9 +59,8 @@ const ModifyForm=({onClose,UtilisateurInfo,UtilisateurRole})=>{
         firstName: prenom,
         lastName: nom,
         role : role,
-        entreprise_id:entreprise,
-        password: "string"
-      }
+        entreprise_id:entreprise
+        }
       console.log(bodyRequest)
       const update=async()=>{
         const response=await apiClient.put(`/utilisateur?ID=${UtilisateurInfo.userRepresentation.id}`,bodyRequest)
@@ -89,9 +71,7 @@ const ModifyForm=({onClose,UtilisateurInfo,UtilisateurRole})=>{
         catch(error){
           console.error("Erreur :"+error)
         }
-        finally{
-          setShowPassword(false)
-        }
+      
     }
   }
   useEffect(() => {
@@ -133,7 +113,6 @@ const ModifyForm=({onClose,UtilisateurInfo,UtilisateurRole})=>{
                 required
                 disabled
                />
-               {errors.username && <p className='text-red-500 text-xs text-center'>{errors.username}</p>}
             </div>
             <div>
               <label htmlFor="Email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -224,53 +203,7 @@ const ModifyForm=({onClose,UtilisateurInfo,UtilisateurRole})=>{
                 
               </select>
             </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="Update_Password" onClick={()=>{setUpdatePassword(!updatePaasword)}} />
-              <label
-                htmlFor="Update_Password"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Modifer le mot de passe
-              </label>
-             </div>
-            {updatePaasword && (
-              <div>
-                <div>
-                  <label htmlFor="Password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Nouveau Mot de passe
-                  </label>
-                  <div className='flex justify-between'>
-                    <input
-                      type={showPassword?"text":"password"}
-                      name="Password"
-                      id="Password"
-                      placeholder="••••••••"
-                      className={`${errors.password ?"border-red-600 bg-red-300":"border-gray-300 bg-gray-50"} border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white`}
-                      autoComplete="new-password"
-                      onChange={(e)=>{setPassword(e.target.value)}}
-                    />
-                    <button type="button" className='ml-7 mr-0' onClick={handleShowPassword}>{showPassword?<EyeOff/>:<Eye/>}</button>
-                  </div>
-                  {errors.password && <p className='text-red-500 text-xs text-center'>{errors.password}</p>}
-                </div>
-                <div>
-                  <label htmlFor="Confi_password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Confirmer le Mot de Passe
-                  </label>
-
-                  <input
-                    type="password"
-                    name="Confi_password"
-                    id="Confi_password"
-                    placeholder="••••••••"
-                    className={`${errors.confirmPassword ?"border-red-600 bg-red-300":"border-gray-300 bg-gray-50"} border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white`}
-                    autoComplete="new-password"
-                    onChange={(e)=>{setConfirmPassword(e.target.value)}}
-                  />
-                  {errors.confirmPassword && <p className='text-red-500 text-xs text-center'>{errors.confirmPassword}</p>}
-                </div>
-              </div> 
-             )}
+   
             <button
               type="submit"
               className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
