@@ -239,7 +239,8 @@ const Navheader = () => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>{keycloak.tokenParsed.preferred_username}</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={()=>{navigate("parameter")}}>Profile</DropdownMenuItem>
+          {(sessionStorage.getItem("roleUser")!="ADMIN")&&
+          <DropdownMenuItem onClick={()=>{navigate("parameter")}}>Profile</DropdownMenuItem>}
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={()=>{keycloak.logout();sessionStorage.setItem('token', undefined);}}>Logout</DropdownMenuItem>
         </DropdownMenuContent>
