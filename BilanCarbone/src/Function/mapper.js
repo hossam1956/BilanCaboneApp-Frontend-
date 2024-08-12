@@ -48,7 +48,7 @@ export function transformData_json(nodes, edges) {
           if (parentType.type === 'Type_child') {
             grandparentTypeId = edges.find(edge => edge.target === parentTypeId)?.source;
             let child_node=nodes.find(file=>file.id==parentTypeId)
-            childType = typeMap[grandparentTypeId]?.types.find(file => file.id === child_node.data.id_type);
+            childType = typeMap[grandparentTypeId]?.types.find(file => file.nom_type === child_node.data.label);
 
           }
           if (childType) {
