@@ -10,7 +10,6 @@ import { Button } from '@/Components/ui/button';
 import { Card } from '@/Components/ui/card';
 import { Plus, Eraser } from 'lucide-react';
 import { transformData_json } from '@/Function/mapper';
-import axios from 'axios';
 import { API_TYPE } from '@/Api/FacteurApi';
 import { toast } from 'sonner';
 import {
@@ -24,6 +23,7 @@ import {
   AlertDialogTitle,
 } from "@/Components/ui/alert-dialog"
 import { useNavigate } from 'react-router-dom';
+import { apiClient } from '@/KeycloakConfig/KeycloakConn';
 
 const initialNodes =[
 ]
@@ -122,6 +122,8 @@ export function Addfct() {
         position,
         data: {
           label: `${type} node`,
+          onDataChange: (newData) => handleDataChange((nodes.length + 1).toString(), newData), // Pass onDataChange
+
         },
       };
       setNodes((nds) => nds.concat(newNode));
@@ -143,7 +145,8 @@ export function Addfct() {
 
   const handlesave = () => {
     const res = transformData_json(nodes, edges);  
-    axios.post(API_TYPE.Type, JSON.stringify(res[0], null, 2), {
+    console.log(res)
+    apiClient.post(API_TYPE.Type, JSON.stringify(res[0], null, 2), {
       headers: {
         'Content-Type': 'application/json'
       }

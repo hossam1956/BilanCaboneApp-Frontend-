@@ -92,10 +92,10 @@ const FacteurTable = ({ Facteurs, loading, setSortConfig, sortConfig, handledele
                     <TableRow>
                         <TableHead className="text-center w-1/6 cursor-pointer "><span onClick={() => requestSort('nom')}>Nom</span> {getIconFor('nom')}</TableHead>
                         <TableHead className="text-center w-1/6 cursor-pointer "><span onClick={() => requestSort('unit')}>Unité</span> {getIconFor('unit')}</TableHead>
-                        <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell "><span onClick={() => requestSort('emissionFactor')}>Émission</span> {getIconFor('emissionFactor')}</TableHead>
-                        <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell ">Type</TableHead>
-                        <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell "><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
-                        <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell "><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
+                        <TableHead className="text-center w-1/6 cursor-pointer  md:table-cell "><span onClick={() => requestSort('emissionFactor')}>Émission</span> {getIconFor('emissionFactor')}</TableHead>
+                        <TableHead className="text-center w-1/6 cursor-pointer  md:table-cell ">Type</TableHead>
+                        <TableHead className="text-center w-1/6 cursor-pointer  md:table-cell "><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
+                        <TableHead className="text-center w-1/6 cursor-pointer  md:table-cell "><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
                         <TableHead className="text-center w-32">Actions</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -126,14 +126,14 @@ const FacteurTable = ({ Facteurs, loading, setSortConfig, sortConfig, handledele
                                     <Link to={"/facteur/"+item.type}>{item.nom_facteur}</Link>
                                     </TableCell>
                                 <TableCell className=" text-center font-medium">{item.unit}</TableCell>
-                                <TableCell className="text-center hidden md:table-cell">{item.emissionFactor}</TableCell>
-                                <TableCell className="text-center hidden md:table-cell">{item.parent_type}</TableCell>
-                                <TableCell className="text-center hidden sm:table-cell">
+                                <TableCell className="text-center  md:table-cell">{item.emissionFactor}</TableCell>
+                                <TableCell className="text-center  md:table-cell">{item.parent_type}</TableCell>
+                                <TableCell className="text-center  sm:table-cell">
                                     <Badge variant="outline" className={item.active ? "bg-green-600  text-white" : "bg-red-600 text-white"}>
                                         {item.active ? "Activer" : "Désactiver"}
                                     </Badge>
                                 </TableCell>
-                                <TableCell className="text-center hidden md:table-cell">{item.creat_at}</TableCell>
+                                <TableCell className="text-center  md:table-cell">{item.creat_at}</TableCell>
                                 <TableCell>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>

@@ -20,10 +20,10 @@ import {
 } from "@/Components/ui/pagination";
 import { API_FACTEUR } from "@/Api/FacteurApi";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Skeleton } from "@/Components/ui/skeleton";
 import { toast } from 'sonner';
 import FacteurTable from "./Table/FacteurTable"; // Import the new table component
+import { apiClient } from "@/KeycloakConfig/KeycloakConn";
 
 const List_Facteur = () => {
   const [Facteurs, setFacteurs] = useState({ content: [] });
@@ -42,7 +42,7 @@ const List_Facteur = () => {
       sorted += `&sortBy=${e.key}&sortBy=${e.direction}`;
     });
     setLoading(true);
-    axios.get(`${API_FACTEUR.Facteur}?page=${currentPage}&search=${search}${sorted}`)
+    apiClient.get(`${API_FACTEUR.Facteur}?page=${currentPage}&search=${search}${sorted}`)
       .then(response => response.data)
       .then(response => {
         setFacteurs(response);
@@ -72,7 +72,7 @@ const List_Facteur = () => {
   };
 
   const handledeletesoft = (id, nom) => {
-    axios.delete(`${API_FACTEUR.Facteur}/${id}`)
+    apiClient.delete(`${API_FACTEUR.Facteur}/${id}`)
       .then(response => response.data)
       .then(response => {
         const currentdate = new Date();
@@ -91,7 +91,7 @@ const List_Facteur = () => {
   };
 
   const handleactivate = (id, nom) => {
-    axios.put(`${API_FACTEUR.Facteur}/${id}/activate`)
+    apiClient.put(`${API_FACTEUR.Facteur}/${id}/activate`)
       .then(response => response.data)
       .then(response => {
         const currentdate = new Date();
@@ -110,7 +110,7 @@ const List_Facteur = () => {
   };
 
   const handledesactivate = (id, nom) => {
-    axios.put(`${API_FACTEUR.Facteur}/${id}/desactivate`)
+    apiClient.put(`${API_FACTEUR.Facteur}/${id}/desactivate`)
       .then(response => response.data)
       .then(response => {
         const currentdate = new Date();
