@@ -19,6 +19,7 @@ import Affichagefct from './Pages/Facteur/Affichagefct';
 import Page404 from './Pages/error/Page404';
 import { getRolesFromToken } from './KeycloakConfig/UserRole';
 import NoAutorisePage from './Pages/NoAutorisePage';
+import FormulaireEmloye from './Pages/FormulaireEmploye';
 
 
 const App = () => {
@@ -42,7 +43,6 @@ const App = () => {
     else if(roles.includes("MANAGER")){sessionStorage.setItem('roleUser','MANAGER')}
     else if(roles.includes("RESPONSABLE")){sessionStorage.setItem('roleUser','RESPONSABLE')}
     else if(roles.includes("EMPLOYE")){sessionStorage.setItem('roleUser','EMPLOYE')}
-    console.log(sessionStorage.getItem("roleUser"))
     
   }
   else{
@@ -64,6 +64,11 @@ const App = () => {
         {
             index:true,
             element:<Dashboard/>
+        },
+        {
+          path:"/formulaire",
+          element:keycloak.authenticated ? <FormulaireEmloye/> : <Navigate to="/welcome"/>,
+          
         },
         {
           path:"parameter",

@@ -9,3 +9,22 @@ export function getRolesFromToken(token){
         console.error("Error decoding token: ", error);
     }
 }
+export function getInfoFromToken(token){
+    try{
+        const decodedToken=jwtDecode(token)
+        const infos = decodedToken;
+        return {
+            id:infos.sub,
+            username:infos.preferred_username,
+            firstName:infos.name.split(" ")[0],
+            lastName:infos.name.split(" ")[1],
+            email:infos.email
+
+        }
+      
+        
+    }
+    catch(error){
+        console.error("Error decoding token: ", error);
+    }
+}
