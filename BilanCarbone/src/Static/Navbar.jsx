@@ -1,7 +1,7 @@
 import { useState } from "react";
 import {
   Home,
-  Package2,
+  CalendarFold,
   Send,
   Users,
   ClipboardList,
@@ -177,6 +177,13 @@ const Navbar = () => {
                   </motion.div>
                 )}
               </AnimatePresence>
+              <Link
+              to="/formulaire"
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+            >
+              <CalendarFold className="h-4 w-4" />
+              Formulaire
+            </Link>
             </div>
           </nav>
         </div>
