@@ -30,7 +30,7 @@ const List_Type = () => {
   });
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
-  const [filterParam, setFilterParam] = useState("");
+  const [filterParam, setFilterParam] = useState("my=true");
 
   const handleAddClick = () => {
     navigate('/facteur/ajouter');

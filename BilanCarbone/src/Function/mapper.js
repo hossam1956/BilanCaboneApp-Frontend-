@@ -68,7 +68,8 @@ export function transformData_json(nodes, edges) {
   return transformToRequestFormat(Object.values(typeMap));
 }
 const transformToRequestFormat = (data) => {
-  return data.map(type => ({
+  return data
+  .map(type => ({
     nom_type: type.nom_type,
     types: type.types ? transformToRequestFormat(type.types) : [],
     facteurs: type.facteurs.map(facteur => ({
