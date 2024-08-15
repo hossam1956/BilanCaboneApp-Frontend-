@@ -149,7 +149,7 @@ const FacteurTable = ({ Facteurs, loading, setSortConfig, sortConfig, handledele
                                             ) : (
                                                 <DropdownMenuItem onClick={() => handleactivate(item.id, item.nom_facteur)} className="text-green-600">Activer</DropdownMenuItem>
                                             )}
-                                            <DropdownMenuItem onClick={() => handleDeleteClick(item)} className="text-red-600">Supprimer</DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => handleDeleteClick(item.id)} className="text-red-600">Supprimer</DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>

@@ -173,10 +173,11 @@ import {
                               ) : (
                                 <DropdownMenuItem onClick={() => handleActivate(item.id)} className="text-green-600">Activer</DropdownMenuItem>
                               )}
-                              <DropdownMenuItem onClick={() => handleDeleteClick(item.id)} className="text-red-600">Supprimer</DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleDeleteClick(item)} className="text-red-600">Supprimer</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu> 
                       :
+                      
                                 <Tooltip>
               <TooltipTrigger><Link to={"/facteur/" + item.type}><Eye/></Link></TooltipTrigger>
               <TooltipContent>
