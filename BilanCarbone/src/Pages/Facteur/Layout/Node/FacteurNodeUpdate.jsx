@@ -74,7 +74,6 @@ export const FacteurNodeUpdate = ({ data, isConnectable }) => {
           placeholder="Facteur"
           value={data.nom}
           onChange={handleNom}
-          onBlur={handleBlur}
           disabled={!data.editMode}
           className={errorinput ? 'border-red-500' : ''}
         />
