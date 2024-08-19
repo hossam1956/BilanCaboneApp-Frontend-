@@ -16,12 +16,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { apiClient } from "@/KeycloakConfig/KeycloakConn"
-
+import { Switch } from "@/components/ui/switch"
+import DataForm from "./DataForm"
 const CalenderForm = ({ onClose, date }) => {
   const [types, setTypes] = useState([]);
   const [isOpen, setIsOpen] = useState({});
   const [facteurs, setFacteurs] = useState([]);
   const [facteursSelected, setFacteursSelected] = useState({});
+  const [isOn,setIsOn]=useState(false)
 
   useEffect(() => {
     fetchType();
@@ -32,6 +34,7 @@ const CalenderForm = ({ onClose, date }) => {
   const fetchType = async () => {
     try {
       const response = await apiClient.get("/type/all");
+      console.log("response =====>    "+JSON.stringify(response.data, null, 2))
       setTypes(response.data);
     } catch (e) {
       console.error("Error fetching types: " + e);
@@ -52,6 +55,9 @@ const CalenderForm = ({ onClose, date }) => {
       ...prev,
       [index]: !prev[index],
     }));
+  };
+  const handleIsOn = (index) => {
+    setIsOn((prevState) => !prevState);
   };
 
   const handleCheckboxChange = (id) => {
@@ -87,13 +93,21 @@ const CalenderForm = ({ onClose, date }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg relative w-1/2 h-fit">
         <div>
+         
           <button
             className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
             onClick={onClose}
           >
             &times;
           </button>
-          <form className="space-y-6" action="#">
+          <div>
+            <Switch id="mode"
+            onCheckedChange={handleIsOn}
+            />
+            <label htmlFor="mode" className="mt-0">{isOn?"Mode Ajouter les facteurs":"Mode Entrer les valeurs"}</label>
+          </div>
+          {!isOn?
+            <form className="space-y-6" action="#">
             <h5 className="text-xl font-medium text-gray-900 dark:text-white text-center">
               Calendrier Formulaire
             </h5>
@@ -131,7 +145,9 @@ const CalenderForm = ({ onClose, date }) => {
                     </CollapsibleTrigger>
                   </div>
                   <CollapsibleContent className="space-y-2">
-                    {type.files.map((file, index) => (
+                    {
+                    type.files ?  
+                    type.files.map((file, index) => (
                       <div
                         key={index}
                         className="rounded-md border px-4 py-3 font-mono text-sm w-full text-center flex justify-between"
@@ -180,13 +196,76 @@ const CalenderForm = ({ onClose, date }) => {
                                   >
                                     {facteur.nom_facteur}
                                   </label>
+                                  
                                 </div>
                               ))}
                             </div>
                           </DialogContent>
                         </Dialog>
                       </div>
-                    ))}
+                    ))
+                    :
+
+                        <div
+                          key={index}
+                          className="rounded-md border px-4 py-3 font-mono text-sm w-full text-center flex justify-between"
+                        >
+                          <div className="flex flex-col">Ajouter un facteur de {type.nom_type}</div>
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <button
+                                onClick={() => {
+                                  fetchFacteur(type.id);
+                                }}
+                                className="border border-solid bg-black text-white text-xs rounded-full h-fit"
+                              >
+                                <Plus />
+                              </button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[425px]">
+                              <DialogHeader>
+                                <DialogTitle>{type.nom_type}</DialogTitle>
+                                <DialogDescription>
+                                  Vous pouvez ajouter des facteurs
+                                </DialogDescription>
+                              </DialogHeader>
+                              <div className="grid gap-4 py-4">
+                                {facteurs.map((facteur, index) => (
+                                  <div
+                                    key={index}
+                                    className="flex justify-between"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      id={`${index}`}
+                                      className="mt-1 mx-2 w-6 h-6 checked:bg-black"
+                                      onChange={() =>
+                                        handleCheckboxChange(facteur.id)
+                                      }
+                                      checked={
+                                        facteursSelected[localStorage.getItem(
+                                          "idUser"
+                                        )]?.[date]?.includes(facteur.id) || false
+                                      }
+                                    />
+                                    <label
+                                      htmlFor={`${index}`}
+                                      className="text-xl w-full"
+                                    >
+                                      {facteur.nom_facteur}
+                                    </label>
+                                    
+                                  </div>
+                                  
+                                ))}
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                        </div>
+
+
+
+                  }
                   </CollapsibleContent>
                 </Collapsible>
               ))}
@@ -197,7 +276,12 @@ const CalenderForm = ({ onClose, date }) => {
             >
               Appliquer
             </button>
-          </form>
+          </form>:
+          <div>
+            <DataForm date={date}/>
+          </div>
+          }
+          
         </div>
       </div>
     </div>
