@@ -20,7 +20,6 @@ const Calendar = () => {
     )
     
   }
-  console.log(localStorage.getItem("dataMaps"))
   return (
     <div className="p-4 w-2/3 h-1/2 mx-auto ">
 
