@@ -3,7 +3,6 @@ import CalendarForm from './CalendarForm';
 const daysOfWeek = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
 
 const Calendar = () => {
-  const gg=localStorage.getItem("dataMap")
   const today = new Date();
   const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
   const startDayOfWeek = startOfMonth.getDay();
@@ -19,6 +18,12 @@ const Calendar = () => {
           setFormVisible(!formvisible),50
     )
     
+  }
+  const handleDayClick = (day) => {
+    handleFormVisibility()
+    const select = new Date(today.getFullYear(), today.getMonth(), day);
+                setSelectedDate(select)
+                setFormatedDate(new Date(select.getFullYear(),select.getMonth(),select.getDate()+1).toISOString().split('T')[0])
   }
   return (
     <div className="p-4 w-2/3 h-1/2 mx-auto ">
@@ -43,12 +48,7 @@ const Calendar = () => {
             className={`text-2xl px-2 py-5 rounded-full ${
             day === selectedDate.getDate() && 'bg-black text-white' 
             } ${day > today.getDate() && 'bg-gray-500 hover:bg-gray-500 '}`}
-            onClick={()=>{
-              const select = new Date(today.getFullYear(), today.getMonth(), day);
-              setSelectedDate(select)
-              setFormatedDate(new Date(select.getFullYear(),select.getMonth(),select.getDate()+1).toISOString().split('T')[0])
-              handleFormVisibility()
-            }}
+            onClick={() => handleDayClick(day)}
           >
             {day}
           </button>
