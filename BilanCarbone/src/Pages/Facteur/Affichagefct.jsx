@@ -244,7 +244,7 @@ export function Affichagefct() {
         setEdgesModified(false);
         setEditMode(false);
         setShowCard(false);
-        
+        getData()
       })
       .catch((error) => {
         console.error('Error activating data:', error);

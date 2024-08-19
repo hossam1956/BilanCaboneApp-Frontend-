@@ -54,6 +54,7 @@ export const FacteurNodeUpdate = ({ data, isConnectable }) => {
 
   const onSwitchChange = useCallback(() => {
     const newActiveState = !isActive;
+    
     setActive(newActiveState);
     data.onDataChange({ ...data, active: newActiveState });
   }, [data, isActive]);

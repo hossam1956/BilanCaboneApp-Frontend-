@@ -138,19 +138,19 @@ const ListTypeAll = ({
               data.content.map((item, index) => (
                 <TableRow key={index}>
                 <TableCell className="text-center font-medium"><Link to={"/facteur/"+item.id}>{item.nom_type}</Link></TableCell>
-                <TableCell className="text-center	hidden md:table-cell">
+                <TableCell className="text-center	 md:table-cell">
                     <Badge variant="secondary" className={!item.parent ? "bg-slate-400" : "bg-emerald-200"}>
                       {!item.parent ? "Parent" : "enfant"}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-center	font-medium">{item.type_parent}</TableCell>
-                  <TableCell className="text-center	hidden md:table-cell">{item.nbr_facteur}</TableCell>
-                  <TableCell className="text-center	hidden sm:table-cell">
+                  <TableCell className="text-center	 md:table-cell">{item.nbr_facteur}</TableCell>
+                  <TableCell className="text-center	 sm:table-cell">
                     <Badge variant="outline" className={item.active ? "bg-green-600 text-white" : "bg-red-600 text-white"}>
                       {item.active ? "Activer" : "Désactiver"}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-center	hidden md:table-cell">{item.create}</TableCell>
+                  <TableCell className="text-center	 md:table-cell">{item.create}</TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
