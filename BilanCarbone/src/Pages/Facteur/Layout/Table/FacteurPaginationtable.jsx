@@ -51,8 +51,8 @@ import {
     currentPage,
     setSortConfig,
     handleDelete,
-    handleactivate,
-    handledesactivate,
+    handleActivate,
+    handleDeactivate,
     isGlobal // nouvelle prop pour indiquer si les facteurs sont globaux
   }) => {
     const [showDialog, setShowDialog] = useState(false);
@@ -167,11 +167,11 @@ import {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-48">
-                          <DropdownMenuItem className="text-blue-600" onClick={() => { handle_affichage(item.id) }}>Afficher</DropdownMenuItem>
+                          <DropdownMenuItem className="text-blue-600" onClick={() => { handle_affichage(item.type) }}>Afficher</DropdownMenuItem>
                               {item.active ? (
-                                <DropdownMenuItem onClick={() => handledesactivate(item.id, item.nom_facteur)} className="text-red-950">Désactiver</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => handleDeactivate(item.id, item.nom_facteur)} className="text-red-950">Désactiver</DropdownMenuItem>
                               ) : (
-                                <DropdownMenuItem onClick={() => handleActivationClick(item)} className="text-green-600">Activer</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => handleActivate(item.id)} className="text-green-600">Activer</DropdownMenuItem>
                               )}
                               <DropdownMenuItem onClick={() => handleDeleteClick(item)} className="text-red-600">Supprimer</DropdownMenuItem>
                         </DropdownMenuContent>

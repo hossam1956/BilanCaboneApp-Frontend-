@@ -44,8 +44,8 @@ const ListTypeAll = ({
   currentPage, 
   setSortConfig, 
   handleDelete, 
-  handleactivate, 
-  handledesactivate 
+  handleActivate, 
+  handleDeactivate 
 }) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showActivateDialog, setShowActivateDialog] = useState(false);
@@ -92,7 +92,7 @@ const ListTypeAll = ({
 
   const confirmActivation = (toggle) => {
     if (selectedItem) {
-      handleactivate(selectedItem.id, selectedItem.nom_facteur, toggle ? "all=true" : "");
+      handleActivate(selectedItem.id, selectedItem.nom_facteur, toggle ? "all=true" : "");
     }
     setShowActivateDialog(false);
     setSelectedItem(null);
@@ -162,7 +162,7 @@ const ListTypeAll = ({
                       <DropdownMenuContent align="end" className="w-48">
                       <DropdownMenuItem className="text-blue-600" onClick={()=>{handle_affichage(item.id)}}>Afficher</DropdownMenuItem>
                         {item.active ? (
-                          <DropdownMenuItem onClick={() => handledesactivate(item.id, item.nom_facteur)} className="text-red-950">Désactiver</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleDeactivate(item.id, item.nom_facteur)} className="text-red-950">Désactiver</DropdownMenuItem>
                         ) : (
                           <DropdownMenuItem onClick={() => handleActivationClick(item)} className="text-green-600">Activer</DropdownMenuItem>
                         )}

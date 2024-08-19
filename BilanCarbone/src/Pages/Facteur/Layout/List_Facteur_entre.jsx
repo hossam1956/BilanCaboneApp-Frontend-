@@ -24,10 +24,10 @@ import { apiClient } from "@/KeycloakConfig/KeycloakConn";
     const [currentPage, setCurrentPage] = useState(0);
     const [search, setSearch] = useState("");
     const [sortConfig, setSortConfig] = useState([]);
-    const [filterParam, setFilterParam] = useState("");
+    const [filterParam, setFilterParam] = useState("my=true");
   useEffect(() => {
     getData();
-  }, [currentPage, search, sortConfig]);
+  }, [currentPage, search, sortConfig,filterParam]);
 
   const getData = () => {
     let sorted = "";
