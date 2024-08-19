@@ -103,12 +103,12 @@ const list_type_trash = ({
           <TableHeader>
             <TableRow>
               <TableHead className=" text-center	cursor-pointer w-1/6"><span onClick={() => requestSort('name')}>Nom</span> {getIconFor('name')}</TableHead>
-              <TableHead className="text-center	cursor-pointer hidden md:table-cell w-1/6">Type</TableHead>
-              <TableHead className="text-center	cursor-pointer hidden md:table-cell  w-1/6">Parent</TableHead>
-              <TableHead className="text-center	cursor-pointer hidden md:table-cell  w-1/6">Nomber de facteur</TableHead>
-              <TableHead className="text-center	cursor-pointer hidden md:table-cell  w-1/6"><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
-              <TableHead className="text-center	cursor-pointer hidden md:table-cell w-1/4"><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
-              <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell "><span onClick={() => requestSort('isDeleted')}>supprimé a</span> {getIconFor('isDeleted')}</TableHead>
+              <TableHead className="text-center	cursor-pointer  md:table-cell w-1/6">Type</TableHead>
+              <TableHead className="text-center	cursor-pointer  md:table-cell  w-1/6">Parent</TableHead>
+              <TableHead className="text-center	cursor-pointer  md:table-cell  w-1/6">Nomber de facteur</TableHead>
+              <TableHead className="text-center	cursor-pointer  md:table-cell  w-1/6"><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
+              <TableHead className="text-center	cursor-pointer  md:table-cell w-1/4"><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
+              <TableHead className="text-center w-1/6 cursor-pointer  md:table-cell "><span onClick={() => requestSort('isDeleted')}>supprimé a</span> {getIconFor('isDeleted')}</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>

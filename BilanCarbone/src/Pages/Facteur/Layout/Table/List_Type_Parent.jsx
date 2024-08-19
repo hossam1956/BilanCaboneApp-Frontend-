@@ -109,8 +109,8 @@ return (
         <TableHeader>
           <TableRow>
             <TableHead className="text-center cursor-pointer w-1/3"><span onClick={() => requestSort('name')}>Nom</span> {getIconFor('name')}</TableHead>
-            <TableHead className="text-center cursor-pointer hidden md:table-cell w-1/3"><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
-            <TableHead className="text-center cursor-pointer hidden md:table-cell w-1/3"><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
+            <TableHead className="text-center cursor-pointer  md:table-cell w-1/3"><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
+            <TableHead className="text-center cursor-pointer  md:table-cell w-1/3"><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>

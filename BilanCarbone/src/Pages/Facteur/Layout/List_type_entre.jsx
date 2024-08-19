@@ -103,7 +103,7 @@ const List_Type = () => {
   };
 
   const handleDeactivate = (id, name) => {
-    apiClient.ent.put(`${API_TYPE.Type}/${id}/desactivate`)
+    apiClient.put(`${API_TYPE.Type}/${id}/desactivate`)
       .then(response => response.data)
       .then(response => {
         showToast('success', `Le type ${response.nom_type} a été désactivé`);

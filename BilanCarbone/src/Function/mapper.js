@@ -11,7 +11,7 @@ export function transformData_json(nodes, edges) {
         nom_type: node.data.label,
         types: [],
         facteurs: [],
-        active: true,
+        active: node.data.active,
         id: node.data.id_type
       };
     }
@@ -27,7 +27,7 @@ export function transformData_json(nodes, edges) {
             nom_type: node.data.label,
             types: [],
             facteurs: [],
-            active: true,
+            active: node.data.active,
             id: node.data.id_type || null
           });
         }
@@ -55,7 +55,7 @@ export function transformData_json(nodes, edges) {
               nom_facteur: node.data.nom,
               unit: node.data.type,
               emissionFactor: node.data.facteur_emission,
-              active: true,
+              active: node.data.active,
               id: node.data.id_facteur || null
             });
           }
