@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import keycloak from '../KeycloakConfig/keycloak';
 import { apiClient } from '@/KeycloakConfig/KeycloakConn';
 const Dashboard=()=>{
-console.log(keycloak.tokenParsed) 
 /*useEffect(()=>{
   apiClient.get("http://localhost:8081/api/compte/my")
   .then((e)=>console.log(e))
