@@ -29,17 +29,24 @@ const DataForm=({date,IDs})=>{
           const fetchedData = await Promise.all(IDs.map(fetchFacteur));
           setFacteursData(fetchedData.filter((data) => data !== null));
 
-          for (const facteur of fetchedData) {
-              if (facteur) {
-                  const value = await fetchValueOfFacteur(facteur.id, localStorage.getItem("idUser"), date);
-                  setNumbers((prevNumbers) => ({
-                      ...prevNumbers,
-                      [facteur.id]: value, 
-                  }));
-
-              }
-
-          }
+          const promises = fetchedData.map(async (facteur) => {
+            if (facteur) {
+              const value = await fetchValueOfFacteur(facteur.id, localStorage.getItem("idUser"), date);
+              return { id: facteur.id, value };
+            }
+            return null;
+          });
+      
+          const results = await Promise.all(promises);
+      
+          results.forEach((result) => {
+            if (result) {
+              setNumbers((prevNumbers) => ({
+                ...prevNumbers,
+                [result.id]: result.value,
+              }));
+            }
+          });
       } catch (e) {
           setIsFacteursDataEmpty(true);
       }
