@@ -1,8 +1,11 @@
 import { Dashboard } from './Pages/Dashboard';
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Main from './Static/Main';
 import { Listfct } from './Pages/Facteur/Listfct';
+import { TooltipProvider } from './components/ui/tooltip';
+import EntrepriseForm from './Pages/Entreprise/EntrepriseForm';
+import EntrepriseList from './Pages/Entreprise/EntrepriseList';
+
 
 function App() {
   const router = createBrowserRouter([
@@ -15,6 +18,22 @@ function App() {
           element: <Dashboard />,
         },
         {
+          path: "entreprise",
+          children: [
+            {
+              index: true,
+              element: <EntrepriseList />
+
+            },
+            {
+              path: "ajouter",
+              element: <EntrepriseForm />
+              
+            },            
+          ]
+          
+        },
+        {
           path: "facteur",
           children: [
             {  index: true, 
@@ -23,10 +42,6 @@ function App() {
             {
               path: "ajouter",
              // element: <Addfct />,
-            },
-            {
-              path: "trash",
-              //element: <Trashfct />,
             },
           ],
         },

@@ -13,6 +13,7 @@ import {
   List,
   Trash2,
 } from "lucide-react";
+import { BarChart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -190,11 +191,11 @@ const Navheader = () => {
                     className="pl-6 mt-2 overflow-hidden"
                   >
                     <Link
-                      to="/entreprise/add"
+                      to="/entreprise/ajouter"
                       className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                     >
                       <PlusCircle className="h-4 w-4" />
-                      ajouter Entreprise
+                      Ajouter Entreprise
                     </Link>
                     <Link
                       to="/entreprise"
@@ -204,11 +205,11 @@ const Navheader = () => {
                       List Entreprise
                     </Link>
                     <Link
-                      to="/entreprise/trash"
+                      to="/entreprise/statistiques"
                       className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                     >
-                      <Trash2 className="h-4 w-4" />
-                      poubelle
+                     <BarChart className="h-4 w-4" />
+                      Statistiques des Emissions
                     </Link>
                   </motion.div>
                 )}

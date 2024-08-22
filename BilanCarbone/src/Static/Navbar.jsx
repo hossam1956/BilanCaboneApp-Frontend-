@@ -10,6 +10,7 @@ import {
   List,
   Trash2,
 } from "lucide-react";
+import { BarChart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import { Badge } from "@/components/ui/badge";
@@ -166,11 +167,11 @@ const Navbar = () => {
                     className="pl-6 mt-2 overflow-hidden"
                   >
                     <Link
-                      to="/entreprise/add" // Example path
+                      to="/entreprise/ajouter" // Example path
                       className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                     >
                       <PlusCircle className="h-4 w-4" />
-                      ajouter Entreprise
+                      Ajouter Entreprise
                     </Link>
                     <Link
                       to="/entreprise"
@@ -178,13 +179,13 @@ const Navbar = () => {
                     >
                       <List className="h-4 w-4" />
                       List Entreprise
-                    </Link>
+                    </Link>                    
                     <Link
-                      to="/entreprise/trash" // Example path
+                      to="/entreprise/statistiques"
                       className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                     >
-                      <Trash2 className="h-4 w-4" />
-                      déchets
+                     <BarChart className="h-4 w-4" />
+                      Statistiques des Emissions
                     </Link>
                   </motion.div>
                 )}

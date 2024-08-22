@@ -1,7 +1,7 @@
-import Navbar from "@/Static/Navbar";
-import Navheader from "@/Static/Navheader";
-import { Outlet } from "react-router-dom";
-import { Toaster } from 'sonner'
+import Navbar from './Navbar';
+import Navheader from './Navheader';
+import { Outlet } from 'react-router-dom';
+import { Toaster } from 'sonner';
 
 const Main = () => {
   return (
@@ -13,8 +13,8 @@ const Main = () => {
           <Outlet />
         </main>
       </div>
-      <Toaster richColors closeButton  />
-      </div>
+      <Toaster richColors closeButton />
+    </div>
   );
 };
 
