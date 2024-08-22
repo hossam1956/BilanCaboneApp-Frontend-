@@ -7,6 +7,11 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card"
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -100,10 +105,18 @@ const CalenderForm = ({ onClose, date }) => {
             &times;
           </button>
           <div>
+          <HoverCard>
+          <HoverCardTrigger asChild>
             <Switch id="mode"
             onCheckedChange={handleIsOn}
+            className={isOn ? "bg-black" : "bg-slate-300"}
             />
-            <label htmlFor="mode" className="mt-0">{isOn?"Mode Ajouter les facteurs":"Mode Entrer les valeurs"}</label>
+            </HoverCardTrigger>
+            <HoverCardContent className="w-fit">
+              <label className="text-center">{isOn?"Mode Ajouter les facteurs":"Mode Entrer les valeurs"}</label>
+          </HoverCardContent>
+          </HoverCard>
+
           </div>
           {!isOn?
             <form className="space-y-6" action="#">

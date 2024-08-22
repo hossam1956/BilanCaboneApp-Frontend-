@@ -43,13 +43,3 @@ export const validateWithoutPassword=({email,prenom,nom})=>{
     return errors;
 }
 
-export const validateInfoConsumption=({number})=>{
-  const errors={}
-
-   
-    if(!NUMBER_REGEX.test(number)){
-      errors.number="la valeur que vous avez entrer est vide ou pas valide"
-    }
-    
-    return errors;
-}

@@ -1,6 +1,9 @@
 import { apiClient } from "@/KeycloakConfig/KeycloakConn";
 import React, { useEffect, useState } from "react";
-import {validateInfoConsumption} from "@/Validation/RegexValidation";
+import { fetchValueOfFacteur,insertValueOfFacteur } from "@/Function/DataInfoFunctions";
+import Alerts from "@/Composant/Alerts";
+
+
 const DataForm=({date,IDs})=>{
 
     
@@ -9,6 +12,9 @@ const DataForm=({date,IDs})=>{
     const [isFacteursDataEmpty,setIsFacteursDataEmpty]=useState(false)
     const [numbers,setNumbers]=useState({});
     const [errors, setErrors] = useState({});
+    const [alert,setAlert]=useState(false)
+    const [problemAlert,setProblemAlert]=useState(false)
+    const [champsVideAlert,setChampsVideAlert]=useState(false)
     const fetchFacteur=async(ID)=>{
         try{
             const response=await apiClient.get(`/facteur/${ID}`)
@@ -18,25 +24,39 @@ const DataForm=({date,IDs})=>{
             console.log("Erreur:"+e)
         }
     }
-    useEffect(() => {
-      const fetchAllFacteurs = async () => {
-        try{
+    const fetchAndSetFacteurValues = async () => {
+      try {
           const fetchedData = await Promise.all(IDs.map(fetchFacteur));
           setFacteursData(fetchedData.filter((data) => data !== null));
-        }
-        catch(e){setIsFacteursDataEmpty(true)}
-       
-      };
+
+          for (const facteur of fetchedData) {
+              if (facteur) {
+                  const value = await fetchValueOfFacteur(facteur.id, localStorage.getItem("idUser"), date);
+                  setNumbers((prevNumbers) => ({
+                      ...prevNumbers,
+                      [facteur.id]: value, 
+                  }));
+
+              }
+
+          }
+      } catch (e) {
+          setIsFacteursDataEmpty(true);
+      }
+  };
+
+  useEffect(() => {
+      fetchAndSetFacteurValues();
+  }, [IDs]);
     
-        fetchAllFacteurs();
-    }, [IDs]);
     
     const handleNumberChange = (id, value) => {
       setNumbers((prevNumbers) => ({
         ...prevNumbers,
-        [id]: value,
+        [id]:value !== '' ? value : '',
       }));
     };
+
     const handleErrorSet = (id, validationErrors) => {
       setErrors((prevNumbers) => ({
         ...prevNumbers,
@@ -44,27 +64,55 @@ const DataForm=({date,IDs})=>{
       }));
     };
     
-    const handleSubmit=(e)=>{
+    const handleSubmit=async(e)=>{
       e.preventDefault()
-      /*Object.entries(numbers).forEach(([id, value]) => {
-        const validationErrors = validateInfoConsumption(value);
-        if (validationErrors.length > 0) {
-          handleErrorSet(id, validationErrors);
-        }
-      });*/
-      Object.entries(numbers).forEach(([id, value]) => {
-        const bodyRequest={
-          idUtilisateur:localStorage.getItem("idUser"),
-          idFacteur:id,
-          quantity:value 
-          }
-          console.log(bodyRequest)
-        }
-      );
-     
       
+            
+      if(!Object.values(numbers).includes(''))
+      { 
+        try{
+          await Promise.all(
+            Object.entries(numbers || {}).map(async([id, value]) => {
+              const bodyRequest={
+                idUtilisateur:localStorage.getItem("idUser"),
+                idFacteur:id,
+                date:date,
+                quantity:value 
+                }
+                  await insertValueOfFacteur(bodyRequest)
+              }
+            )
+          )
+          setAlert(true);
+        }
+
+        catch(e){
+          console.error(e)
+          setProblemAlert(true)
+        }
+      }
+      else{
+        setChampsVideAlert(true)
+      }
+     
     }
-    
+    useEffect(() => {
+      if (alert || problemAlert ||champsVideAlert) {
+          const timer = setTimeout(() => {
+              setAlert(false);
+              setProblemAlert(false);
+              setChampsVideAlert(false);
+          }, 1000); 
+  
+          return () => clearTimeout(timer);
+      }
+  }, [alert, problemAlert]);
+  console.log("=======Number========")
+  console.log(numbers)
+  console.log("-------------")
+  console.log(Object.values(numbers).includes(''))
+  console.log("===================")
+
     return(
         <div>
             <h5 className="text-xl font-medium text-gray-900 dark:text-white text-center">
@@ -94,7 +142,10 @@ const DataForm=({date,IDs})=>{
                   <input 
                   type="number" 
                   className="border border-solid border-black w-16"
-                  onChange={(e)=>{handleNumberChange(facteurData.id,e.target.value)}}
+                  step="0.1"
+                  onBlur={(e)=>{handleNumberChange(facteurData.id,e.target.value)}}
+                  defaultValue={numbers[facteurData.id] || ""}
+                  required
                   />
                 </div>
             
@@ -108,11 +159,15 @@ const DataForm=({date,IDs})=>{
 
             <button
               type="submit"
-              className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              className={`w-full text-white ${isFacteursDataEmpty?`bg-gray-400`:` bg-gray-700 hover:bg-black`} focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
               onClick={handleSubmit}
+              disabled={isFacteursDataEmpty}
             >
               Appliquer
             </button>
+            <Alerts  alert={alert} alertProblem={problemAlert} titre_succes={"Données Enregistrer"} message_succes={"Données Enregistrer avec succès" } message_erreur={"Une erreur est survenue lors de l'opération"}/>
+            <Alerts  alert={alert} alertProblem={champsVideAlert} titre_succes={"Données Enregistrer"} message_succes={"Données Enregistrer avec succès" } message_erreur={"L'un des champs est vide"}/>
+
         </div>
     )
 }
