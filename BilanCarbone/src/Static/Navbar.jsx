@@ -135,48 +135,66 @@ const Navbar = () => {
               </AnimatePresence>
             </div>
 
+
             <div>
-              <button
-                onClick={() => toggleAccordion("entreprise")}
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary w-full text-left"
-              >
-                <Building2 className="h-4 w-4" />
-                Entreprise
-              </button>
-              <AnimatePresence initial={false}>
-                {isEntrepriseOpen && (
-                  <motion.div
-                    initial="hidden"
-                    animate="visible"
-                    exit="hidden"
-                    variants={accordionVariants}
-                    transition={{ duration: 0.3 }}
-                    className="pl-6 mt-2 overflow-hidden"
-                  >
-                    <Link
-                      to="/entreprise/ajouter" // Example path
-                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                    >
-                      <PlusCircle className="h-4 w-4" />
-                      Ajouter Entreprise
-                    </Link>
-                    <Link
-                      to="/entreprise"
-                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                    >
-                      <List className="h-4 w-4" />
-                      List Entreprise
-                    </Link>                    
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              <Link
-              to="/formulaire"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-            >
-              <CalendarFold className="h-4 w-4" />
-              Formulaire
-            </Link>
+              {(sessionStorage.getItem("roleUser")!="MANAGER")&&
+                (
+                <div>
+                  <button
+                  onClick={() => toggleAccordion("entreprise")}
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary w-full text-left"
+                      >   
+                    <Building2 className="h-4 w-4" />
+                    Entreprise
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {isEntrepriseOpen && (
+                      <motion.div
+                        initial="hidden"
+                        animate="visible"
+                        exit="hidden"
+                        variants={accordionVariants}
+                        transition={{ duration: 0.3 }}
+                        className="pl-6 mt-2 overflow-hidden"
+                      >
+                        <Link
+                          to="/entreprise/add" // Example path
+                          className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                        >
+                          <PlusCircle className="h-4 w-4" />
+                          ajouter Entreprise
+                        </Link>
+                        <Link
+                          to="/entreprise"
+                          className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                        >
+                          <List className="h-4 w-4" />
+                          List Entreprise
+                        </Link>
+                        <Link
+                          to="/entreprise/trash" // Example path
+                          className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                          déchets
+                        </Link>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+                )
+              }
+              
+              {(sessionStorage.getItem("roleUser")!="ADMIN")&&
+               <Link
+               to="/formulaire"
+               className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+             >
+               <CalendarFold className="h-4 w-4" />
+               Formulaire
+             </Link>
+              }
+             
             </div>
           </nav>
         </div>
