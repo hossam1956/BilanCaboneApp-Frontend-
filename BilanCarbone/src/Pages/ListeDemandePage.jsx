@@ -241,7 +241,7 @@ function ListDemandePage() {
                                     {email}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
-                                    {entreprise.nomEntreprise}
+                                    {entreprise.nom}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
                                     {sendDate}
