@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Alerts from "@/Composant/Alerts";
 import {validate} from '@/Validation/RegexValidation';
-import { apiClient } from '@/KeycloakConfig/KeycloakConn';
+import { apiClientWithoutToken } from '@/KeycloakConfig/KeycloakConn';
 
 const RegisterPage = () => {
   const navigate=useNavigate()
@@ -28,7 +28,7 @@ const RegisterPage = () => {
   useEffect(() => {
     const getEntreprises = async () => {
       try{
-        const response = await axios.get('http://localhost:8081/api/entreprises');
+        const response = await apiClientWithoutToken.get("/entreprises");
       setEntreprises(response.data);
       }
       catch(error){
