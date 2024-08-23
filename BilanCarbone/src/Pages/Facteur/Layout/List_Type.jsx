@@ -3,18 +3,18 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@/components/ui/tabs";
+} from "@/Components/ui/tabs";
 import { PlusCircle, Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/Components/ui/input";
+import { Button } from "@/Components/ui/button";
 import List_type_all from "./Table/List_type_all";
 import List_Type_Parent from "./Table/List_Type_Parent";
 import List_Type_children from "./Table/List_Type_children";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import axios from "axios";
 import { API_TYPE } from "@/Api/FacteurApi";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { apiClient } from "@/KeycloakConfig/KeycloakConn";
 
 const List_Type = () => {
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ const List_Type = () => {
   const fetchData = () => {
     const sortString = sortConfig.map(e => `&sortBy=${e.key}&sortBy=${e.direction}`).join("");
     setLoading(true);
-    axios.get(`${API_TYPE.Type}?${filterParam}&page=${currentPage}&search=${search}${sortString}`)
+    apiClient.get(`${API_TYPE.Type}?${filterParam}&page=${currentPage}&search=${search}${sortString}`)
       .then(response => response.data)
       .then(response => {
         setFacteurs(response);
@@ -78,7 +78,7 @@ const List_Type = () => {
   };
 
   const handleDelete = (id, name) => {
-    axios.delete(`${API_TYPE.Type}/${id}`)
+    apiClient.delete(`${API_TYPE.Type}/${id}`)
       .then(response => response.data)
       .then(response => {
         showToast('success', `Le type ${response.nom_type} a été supprimé`);
@@ -91,7 +91,7 @@ const List_Type = () => {
   };
 
   const handleActivate = (id, name, txt) => {
-    axios.put(`${API_TYPE.Type}/${id}/activate?${txt}`)
+    apiClient.put(`${API_TYPE.Type}/${id}/activate?${txt}`)
       .then(response => response.data)
       .then(response => {
         showToast('success', `Le type ${response.nom_type} a été activé`);
@@ -104,7 +104,7 @@ const List_Type = () => {
   };
 
   const handleDeactivate = (id, name) => {
-    axios.put(`${API_TYPE.Type}/${id}/desactivate`)
+    apiClient.put(`${API_TYPE.Type}/${id}/desactivate`)
       .then(response => response.data)
       .then(response => {
         showToast('success', `Le type ${response.nom_type} a été désactivé`);

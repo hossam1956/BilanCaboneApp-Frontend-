@@ -13,7 +13,7 @@ const EntrepriseForm = () => {
     const entreprise = { nom, adresse, type, bloque };
 
     try {
-      const response = await fetch('http://localhost:8088/api/entreprises', {
+      const response = await fetch('http://localhost:8081/api/entreprises', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

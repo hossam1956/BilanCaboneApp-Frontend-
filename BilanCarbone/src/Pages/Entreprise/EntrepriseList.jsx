@@ -12,7 +12,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/Components/ui/alert-dialog"
 
 const EntrepriseList = () => {
   const [entreprises, setEntreprises] = useState([]);
@@ -27,7 +27,7 @@ const EntrepriseList = () => {
   useEffect(() => {
     const fetchEntreprises = async () => {
       try {
-        const response = await fetch('http://localhost:8088/api/entreprises');
+        const response = await fetch('http://localhost:8081/api/entreprises');
         if (response.ok) {
           const data = await response.json();
           setEntreprises(data);
@@ -62,7 +62,7 @@ const EntrepriseList = () => {
     console.log('Données envoyées:', updatedEntreprise);
   
     try {
-      const response = await fetch(`http://localhost:8088/api/entreprises/${editEntrepriseId}`, {
+      const response = await fetch(`http://localhost:8081/api/entreprises/${editEntrepriseId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ const EntrepriseList = () => {
   const handleDelete = async () => {
     if (deleteEntrepriseId) {
       try {
-        const response = await fetch(`http://localhost:8088/api/entreprises/${deleteEntrepriseId}`, {
+        const response = await fetch(`http://localhost:8081/api/entreprises/${deleteEntrepriseId}`, {
           method: 'DELETE',
         });
         if (response.ok) {

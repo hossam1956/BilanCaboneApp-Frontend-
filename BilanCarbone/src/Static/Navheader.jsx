@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { createContext, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   CircleUser,
   Home,
@@ -7,16 +8,15 @@ import {
   ClipboardList,
   Package2,
   Search,
-  ShoppingCart,
+  Send,
   Users,
   PlusCircle,
   List,
   Trash2,
 } from "lucide-react";
-import { BarChart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/Components/ui/badge";
+import { Button } from "@/Components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,15 +24,22 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+} from "@/Components/ui/dropdown-menu";
+import { Input } from "@/Components/ui/input";
+import { Sheet, SheetContent, SheetTrigger } from "@/Components/ui/sheet";
 import { Link } from "react-router-dom";
+import keycloak from "@/KeycloakConfig/keycloak";
+import { SearchContext } from "./SearchProvider";
+
 
 const Navheader = () => {
+  const navigate=useNavigate()
   const [isFacteurOpen, setIsFacteurOpen] = useState(false);
   const [isCustomersOpen, setIsCustomersOpen] = useState(false);
   const [isEntrepriseOpen, setIsEntrepriseOpen] = useState(false);
+
+  const { searchValue, handleSearching } = useContext(SearchContext);
+
 
   const toggleAccordion = (section) => {
     if (section === "facteur") setIsFacteurOpen(!isFacteurOpen);
@@ -74,15 +81,6 @@ const Navheader = () => {
               <Home className="h-5 w-5" />
               Tableau de bord
             </Link>
-            <span
-              className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
-            >
-              <ShoppingCart className="h-5 w-5" />
-              -----------
-              <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                6
-              </Badge>
-            </span>
 
             <div>
               <button
@@ -146,26 +144,26 @@ const Navheader = () => {
                     transition={{ duration: 0.3 }}
                     className="pl-6 mt-2 overflow-hidden"
                   >
-                    <Link
-                      to="/customers/add"
+                     <Link
+                      to="/"
                       className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                     >
                       <PlusCircle className="h-4 w-4" />
-                      ajouter Utilisateur
+                      ajouter un Utilisateur
                     </Link>
                     <Link
-                      to="/customers"
+                      to="/"
                       className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                     >
                       <List className="h-4 w-4" />
-                      List Utilisateur
+                      Liste des Utilisateurs
                     </Link>
                     <Link
-                      to="/customers/trash"
+                      to="/utilisateur/demandes"
                       className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                     >
-                      <Trash2 className="h-4 w-4" />
-                      poubelle
+                      <Send className="h-4 w-4" />
+                      Liste des demandes
                     </Link>
                   </motion.div>
                 )}
@@ -204,13 +202,6 @@ const Navheader = () => {
                       <List className="h-4 w-4" />
                       List Entreprise
                     </Link>
-                    <Link
-                      to="/entreprise/statistiques"
-                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                    >
-                     <BarChart className="h-4 w-4" />
-                      Statistiques des Emissions
-                    </Link>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -223,8 +214,9 @@ const Navheader = () => {
           <div className="relative">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
+              onChange={handleSearching}
               type="search"
-              placeholder="Search products..."
+              placeholder="Que voulez vous ?"
               className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
             />
           </div>
@@ -238,16 +230,15 @@ const Navheader = () => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel>{keycloak.tokenParsed.preferred_username}</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Support</DropdownMenuItem>
+          {(sessionStorage.getItem("roleUser")!="ADMIN")&&
+          <DropdownMenuItem onClick={()=>{navigate("parameter")}}>Profile</DropdownMenuItem>}
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
+          <DropdownMenuItem onClick={()=>{keycloak.logout();sessionStorage.setItem('token', undefined);}}>Logout</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>
   );
 };
-
-export default Navheader;
+export default Navheader

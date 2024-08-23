@@ -1,6 +1,6 @@
-import BodyLandingPage from "../components/BodyLandingPage"
-import Footer from "../components/Footer"
-import NavbarSimple  from "../components/NavbarSimple"
+import BodyLandingPage from "../Composant/BodyLandingPage"
+import Footer from "../Composant/Footer"
+import NavbarSimple  from "../Composant/NavbarSimple"
 
 const LandingPage=()=>{
     return(

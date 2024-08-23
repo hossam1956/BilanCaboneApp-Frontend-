@@ -6,23 +6,24 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/Components/ui/table";
 import {
   MoreHorizontal,
   ChevronUp,
   ChevronDown,
   CircleX
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/Components/ui/badge";
+import { Button } from "@/Components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+} from "@/Components/ui/dropdown-menu";
+import { Skeleton } from "@/Components/ui/skeleton";
+import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from '@/Components/ui/dialog';
+import { Link, useNavigate } from "react-router-dom";
 
 const FacteurTable = ({ Facteurs, loading, setSortConfig, sortConfig, handledeletesoft, handleactivate, handledesactivate }) => {
     const [showDialog, setShowDialog] = useState(false);
@@ -77,6 +78,12 @@ const FacteurTable = ({ Facteurs, loading, setSortConfig, sortConfig, handledele
         setShowDialog(false);
         setSelectedItem(null);
     };
+    const navigate = useNavigate();
+
+    const handle_affichage=(id)=>{
+        navigate('/facteur/'+id);
+
+    }
 
     return (
         <>
@@ -85,10 +92,10 @@ const FacteurTable = ({ Facteurs, loading, setSortConfig, sortConfig, handledele
                     <TableRow>
                         <TableHead className="text-center w-1/6 cursor-pointer "><span onClick={() => requestSort('nom')}>Nom</span> {getIconFor('nom')}</TableHead>
                         <TableHead className="text-center w-1/6 cursor-pointer "><span onClick={() => requestSort('unit')}>Unité</span> {getIconFor('unit')}</TableHead>
-                        <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell "><span onClick={() => requestSort('emissionFactor')}>Émission</span> {getIconFor('emissionFactor')}</TableHead>
-                        <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell ">Type</TableHead>
-                        <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell "><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
-                        <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell "><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
+                        <TableHead className="text-center w-1/6 cursor-pointer  md:table-cell "><span onClick={() => requestSort('emissionFactor')}>Émission</span> {getIconFor('emissionFactor')}</TableHead>
+                        <TableHead className="text-center w-1/6 cursor-pointer  md:table-cell ">Type</TableHead>
+                        <TableHead className="text-center w-1/6 cursor-pointer  md:table-cell "><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
+                        <TableHead className="text-center w-1/6 cursor-pointer  md:table-cell "><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
                         <TableHead className="text-center w-32">Actions</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -114,16 +121,19 @@ const FacteurTable = ({ Facteurs, loading, setSortConfig, sortConfig, handledele
                     ) : (
                         Facteurs.content.map((item, index) => (
                             <TableRow key={index}>
-                                <TableCell className=" text-center font-medium">{item.nom_facteur}</TableCell>
+                                <TableCell className=" text-center font-medium">
+                                    
+                                    <Link to={"/facteur/"+item.type}>{item.nom_facteur}</Link>
+                                    </TableCell>
                                 <TableCell className=" text-center font-medium">{item.unit}</TableCell>
-                                <TableCell className="text-center hidden md:table-cell">{item.emissionFactor}</TableCell>
-                                <TableCell className="text-center hidden md:table-cell">{item.parent_type}</TableCell>
-                                <TableCell className="text-center hidden sm:table-cell">
+                                <TableCell className="text-center  md:table-cell">{item.emissionFactor}</TableCell>
+                                <TableCell className="text-center  md:table-cell">{item.parent_type}</TableCell>
+                                <TableCell className="text-center  sm:table-cell">
                                     <Badge variant="outline" className={item.active ? "bg-green-600  text-white" : "bg-red-600 text-white"}>
                                         {item.active ? "Activer" : "Désactiver"}
                                     </Badge>
                                 </TableCell>
-                                <TableCell className="text-center hidden md:table-cell">{item.creat_at}</TableCell>
+                                <TableCell className="text-center  md:table-cell">{item.creat_at}</TableCell>
                                 <TableCell>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
@@ -133,14 +143,13 @@ const FacteurTable = ({ Facteurs, loading, setSortConfig, sortConfig, handledele
                                             </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end" className="w-48">
-                                            <DropdownMenuItem className="text-blue-600">Afficher</DropdownMenuItem>
-                                            <DropdownMenuItem className="text-orange-600">Modifier</DropdownMenuItem>
+                                            <DropdownMenuItem className="text-blue-600" onClick={()=>{handle_affichage(item.type)}}>Afficher</DropdownMenuItem>
                                             {item.active ? (
                                                 <DropdownMenuItem onClick={() => handledesactivate(item.id, item.nom_facteur)} className="text-red-950">Désactiver</DropdownMenuItem>
                                             ) : (
                                                 <DropdownMenuItem onClick={() => handleactivate(item.id, item.nom_facteur)} className="text-green-600">Activer</DropdownMenuItem>
                                             )}
-                                            <DropdownMenuItem onClick={() => handleDeleteClick(item)} className="text-red-600">Supprimer</DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => handleDeleteClick(item.id)} className="text-red-600">Supprimer</DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>

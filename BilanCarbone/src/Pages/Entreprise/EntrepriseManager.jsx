@@ -9,7 +9,7 @@ const EntrepriseManager = () => {
     useEffect(() => {
         const fetchEntreprises = async () => {
             try {
-                const response = await axios.get('http://localhost:8088/api/entreprises');
+                const response = await axios.get('http://localhost:8081/api/entreprises');
                 setEntreprises(response.data);
             } catch (error) {
                 console.error('Erreur lors de la récupération des entreprises:', error);

@@ -6,7 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/Components/ui/table";
 import {
   MoreHorizontal, ChevronDown, CircleX, ChevronUp
 } from "lucide-react";
@@ -14,14 +14,14 @@ import {
   CardFooter,
   CardContent,
   Card,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+} from "@/Components/ui/card";
+import { Button } from "@/Components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/Components/ui/dropdown-menu";
 import {
   Pagination,
   PaginationContent,
@@ -29,10 +29,11 @@ import {
   PaginationPrevious,
   PaginationLink,
   PaginationNext,
-} from "@/components/ui/pagination";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+} from "@/Components/ui/pagination";
+import { Badge } from "@/Components/ui/badge";
+import { Skeleton } from "@/Components/ui/skeleton";
+import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from "@/Components/ui/dialog";
+import { Link, useNavigate } from 'react-router-dom';
 
 const ListTypeAll = ({ 
   data, 
@@ -42,9 +43,9 @@ const ListTypeAll = ({
   handlePageChange, 
   currentPage, 
   setSortConfig, 
-  handledeletesoft, 
-  handleactivate, 
-  handledesactivate 
+  handleDelete, 
+  handleActivate, 
+  handleDeactivate 
 }) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showActivateDialog, setShowActivateDialog] = useState(false);
@@ -75,7 +76,7 @@ const ListTypeAll = ({
     setSelectedItem(item);
     setShowDeleteDialog(true);
   };
-
+  
   const handleActivationClick = (item) => {
     setSelectedItem(item);
     setShowActivateDialog(true);
@@ -83,7 +84,7 @@ const ListTypeAll = ({
 
   const confirmDelete = () => {
     if (selectedItem) {
-      handledeletesoft(selectedItem.id, selectedItem.nom_facteur);
+      handleDelete(selectedItem.id, selectedItem.nom_facteur);
     }
     setShowDeleteDialog(false);
     setSelectedItem(null);
@@ -91,12 +92,16 @@ const ListTypeAll = ({
 
   const confirmActivation = (toggle) => {
     if (selectedItem) {
-      handleactivate(selectedItem.id, selectedItem.nom_facteur, toggle ? "all=true" : "");
+      handleActivate(selectedItem.id, selectedItem.nom_facteur, toggle ? "all=true" : "");
     }
     setShowActivateDialog(false);
     setSelectedItem(null);
   };
-
+  const navigate = useNavigate();
+  const handle_affichage=(id)=>{
+    navigate('/facteur/'+id);
+  
+  }
   return (
     <Card className="w-full">
       <CardContent>
@@ -132,20 +137,20 @@ const ListTypeAll = ({
             ) : (
               data.content.map((item, index) => (
                 <TableRow key={index}>
-                  <TableCell className="text-center	font-medium">{item.nom_type}</TableCell>
-                  <TableCell className="text-center	hidden md:table-cell">
+                <TableCell className="text-center font-medium"><Link to={"/facteur/"+item.id}>{item.nom_type}</Link></TableCell>
+                <TableCell className="text-center	 md:table-cell">
                     <Badge variant="secondary" className={!item.parent ? "bg-slate-400" : "bg-emerald-200"}>
                       {!item.parent ? "Parent" : "enfant"}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-center	font-medium">{item.type_parent}</TableCell>
-                  <TableCell className="text-center	hidden md:table-cell">{item.nbr_facteur}</TableCell>
-                  <TableCell className="text-center	hidden sm:table-cell">
+                  <TableCell className="text-center	 md:table-cell">{item.nbr_facteur}</TableCell>
+                  <TableCell className="text-center	 sm:table-cell">
                     <Badge variant="outline" className={item.active ? "bg-green-600 text-white" : "bg-red-600 text-white"}>
                       {item.active ? "Activer" : "Désactiver"}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-center	hidden md:table-cell">{item.create}</TableCell>
+                  <TableCell className="text-center	 md:table-cell">{item.create}</TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -155,10 +160,9 @@ const ListTypeAll = ({
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-48">
-                        <DropdownMenuItem className="text-blue-600">Afficher</DropdownMenuItem>
-                        <DropdownMenuItem className="text-orange-600">Modifier</DropdownMenuItem>
+                      <DropdownMenuItem className="text-blue-600" onClick={()=>{handle_affichage(item.id)}}>Afficher</DropdownMenuItem>
                         {item.active ? (
-                          <DropdownMenuItem onClick={() => handledesactivate(item.id, item.nom_facteur)} className="text-red-950">Désactiver</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleDeactivate(item.id, item.nom_facteur)} className="text-red-950">Désactiver</DropdownMenuItem>
                         ) : (
                           <DropdownMenuItem onClick={() => handleActivationClick(item)} className="text-green-600">Activer</DropdownMenuItem>
                         )}

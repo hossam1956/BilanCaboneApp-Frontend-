@@ -1,8 +1,8 @@
 import { useState } from "react";
 import {
   Home,
-  Package2,
-  ShoppingCart,
+  CalendarFold,
+  Send,
   Users,
   ClipboardList,
   Building2,
@@ -10,10 +10,9 @@ import {
   List,
   Trash2,
 } from "lucide-react";
-import { BarChart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
-import { Badge } from "@/components/ui/badge";
+
 
 const Navbar = () => {
   const [isFacteurOpen, setIsFacteurOpen] = useState(false);
@@ -36,8 +35,7 @@ const Navbar = () => {
       <div className="flex h-full max-h-screen flex-col gap-2">
         <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
           <Link to="/" className="flex items-center gap-2 font-semibold">
-            <Package2 className="h-6 w-6" />
-            <span>Bilan de carbone</span>
+            <span>BilanCarbone</span>
           </Link>
         </div>
         <div className="flex-1">
@@ -49,17 +47,6 @@ const Navbar = () => {
               <Home className="h-4 w-4" />
               Tableau de bord
             </Link>
-            <Link
-              to="#"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-            >
-              <ShoppingCart className="h-4 w-4" />
-              --------
-              <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                6
-              </Badge>
-            </Link>
-
             <div>
               <button
                 onClick={() => toggleAccordion("facteur")}
@@ -123,25 +110,25 @@ const Navbar = () => {
                     className="pl-6 mt-2 overflow-hidden"
                   >
                     <Link
-                      to="/customers/add" // Example path
+                      to="/utilisateur/ajouter"
                       className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                     >
                       <PlusCircle className="h-4 w-4" />
-                      ajouter Utilisateur
+                      ajouter un Utilisateur
                     </Link>
                     <Link
-                      to="/customers"
+                      to="/utilisateur/liste"
                       className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                     >
                       <List className="h-4 w-4" />
-                      List Utilisateurs
+                      Liste des Utilisateurs
                     </Link>
                     <Link
-                      to="/customers/trash" // Example path
+                      to="/utilisateur/demandes"
                       className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                     >
-                      <Trash2 className="h-4 w-4" />
-                      déchets
+                      <Send className="h-4 w-4" />
+                      Liste des demandes
                     </Link>
                   </motion.div>
                 )}
@@ -180,16 +167,16 @@ const Navbar = () => {
                       <List className="h-4 w-4" />
                       List Entreprise
                     </Link>                    
-                    <Link
-                      to="/entreprise/statistiques"
-                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                    >
-                     <BarChart className="h-4 w-4" />
-                      Statistiques des Emissions
-                    </Link>
                   </motion.div>
                 )}
               </AnimatePresence>
+              <Link
+              to="/formulaire"
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+            >
+              <CalendarFold className="h-4 w-4" />
+              Formulaire
+            </Link>
             </div>
           </nav>
         </div>

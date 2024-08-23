@@ -5,7 +5,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/Components/ui/table";
 import {
   MoreHorizontal, ChevronDown, CircleX, ChevronUp
 } from "lucide-react";
@@ -13,14 +13,14 @@ import {
   CardFooter,
   CardContent,
   Card,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+} from "@/Components/ui/card";
+import { Button } from "@/Components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/Components/ui/dropdown-menu";
 import {
   Pagination,
   PaginationContent,
@@ -28,11 +28,12 @@ import {
   PaginationPrevious,
   PaginationLink,
   PaginationNext,
-} from "@/components/ui/pagination";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+} from "@/Components/ui/pagination";
+import { Badge } from "@/Components/ui/badge";
+import { Skeleton } from "@/Components/ui/skeleton";
+import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from "@/Components/ui/dialog";
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const List_Type_Parent =({data, 
 loading, 
@@ -41,9 +42,9 @@ requestSort,
 handlePageChange, 
 currentPage, 
 setSortConfig, 
-handledeletesoft, 
-handleactivate, 
-handledesactivate 
+handleDelete, 
+handleActivate, 
+handleDeactivate 
 }) => {
 const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 const [showActivateDialog, setShowActivateDialog] = useState(false);
@@ -82,7 +83,7 @@ const handleActivationClick = (item) => {
 
 const confirmDelete = () => {
   if (selectedItem) {
-    handledeletesoft(selectedItem.id, selectedItem.nom_facteur);
+    handleDelete(selectedItem.id, selectedItem.nom_facteur);
   }
   setShowDeleteDialog(false);
   setSelectedItem(null);
@@ -90,11 +91,16 @@ const confirmDelete = () => {
 
 const confirmActivation = (toggle) => {
   if (selectedItem) {
-    handleactivate(selectedItem.id, selectedItem.nom_facteur, toggle ? "all=true" : "");
+    handleActivate(selectedItem.id, selectedItem.nom_facteur, toggle ? "all=true" : "");
   }
   setShowActivateDialog(false);
   setSelectedItem(null);
 };
+const navigate = useNavigate();
+const handle_affichage=(id)=>{
+  navigate('/facteur/'+id);
+
+}
 
 return (
   <Card className="w-full">
@@ -103,8 +109,8 @@ return (
         <TableHeader>
           <TableRow>
             <TableHead className="text-center cursor-pointer w-1/3"><span onClick={() => requestSort('name')}>Nom</span> {getIconFor('name')}</TableHead>
-            <TableHead className="text-center cursor-pointer hidden md:table-cell w-1/3"><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
-            <TableHead className="text-center cursor-pointer hidden md:table-cell w-1/3"><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
+            <TableHead className="text-center cursor-pointer  md:table-cell w-1/3"><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
+            <TableHead className="text-center cursor-pointer  md:table-cell w-1/3"><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -128,7 +134,7 @@ return (
           ) : (
             data.content.map((item, index) => (
               <TableRow key={index}>
-                <TableCell className="text-center font-medium">{item.nom_type}</TableCell>
+                <TableCell className="text-center font-medium"><Link to={"/facteur/"+item.id}>{item.nom_type}</Link></TableCell>
                 <TableCell className="text-center hidden sm:table-cell">
                   <Badge variant="outline" className={item.active ? "bg-green-600 text-white" : "bg-red-600 text-white"}>
                     {item.active ? "Activer" : "Désactiver"}
@@ -144,10 +150,9 @@ return (
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">
-                      <DropdownMenuItem className="text-blue-600">Afficher</DropdownMenuItem>
-                      <DropdownMenuItem className="text-orange-600">Modifier</DropdownMenuItem>
+                      <DropdownMenuItem className="text-blue-600" onClick={()=>{handle_affichage(item.id)}}>Afficher</DropdownMenuItem>
                       {item.active ? (
-                        <DropdownMenuItem onClick={() => handledesactivate(item.id, item.nom_facteur)} className="text-red-950">Désactiver</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleDeactivate(item.id, item.nom_facteur)} className="text-red-950">Désactiver</DropdownMenuItem>
                       ) : (
                         <DropdownMenuItem onClick={() => handleActivationClick(item)} className="text-green-600">Activer</DropdownMenuItem>
                       )}

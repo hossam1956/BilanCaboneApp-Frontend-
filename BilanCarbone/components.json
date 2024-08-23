@@ -6,12 +6,12 @@
   "tailwind": {
     "config": "tailwind.config.js",
     "css": "src/index.css",
-    "baseColor": "slate",
-    "cssVariables": true,
+    "baseColor": "neutral",
+    "cssVariables": true, 
     "prefix": ""
   },
   "aliases": {
-    "components": "@/components",
+    "components": "@/Components",
     "utils": "@/lib/utils"
   }
 }
