@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { apiClient } from "@/KeycloakConfig/KeycloakConn"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,10 +28,9 @@ const EntrepriseList = () => {
   useEffect(() => {
     const fetchEntreprises = async () => {
       try {
-        const response = await fetch('http://localhost:8081/api/entreprises');
-        if (response.ok) {
-          const data = await response.json();
-          setEntreprises(data);
+        const response = await apiClient.get('entreprises');
+        if (response.status === 200) {
+          setEntreprises(response.data);
         } else {
           console.error('Erreur lors de la récupération des entreprises:', response.statusText);
         }
@@ -58,29 +58,18 @@ const EntrepriseList = () => {
   
     const updatedEntreprise = { nom, adresse, type, bloque };
   
-    // Debug: vérifier les données envoyées
-    console.log('Données envoyées:', updatedEntreprise);
-  
     try {
-      const response = await fetch(`http://localhost:8081/api/entreprises/${editEntrepriseId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedEntreprise),
-      });
+      const response = await apiClient.put(`entreprises/${editEntrepriseId}`, updatedEntreprise);
   
-      if (response.ok) {
+      if (response.status === 200) {
         setEntreprises(entreprises.map((entreprise) =>
           entreprise.id === editEntrepriseId ? { ...entreprise, nom, adresse, type, bloque } : entreprise
         ));
         setEditEntrepriseId(null);
   
-        // Afficher une alerte de succès
         toast.success("Entreprise mise à jour avec succès !");
       } else {
-        const errorText = await response.text(); // Obtenir plus de détails sur l'erreur
-        console.error('Erreur lors de la mise à jour de l\'entreprise:', errorText);
+        console.error('Erreur lors de la mise à jour de l\'entreprise:', response.statusText);
       }
     } catch (error) {
       console.error('Erreur lors de la mise à jour de l\'entreprise:', error);
@@ -90,14 +79,11 @@ const EntrepriseList = () => {
   const handleDelete = async () => {
     if (deleteEntrepriseId) {
       try {
-        const response = await fetch(`http://localhost:8081/api/entreprises/${deleteEntrepriseId}`, {
-          method: 'DELETE',
-        });
-        if (response.ok) {
+        const response = await apiClient.delete(`entreprises/${deleteEntrepriseId}`);
+        if (response.status === 200) {
           setEntreprises(entreprises.filter((entreprise) => entreprise.id !== deleteEntrepriseId));
           setDeleteEntrepriseId(null);
 
-          // Show success toast
           toast.success("Entreprise supprimée avec succès !");
         } else {
           console.error('Erreur lors de la suppression de l\'entreprise:', response.statusText);

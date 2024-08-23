@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { apiClient } from "@/KeycloakConfig/KeycloakConn"
 
 const EntrepriseForm = () => {
   const [nom, setNom] = useState('');
@@ -8,20 +9,31 @@ const EntrepriseForm = () => {
   const [type, setType] = useState('TECHNOLOGIE');
   const [bloque, setBloque] = useState(false);
 
+  // Fonction pour récupérer les données des entreprises
+  const getForm = () => {
+    apiClient.get('entreprises')
+      .then(response => {
+        console.log("Data fetched successfully:", response.data);
+        // Vous pouvez utiliser les données récupérées ici si nécessaire
+      })
+      .catch(error => {
+        console.error("Error fetching data:", error);
+      });
+  };
+
+  useEffect(() => {
+    // Appel à la fonction de récupération des données au montage du composant
+    getForm();
+  }, []); // Le tableau vide [] assure que cet effet est exécuté une seule fois, au montage
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const entreprise = { nom, adresse, type, bloque };
 
     try {
-      const response = await fetch('http://localhost:8081/api/entreprises', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(entreprise),
-      });
+      const response = await apiClient.post('entreprises', entreprise);
 
-      if (response.ok) {
+      if (response.status === 200 || response.status === 201) {
         // Vider les champs après la création de l'entreprise
         setNom('');
         setAdresse('');
@@ -32,7 +44,7 @@ const EntrepriseForm = () => {
         toast.success('Entreprise ajoutée avec succès !', { autoClose: 3000 });
       } else if (response.status === 400) {
         // Si le serveur retourne une erreur 400, afficher une alerte
-        const errorMessage = await response.text(); // Lire le message d'erreur
+        const errorMessage = response.data.message || "Erreur lors de la création de l'entreprise.";
         toast.error(errorMessage, { autoClose: 3000 });
       } else {
         console.error('Erreur lors de la création de l\'entreprise:', response.statusText);

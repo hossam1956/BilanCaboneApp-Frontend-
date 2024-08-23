@@ -16,7 +16,6 @@ import { Addfct } from './Pages/Facteur/Addfct';
 import { Listfct } from './Pages/Facteur/Listfct';
 import EntrepriseForm from './Pages/Entreprise/EntrepriseForm';
 import EntrepriseList from './Pages/Entreprise/EntrepriseList';
-
 import Trashfct from './Pages/Facteur/Trashfct';
 import Affichagefct from './Pages/Facteur/Affichagefct';
 import Page404 from './Pages/error/Page404';

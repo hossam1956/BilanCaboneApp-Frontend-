@@ -11,13 +11,14 @@ import {
   Trash2,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
-
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isFacteurOpen, setIsFacteurOpen] = useState(false);
   const [isCustomersOpen, setIsCustomersOpen] = useState(false);
   const [isEntrepriseOpen, setIsEntrepriseOpen] = useState(false);
+
+  const roleUser = sessionStorage.getItem("roleUser");
 
   const toggleAccordion = (section) => {
     if (section === "facteur") setIsFacteurOpen(!isFacteurOpen);
@@ -135,15 +136,13 @@ const Navbar = () => {
               </AnimatePresence>
             </div>
 
-
             <div>
-              {(sessionStorage.getItem("roleUser")!="MANAGER")&&
-                (
+              {roleUser !== "MANAGER" && (
                 <div>
                   <button
-                  onClick={() => toggleAccordion("entreprise")}
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary w-full text-left"
-                      >   
+                    onClick={() => toggleAccordion("entreprise")}
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary w-full text-left"
+                  >
                     <Building2 className="h-4 w-4" />
                     Entreprise
                   </button>
@@ -158,11 +157,11 @@ const Navbar = () => {
                         className="pl-6 mt-2 overflow-hidden"
                       >
                         <Link
-                          to="/entreprise/add" // Example path
+                          to="/entreprise/ajouter"
                           className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                         >
                           <PlusCircle className="h-4 w-4" />
-                          ajouter Entreprise
+                          Ajouter Entreprise
                         </Link>
                         <Link
                           to="/entreprise"
@@ -171,30 +170,21 @@ const Navbar = () => {
                           <List className="h-4 w-4" />
                           List Entreprise
                         </Link>
-                        <Link
-                          to="/entreprise/trash" // Example path
-                          className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                          déchets
-                        </Link>
                       </motion.div>
                     )}
                   </AnimatePresence>
                 </div>
-                )
-              }
+              )}
               
-              {(sessionStorage.getItem("roleUser")!="ADMIN")&&
-               <Link
-               to="/formulaire"
-               className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-             >
-               <CalendarFold className="h-4 w-4" />
-               Formulaire
-             </Link>
-              }
-             
+              {roleUser !== "ADMIN" && (
+                <Link
+                  to="/formulaire"
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                >
+                  <CalendarFold className="h-4 w-4" />
+                  Formulaire
+                </Link>
+              )}
             </div>
           </nav>
         </div>

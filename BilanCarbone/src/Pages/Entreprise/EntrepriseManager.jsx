@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { apiClient } from "@/KeycloakConfig/KeycloakConn";
 import EntrepriseForm from './EntrepriseForm';
 import EntrepriseList from './EntrepriseList';
 
@@ -9,7 +9,7 @@ const EntrepriseManager = () => {
     useEffect(() => {
         const fetchEntreprises = async () => {
             try {
-                const response = await axios.get('http://localhost:8081/api/entreprises');
+                const response = await apiClient.get('entreprises');  // Utilisation de apiClient
                 setEntreprises(response.data);
             } catch (error) {
                 console.error('Erreur lors de la récupération des entreprises:', error);
@@ -20,7 +20,6 @@ const EntrepriseManager = () => {
 
     return (
         <div>
-            {/* Le composant EntrepriseForm n'a plus besoin de la prop addEntreprise */}
             <EntrepriseForm />
             <EntrepriseList entreprises={entreprises} />
         </div>
