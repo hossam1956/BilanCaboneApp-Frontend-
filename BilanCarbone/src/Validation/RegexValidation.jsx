@@ -1,4 +1,4 @@
-import { USERNAME_REGEX,EMAIL_REGEX,PRENOM_REGEX,NOM_REGEX,PASSWORD_REGEX } from "@/Constants/Regex";
+import { USERNAME_REGEX,EMAIL_REGEX,PRENOM_REGEX,NOM_REGEX,PASSWORD_REGEX,NUMBER_REGEX } from "@/Constants/Regex";
 
 export const validate=({username,email,prenom,nom,password,confirmPassword})=>{
     const errors={}
@@ -26,7 +26,7 @@ export const validate=({username,email,prenom,nom,password,confirmPassword})=>{
     
     return errors;
   }
-export const validateWithoutPassword=({username,email,prenom,nom})=>{
+export const validateWithoutPassword=({email,prenom,nom})=>{
   const errors={}
 
    
@@ -42,3 +42,4 @@ export const validateWithoutPassword=({username,email,prenom,nom})=>{
     }
     return errors;
 }
+

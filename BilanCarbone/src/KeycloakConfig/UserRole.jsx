@@ -3,6 +3,7 @@ export function getRolesFromToken(token){
     try{
         const decodedToken=jwtDecode(token)
         const roles = decodedToken.realm_access.roles;
+        localStorage.setItem("idUser",decodedToken.sub)
         return roles;
     }
     catch(error){

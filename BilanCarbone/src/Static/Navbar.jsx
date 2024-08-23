@@ -136,6 +136,7 @@ const Navbar = () => {
               </AnimatePresence>
             </div>
 
+
             <div>
               {roleUser !== "MANAGER" && (
                 <div>
