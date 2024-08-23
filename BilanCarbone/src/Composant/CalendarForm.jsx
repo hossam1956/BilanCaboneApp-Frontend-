@@ -29,12 +29,23 @@ const CalenderForm = ({ onClose, date }) => {
   const [facteurs, setFacteurs] = useState([]);
   const [facteursSelected, setFacteursSelected] = useState({});
   const [isOn,setIsOn]=useState(false)
-
+  
   useEffect(() => {
     fetchType();
     const storedData = JSON.parse(localStorage.getItem("dataMaps")) || {};
+    
+    if(!Object.keys(storedData).includes(localStorage.getItem("idUser"))){
+     
+      storedData[localStorage.getItem("idUser")]={}
+      localStorage.setItem("dataMaps", JSON.stringify(storedData));
+    }
+    const value = Object.keys(Object.values(storedData[localStorage.getItem("idUser")])[0] || {}) || [0];
+    if(value.length==0){
+      delete storedData[localStorage.getItem("idUser")][date]
+      localStorage.setItem("dataMaps", JSON.stringify(storedData));
+    }
     setFacteursSelected(storedData);
-  }, []);
+  }, [isOn]);
 
   const fetchType = async () => {
     try {
@@ -92,7 +103,9 @@ const CalenderForm = ({ onClose, date }) => {
       return updatedFacteursSelected;
     });
   };
- 
+              
+          
+              
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg relative w-1/2 h-fit">
@@ -275,12 +288,13 @@ const CalenderForm = ({ onClose, date }) => {
                           </Dialog>
                         </div>
 
-
-
                   }
                   </CollapsibleContent>
                 </Collapsible>
+                
               ))}
+              
+              
             </div>
             
           </form>

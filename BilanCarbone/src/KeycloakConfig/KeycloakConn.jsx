@@ -1,5 +1,10 @@
 import axios from 'axios';
 
+
+export const apiClientWithoutToken = axios.create({
+  baseURL: import.meta.env.VITE_AXIOS_URL,
+  withCredentials: false 
+});
 // Create Axios instances
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_AXIOS_URL,

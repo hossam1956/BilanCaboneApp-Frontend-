@@ -5,13 +5,10 @@ import Alerts from "@/Composant/Alerts";
 
 
 const DataForm=({date,IDs})=>{
-
     
-    const dataMaps=JSON.parse(localStorage.getItem("dataMaps"))[localStorage.getItem("idUser")][date]
     const [facteursData, setFacteursData] = useState([]);
     const [isFacteursDataEmpty,setIsFacteursDataEmpty]=useState(false)
     const [numbers,setNumbers]=useState({});
-    const [errors, setErrors] = useState({});
     const [alert,setAlert]=useState(false)
     const [problemAlert,setProblemAlert]=useState(false)
     const [champsVideAlert,setChampsVideAlert]=useState(false)
@@ -64,12 +61,7 @@ const DataForm=({date,IDs})=>{
       }));
     };
 
-    const handleErrorSet = (id, validationErrors) => {
-      setErrors((prevNumbers) => ({
-        ...prevNumbers,
-        [id]: validationErrors,
-      }));
-    };
+    
     
     const handleSubmit=async(e)=>{
       e.preventDefault()
@@ -114,11 +106,7 @@ const DataForm=({date,IDs})=>{
           return () => clearTimeout(timer);
       }
   }, [alert, problemAlert]);
-  console.log("=======Number========")
-  console.log(numbers)
-  console.log("-------------")
-  console.log(Object.values(numbers).includes(''))
-  console.log("===================")
+  
 
     return(
         <div>

@@ -320,7 +320,7 @@ function ListeUtilisateur() {
                         utilisateurs.map 
                         ((utilisateur)=>{
                             const {id,email,lastName,firstName,enabled,username,attributes}=utilisateur.userRepresentation;
-                            const{nomEntreprise}=utilisateur.entreprise
+                            const{nom}=utilisateur.entreprise
                             const role = roles[id];
                             return(
                               
@@ -335,7 +335,7 @@ function ListeUtilisateur() {
                                           {email}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
-                                      {nomEntreprise}
+                                      {nom}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
                                   {role}
