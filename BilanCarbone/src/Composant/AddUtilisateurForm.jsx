@@ -23,7 +23,7 @@ const AddUtilisateurForm=()=>{
   useEffect(() => {
     const getEntreprises = async () => {
       try{
-        const response = await apiClient.get('/entreprise');
+        const response = await apiClient.get('/entreprises');
       setEntreprises(response.data);
       }
       catch(error){
@@ -188,9 +188,9 @@ const AddUtilisateurForm=()=>{
               >
                 {
                   entreprises.map((entrepriseInfo)=>{
-                    const {id,nomEntreprise}=entrepriseInfo
+                    const {id,nom}=entrepriseInfo
                     return(
-                      <option key={id} value={`${id}`}>{nomEntreprise}</option>
+                      <option key={id} value={`${id}`}>{nom}</option>
                     )
                   })
                   

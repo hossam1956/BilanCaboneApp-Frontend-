@@ -28,7 +28,7 @@ const RegisterPage = () => {
   useEffect(() => {
     const getEntreprises = async () => {
       try{
-        const response = await axios.get('http://localhost:8081/api/entreprise');
+        const response = await axios.get('http://localhost:8081/api/entreprises');
       setEntreprises(response.data);
       }
       catch(error){
@@ -213,9 +213,9 @@ const RegisterPage = () => {
               >
                 {
                   entreprises.map((entrepriseInfo)=>{
-                    const {id,nomEntreprise}=entrepriseInfo
+                    const {id,nom}=entrepriseInfo
                     return(
-                      <option key={id} value={`${id}`}>{nomEntreprise}</option>
+                      <option key={id} value={`${id}`}>{nom}</option>
                     )
                   })
                   

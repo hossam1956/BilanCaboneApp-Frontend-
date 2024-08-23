@@ -44,8 +44,8 @@ const ListTypeAll = ({
   currentPage, 
   setSortConfig, 
   handleDelete, 
-  handleactivate, 
-  handledesactivate 
+  handleActivate, 
+  handleDeactivate 
 }) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showActivateDialog, setShowActivateDialog] = useState(false);
@@ -92,7 +92,7 @@ const ListTypeAll = ({
 
   const confirmActivation = (toggle) => {
     if (selectedItem) {
-      handleactivate(selectedItem.id, selectedItem.nom_facteur, toggle ? "all=true" : "");
+      handleActivate(selectedItem.id, selectedItem.nom_facteur, toggle ? "all=true" : "");
     }
     setShowActivateDialog(false);
     setSelectedItem(null);
@@ -109,11 +109,11 @@ const ListTypeAll = ({
           <TableHeader>
             <TableRow>
               <TableHead className=" text-center	cursor-pointer w-1/6"><span onClick={() => requestSort('name')}>Nom</span> {getIconFor('name')}</TableHead>
-              <TableHead className="text-center	cursor-pointer hidden md:table-cell w-1/6">Type</TableHead>
-              <TableHead className="text-center	cursor-pointer hidden md:table-cell  w-1/6">Parent</TableHead>
-              <TableHead className="text-center	cursor-pointer hidden md:table-cell  w-1/6">Nomber de facteur</TableHead>
-              <TableHead className="text-center	cursor-pointer hidden md:table-cell  w-1/6"><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
-              <TableHead className="text-center	cursor-pointer hidden md:table-cell w-1/4"><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
+              <TableHead className="text-center	cursor-pointer  md:table-cell w-1/6">Type</TableHead>
+              <TableHead className="text-center	cursor-pointer  md:table-cell  w-1/6">Parent</TableHead>
+              <TableHead className="text-center	cursor-pointer  md:table-cell  w-1/6">Nomber de facteur</TableHead>
+              <TableHead className="text-center	cursor-pointer  md:table-cell  w-1/6"><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
+              <TableHead className="text-center	cursor-pointer  md:table-cell w-1/4"><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -131,26 +131,26 @@ const ListTypeAll = ({
             ) : data.content && data.content.length === 0 ? (
               <TableRow>
                 <TableCell colSpan="7" className="text-2xl text-center py-4">
-                  Pas de Facteurs
+                  Pas de type
                 </TableCell>
               </TableRow>
             ) : (
               data.content.map((item, index) => (
                 <TableRow key={index}>
                 <TableCell className="text-center font-medium"><Link to={"/facteur/"+item.id}>{item.nom_type}</Link></TableCell>
-                <TableCell className="text-center	hidden md:table-cell">
+                <TableCell className="text-center	 md:table-cell">
                     <Badge variant="secondary" className={!item.parent ? "bg-slate-400" : "bg-emerald-200"}>
                       {!item.parent ? "Parent" : "enfant"}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-center	font-medium">{item.type_parent}</TableCell>
-                  <TableCell className="text-center	hidden md:table-cell">{item.nbr_facteur}</TableCell>
-                  <TableCell className="text-center	hidden sm:table-cell">
+                  <TableCell className="text-center	 md:table-cell">{item.nbr_facteur}</TableCell>
+                  <TableCell className="text-center	 sm:table-cell">
                     <Badge variant="outline" className={item.active ? "bg-green-600 text-white" : "bg-red-600 text-white"}>
                       {item.active ? "Activer" : "Désactiver"}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-center	hidden md:table-cell">{item.create}</TableCell>
+                  <TableCell className="text-center	 md:table-cell">{item.create}</TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -162,7 +162,7 @@ const ListTypeAll = ({
                       <DropdownMenuContent align="end" className="w-48">
                       <DropdownMenuItem className="text-blue-600" onClick={()=>{handle_affichage(item.id)}}>Afficher</DropdownMenuItem>
                         {item.active ? (
-                          <DropdownMenuItem onClick={() => handledesactivate(item.id, item.nom_facteur)} className="text-red-950">Désactiver</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleDeactivate(item.id, item.nom_facteur)} className="text-red-950">Désactiver</DropdownMenuItem>
                         ) : (
                           <DropdownMenuItem onClick={() => handleActivationClick(item)} className="text-green-600">Activer</DropdownMenuItem>
                         )}

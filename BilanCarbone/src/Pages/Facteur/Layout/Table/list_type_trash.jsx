@@ -126,7 +126,7 @@ const list_type_trash = ({
             ) : data.content && data.content.length === 0 ? (
               <TableRow>
                 <TableCell colSpan="7" className="text-2xl text-center py-4">
-                  Pas de Facteurs
+                  Pas de TYPE
                 </TableCell>
               </TableRow>
             ) : (

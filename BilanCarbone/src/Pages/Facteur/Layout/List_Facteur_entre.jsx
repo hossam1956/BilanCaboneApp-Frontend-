@@ -17,19 +17,24 @@ import { apiClient } from "@/KeycloakConfig/KeycloakConn";
   const List_Facteur_entre = () => { 
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
+    const [filterParam, setFilterParam] = useState("my=true");
     const activeTab = searchParams.get("facteur") || "personnalise";
-
     const [Facteurs, setFacteurs] = useState({ content: [] });
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(0);
     const [search, setSearch] = useState("");
     const [sortConfig, setSortConfig] = useState([]);
-    const [filterParam, setFilterParam] = useState("");
   useEffect(() => {
+    if (activeTab === "personnalise") {
+      setFilterParam("my=true");
+    } else {
+      setFilterParam("");
+    }
     getData();
-  }, [currentPage, search, sortConfig]);
+  }, [currentPage, search, sortConfig,filterParam]);
 
   const getData = () => {
+    console.log(filterParam)
     let sorted = "";
     sortConfig.forEach(e => {
       sorted += `&sortBy=${e.key}&sortBy=${e.direction}`;
