@@ -189,11 +189,11 @@ const Navheader = () => {
                     className="pl-6 mt-2 overflow-hidden"
                   >
                     <Link
-                      to="/entreprise/add"
+                      to="/entreprise/ajouter"
                       className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                     >
                       <PlusCircle className="h-4 w-4" />
-                      ajouter Entreprise
+                      Ajouter Entreprise
                     </Link>
                     <Link
                       to="/entreprise"
@@ -201,13 +201,6 @@ const Navheader = () => {
                     >
                       <List className="h-4 w-4" />
                       List Entreprise
-                    </Link>
-                    <Link
-                      to="/entreprise/trash"
-                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                      poubelle
                     </Link>
                   </motion.div>
                 )}
