@@ -23,3 +23,4 @@ const injectToken = (config) => {
 // Use the interceptor in both Axios instances
 apiClient.interceptors.request.use(injectToken, (error) => Promise.reject(error));
 apikeycloak.interceptors.request.use(injectToken, (error) => Promise.reject(error));
+

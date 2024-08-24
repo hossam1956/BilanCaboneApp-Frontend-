@@ -164,7 +164,7 @@ function ListeUtilisateur() {
         const rolesData = {};
         const rolesPromises=utilisateurs.flatMap(utilisateur=>getRoleUtilisateur(utilisateur.userRepresentation.id)) 
         const rolesResults=await Promise.all(rolesPromises)
-        rolesResults.forEach((role, index) => {
+          rolesResults.forEach((role, index) => {
             rolesData[utilisateurs[index].userRepresentation.id] = role;
           });
           setRoles(rolesData);
@@ -317,9 +317,9 @@ function ListeUtilisateur() {
                         {
                         
                         utilisateurs.length==0?(<TableRow><TableCell colSpan="7" className="font-medium text-3xl text-center" >Pas Utilisateurs</TableCell></TableRow>):
-                        utilisateurs.map 
-                        ((utilisateur)=>{
-                            const {id,email,lastName,firstName,enabled,username,attributes}=utilisateur.userRepresentation;
+
+                        utilisateurs.map ((utilisateur)=>{
+                            const {id,email,lastName,firstName,enabled,username}=utilisateur.userRepresentation;
                             const{nom}=utilisateur.entreprise
                             const role = roles[id];
                             return(

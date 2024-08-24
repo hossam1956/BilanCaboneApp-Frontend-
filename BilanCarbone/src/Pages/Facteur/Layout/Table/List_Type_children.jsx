@@ -51,8 +51,8 @@ export const List_Type_children = ({
   currentPage, 
   setSortConfig, 
   handleDelete, 
-  handleactivate, 
-  handledesactivate, 
+  handleActivate, 
+  handleDeactivate, 
   isGlobal 
 }) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -102,7 +102,7 @@ export const List_Type_children = ({
 
   const confirmActivation = (toggle) => {
     if (selectedItem) {
-      handleactivate(selectedItem.id, selectedItem.nom_facteur, toggle ? "all=true" : "");
+      handleActivate(selectedItem.id, selectedItem.nom_facteur, toggle ? "all=true" : "");
     }
     setShowActivateDialog(false);
     setSelectedItem(null);
@@ -184,7 +184,7 @@ export const List_Type_children = ({
                         <DropdownMenuContent align="end" className="w-48">
                           <DropdownMenuItem className="text-blue-600" onClick={() => { handle_affichage(item.id) }}>Afficher</DropdownMenuItem>
                               {item.active ? (
-                                <DropdownMenuItem onClick={() => handledesactivate(item.id, item.nom_facteur)} className="text-red-950">Désactiver</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => handleDeactivate(item.id, item.nom_facteur)} className="text-red-950">Désactiver</DropdownMenuItem>
                               ) : (
                                 <DropdownMenuItem onClick={() => handleActivationClick(item)} className="text-green-600">Activer</DropdownMenuItem>
                               )}
@@ -272,6 +272,31 @@ export const List_Type_children = ({
           </>
         )}
       </CardFooter>
+      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <DialogContent>
+          <DialogTitle>Confirmer la suppression</DialogTitle>
+          <DialogDescription>
+            Êtes-vous sûr de bien vouloir supprimer cet élément?    
+          </DialogDescription>
+          <DialogFooter>
+            <Button onClick={() => setShowDeleteDialog(false)}>Annuler</Button>
+            <Button variant="destructive" onClick={confirmDelete}>Supprimer</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={showActivateDialog} onOpenChange={setShowActivateDialog}>
+        <DialogContent>
+          <DialogTitle>Activation</DialogTitle>
+          <DialogDescription>
+            Comment voulez-vous activer?
+          </DialogDescription>
+          <DialogFooter>
+            <Button onClick={() => setShowActivateDialog(false)}>Annuler</Button>
+            <Button className="bg-green-600 text-white hover:bg-green-300 hover:text-black" onClick={() => confirmActivation(0)}>Seulement</Button>
+            <Button className="bg-emerald-900 text-white hover:bg-green-300 hover:text-black" onClick={() => confirmActivation(1)}>Tous avec des enfants</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 };
