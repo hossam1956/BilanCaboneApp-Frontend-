@@ -59,7 +59,7 @@ const Calendar = () => {
             key={day}
             className={
             (existDay.includes(`${day}`))?` ${
-              (day === selectedDate.getDate()) ?'bg-black text-white text-2xl px-2 py-5 rounded-full'
+              (day === selectedDate.getDate()) ?'bg-green-950 text-white text-2xl px-2 py-5 rounded-full'
               : 'bg-green-500 text-white text-2xl px-2 py-5 rounded-full'
               }`
               :  
