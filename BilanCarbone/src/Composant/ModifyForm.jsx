@@ -216,7 +216,7 @@ const ModifyForm=({onClose,UtilisateurInfo,UtilisateurRole})=>{
 
         </div>
       </div>
-      <Alerts alert={alert} alertProblem={problemAlert} titre_succes={"Utilisateur Modifier"} message_succes={"Utilisateur Modifier avec succès" } message_erreur={"Une erreur est survenue lors de l'envoi de l'opération"}/>
+      <Alerts alert={alert} alertProblem={problemAlert} titre_succes={"Utilisateur Modifier"} message_succes={"Utilisateur Modifier avec succès" } message_erreur={"Une erreur est survenue lors de l'opération"}/>
     </div>  
     )
 }

@@ -101,11 +101,11 @@ const FacteurtrashTable = (
                     <TableRow>
                         <TableHead className="text-center w-1/6 cursor-pointer "><span onClick={() => requestSort('nom')}>Nom</span> {getIconFor('nom')}</TableHead>
                         <TableHead className="text-center w-1/6 cursor-pointer "><span onClick={() => requestSort('unit')}>Unité</span> {getIconFor('unit')}</TableHead>
-                        <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell "><span onClick={() => requestSort('emissionFactor')}>Émission</span> {getIconFor('emissionFactor')}</TableHead>
-                        <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell ">Type</TableHead>
-                        <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell "><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
-                        <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell "><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
-                        <TableHead className="text-center w-1/6 cursor-pointer hidden md:table-cell "><span onClick={() => requestSort('isDeleted')}>supprimé a</span> {getIconFor('isDeleted')}</TableHead>
+                        <TableHead className="text-center w-1/6 cursor-pointer  md:table-cell "><span onClick={() => requestSort('emissionFactor')}>Émission</span> {getIconFor('emissionFactor')}</TableHead>
+                        <TableHead className="text-center w-1/6 cursor-pointer  md:table-cell ">Type</TableHead>
+                        <TableHead className="text-center w-1/6 cursor-pointer  md:table-cell "><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
+                        <TableHead className="text-center w-1/6 cursor-pointer  md:table-cell "><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
+                        <TableHead className="text-center w-1/6 cursor-pointer  md:table-cell "><span onClick={() => requestSort('isDeleted')}>supprimé a</span> {getIconFor('isDeleted')}</TableHead>
                         <TableHead className="text-center w-32">Actions</TableHead>
                     </TableRow>
                 </TableHeader>

@@ -43,8 +43,8 @@ handlePageChange,
 currentPage, 
 setSortConfig, 
 handleDelete, 
-handleactivate, 
-handledesactivate 
+handleActivate, 
+handleDeactivate 
 }) => {
 const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 const [showActivateDialog, setShowActivateDialog] = useState(false);
@@ -91,7 +91,7 @@ const confirmDelete = () => {
 
 const confirmActivation = (toggle) => {
   if (selectedItem) {
-    handleactivate(selectedItem.id, selectedItem.nom_facteur, toggle ? "all=true" : "");
+    handleActivate(selectedItem.id, selectedItem.nom_facteur, toggle ? "all=true" : "");
   }
   setShowActivateDialog(false);
   setSelectedItem(null);
@@ -109,8 +109,8 @@ return (
         <TableHeader>
           <TableRow>
             <TableHead className="text-center cursor-pointer w-1/3"><span onClick={() => requestSort('name')}>Nom</span> {getIconFor('name')}</TableHead>
-            <TableHead className="text-center cursor-pointer hidden md:table-cell w-1/3"><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
-            <TableHead className="text-center cursor-pointer hidden md:table-cell w-1/3"><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
+            <TableHead className="text-center cursor-pointer  md:table-cell w-1/3"><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
+            <TableHead className="text-center cursor-pointer  md:table-cell w-1/3"><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -152,7 +152,7 @@ return (
                     <DropdownMenuContent align="end" className="w-48">
                       <DropdownMenuItem className="text-blue-600" onClick={()=>{handle_affichage(item.id)}}>Afficher</DropdownMenuItem>
                       {item.active ? (
-                        <DropdownMenuItem onClick={() => handledesactivate(item.id, item.nom_facteur)} className="text-red-950">Désactiver</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleDeactivate(item.id, item.nom_facteur)} className="text-red-950">Désactiver</DropdownMenuItem>
                       ) : (
                         <DropdownMenuItem onClick={() => handleActivationClick(item)} className="text-green-600">Activer</DropdownMenuItem>
                       )}

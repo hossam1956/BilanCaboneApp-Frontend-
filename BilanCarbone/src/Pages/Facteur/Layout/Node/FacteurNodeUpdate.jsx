@@ -54,6 +54,7 @@ export const FacteurNodeUpdate = ({ data, isConnectable }) => {
 
   const onSwitchChange = useCallback(() => {
     const newActiveState = !isActive;
+    
     setActive(newActiveState);
     data.onDataChange({ ...data, active: newActiveState });
   }, [data, isActive]);
@@ -74,7 +75,6 @@ export const FacteurNodeUpdate = ({ data, isConnectable }) => {
           placeholder="Facteur"
           value={data.nom}
           onChange={handleNom}
-          onBlur={handleBlur}
           disabled={!data.editMode}
           className={errorinput ? 'border-red-500' : ''}
         />

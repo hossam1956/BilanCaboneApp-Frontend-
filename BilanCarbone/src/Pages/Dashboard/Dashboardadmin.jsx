@@ -5,7 +5,6 @@ import {
     UsersRound,
   } from "lucide-react"
   
-  import { Badge } from "@/Components/ui/badge"
   import { Button } from "@/Components/ui/button"
   import {
     Card,
@@ -213,10 +212,10 @@ const Dashboardadmin = () => {
                 </CardDescription>
               </div>
               <Button asChild size="sm" className="ml-auto gap-1">
-                <span href="#">
+                <Link to="/entreprise">
                 Afficher tout
                   <ArrowUpRight className="h-4 w-4" />
-                </span>
+                </Link>
               </Button>
             </CardHeader>
             <CardContent>

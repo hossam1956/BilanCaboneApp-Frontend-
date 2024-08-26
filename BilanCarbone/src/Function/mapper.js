@@ -11,7 +11,7 @@ export function transformData_json(nodes, edges) {
         nom_type: node.data.label,
         types: [],
         facteurs: [],
-        active: true,
+        active: node.data.active,
         id: node.data.id_type
       };
     }
@@ -27,7 +27,7 @@ export function transformData_json(nodes, edges) {
             nom_type: node.data.label,
             types: [],
             facteurs: [],
-            active: true,
+            active: node.data.active,
             id: node.data.id_type || null
           });
         }
@@ -47,7 +47,9 @@ export function transformData_json(nodes, edges) {
           if (parentType.type === 'Type_child') {
             grandparentTypeId = edges.find(edge => edge.target === parentTypeId)?.source;
             let child_node=nodes.find(file=>file.id==parentTypeId)
-            childType = typeMap[grandparentTypeId].types.find(file => file.nom_type === child_node.data.label);
+            
+            childType = typeMap[grandparentTypeId]?.types.find(file => file.nom_type === child_node.data.label);
+
 
           }
           if (childType) {
@@ -55,7 +57,7 @@ export function transformData_json(nodes, edges) {
               nom_facteur: node.data.nom,
               unit: node.data.type,
               emissionFactor: node.data.facteur_emission,
-              active: true,
+              active: node.data.active,
               id: node.data.id_facteur || null
             });
           }
@@ -68,7 +70,8 @@ export function transformData_json(nodes, edges) {
   return transformToRequestFormat(Object.values(typeMap));
 }
 const transformToRequestFormat = (data) => {
-  return data.map(type => ({
+  return data
+  .map(type => ({
     nom_type: type.nom_type,
     types: type.types ? transformToRequestFormat(type.types) : [],
     facteurs: type.facteurs.map(facteur => ({

@@ -34,6 +34,9 @@ import { apiClient } from "@/KeycloakConfig/KeycloakConn";
   }, [currentPage, search, sortConfig,filterParam]);
 
   const getData = () => {
+    if(activeTab!=="personnalise"){
+      setFilterParam("")
+    }
     let sorted = "";
     sortConfig.forEach(e => {
       sorted += `&sortBy=${e.key}&sortBy=${e.direction}`;

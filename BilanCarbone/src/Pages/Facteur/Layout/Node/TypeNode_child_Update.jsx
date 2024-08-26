@@ -55,7 +55,6 @@ export const TypeNode_child_Update = ({ data,isConnectable,editMode }) => {
           placeholder="Type"
           value={data.label}
           onChange={onChange}
-          onBlur={handleBlur}
           className={error ? 'border-red-500' : ''}
           disabled={!data.editMode}
         />

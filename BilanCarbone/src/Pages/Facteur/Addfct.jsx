@@ -123,7 +123,6 @@ export function Addfct() {
         data: {
           label: `${type} node`,
           onDataChange: (newData) => handleDataChange((nodes.length + 1).toString(), newData), // Pass onDataChange
-
         },
       };
       setNodes((nds) => nds.concat(newNode));
@@ -144,8 +143,10 @@ export function Addfct() {
   };
 
   const handlesave = () => {
+
     const res = transformData_json(nodes, edges);  
     apiClient.post(API_TYPE.Type, JSON.stringify(res[0], null, 2), {
+
       headers: {
         'Content-Type': 'application/json'
       }

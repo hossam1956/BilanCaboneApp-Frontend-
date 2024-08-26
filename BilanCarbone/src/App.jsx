@@ -14,11 +14,15 @@ import AddUtilisateurPage from './Pages/AddUtilisateurPage';
 import { TooltipProvider } from "@/Components/ui/tooltip";
 import { Addfct } from './Pages/Facteur/Addfct';
 import { Listfct } from './Pages/Facteur/Listfct';
+import EntrepriseForm from './Pages/Entreprise/EntrepriseForm';
+import EntrepriseList from './Pages/Entreprise/EntrepriseList';
 import Trashfct from './Pages/Facteur/Trashfct';
 import Affichagefct from './Pages/Facteur/Affichagefct';
 import Page404 from './Pages/error/Page404';
 import { getRolesFromToken } from './KeycloakConfig/UserRole';
 import NoAutorisePage from './Pages/NoAutorisePage';
+import FormulaireEmloye from './Pages/FormulaireEmploye';
+
 
 
 const App = () => {
@@ -65,6 +69,11 @@ const App = () => {
             element:<Dashboard/>
         },
         {
+          path:"/formulaire",
+          element:keycloak.authenticated ? <FormulaireEmloye/> : <Navigate to="/welcome"/>,
+          
+        },
+        {
           path:"parameter",
           element:<ParametresPages/>
         },
@@ -106,6 +115,21 @@ const App = () => {
                 },
             ],
           },
+          {
+            path: "entreprise",
+          children: [
+            {
+              index: true,
+              element:(sessionStorage.getItem("roleUser")=="ADMIN")?<EntrepriseList/>:<NoAutorisePage/>
+
+            },
+            {
+              path: "ajouter",
+              element:(sessionStorage.getItem("roleUser")=="ADMIN")?<EntrepriseForm/>:<NoAutorisePage/>
+              
+            },            
+          ]
+          }
       ],
     },
     

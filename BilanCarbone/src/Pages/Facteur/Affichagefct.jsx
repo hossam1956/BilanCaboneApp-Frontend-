@@ -51,7 +51,7 @@ export function Affichagefct() {
   const [errorStatus, setErrorStatus] = useState(null);
   const [global,setglobal]=useState(true)
   const userIsAdmin = isAdmin();
-
+  const [globalid , setglobalid]=useState(0);
   const getData = useCallback(() => {
     apiClient
       .get(`${API_TYPE.Type}/${id}?all=true`)
@@ -62,6 +62,7 @@ export function Affichagefct() {
         } else {
           setglobal(data.entreprise !== undefined && data.entreprise !== null);
         }
+        setglobalid(data.id)
         const { nodes_res, edges_res } = reverseTransformData(data, handleDataChange);
         setNodes(nodes_res);
         setEdges(edges_res);
@@ -230,7 +231,7 @@ export function Affichagefct() {
   const handleSave = () => {
     const res = transformData_json(nodes, edges);
     apiClient
-      .put(`${API_TYPE.Type}/${id}`, JSON.stringify(res[0], null, 2), {
+      .put(`${API_TYPE.Type}/${globalid}`, JSON.stringify(res[0], null, 2), {
         headers: { 'Content-Type': 'application/json' },
       })
       .then((e) => e.data)
@@ -242,6 +243,7 @@ export function Affichagefct() {
         setEdgesModified(false);
         setEditMode(false);
         setShowCard(false);
+        getData()
       })
       .catch((error) => {
         console.error('Error activating data:', error);
