@@ -223,3 +223,33 @@ export function transformData(users, entreprises) {
   // Convert the object to an array
   return Object.values(countsByMonth);
 }
+
+
+
+export function convertToChartDatacircle(customUserObj) {
+  // Initialize the chart data array
+  const chartData = [];
+
+  // Iterate over each user object in the array
+  customUserObj.forEach(customUserObj => {
+    // Extract role information from the customUserObj
+    const role = customUserObj.role;
+
+    // Find if the role already exists in the chart data array
+    const existingRole = chartData.find(item => item.browser === role);
+
+    // If the role exists, increment the visitors count
+    if (existingRole) {
+      existingRole.visitors += 1;
+    } else {
+      // If the role doesn't exist, create a new entry
+      chartData.push({
+        browser: role,
+        visitors: 1,
+        fill: `var(--color-${role})`
+      });
+    }
+  });
+
+  return chartData;
+}

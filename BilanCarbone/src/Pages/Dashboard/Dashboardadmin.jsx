@@ -96,7 +96,7 @@ const Dashboardadmin = () => {
   };
   return (
 <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-1">
-        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
         <Card className="" style={{ boxShadow: '0px 1px 20px 5px #e5f1f7' }}>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -130,11 +130,7 @@ const Dashboardadmin = () => {
             <div className="text-2xl font-bold">{nbr_user}</div>
             </CardContent>
         </Card>
-        </div>
-        <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-        <Chart_dash User={user} entreprise={entreprise}/>
-        <div >
-        <Card className="mb-10 mt-8" style={{ boxShadow: '0px 1px 20px 5px #e5f1f7' }}>
+        <Card className="" style={{ boxShadow: '0px 1px 20px 5px #ffdbb4' }}>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
             nombre de Demandes
@@ -145,7 +141,12 @@ const Dashboardadmin = () => {
             <div className="text-2xl font-bold">{nbr_facteur}</div>
             </CardContent>
         </Card>
-        <Chart_circle/>
+        </div>
+
+        <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
+        <Chart_dash User={user} entreprise={entreprise}/>
+        <div className=" flex items-center justify-center">
+        <Chart_circle User={user}/>
         </div>
         </div>
         <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
@@ -252,15 +253,15 @@ const Dashboardadmin = () => {
                 </TableHeader>
                 <TableBody>
                 {user.map(f => (
-                    <TableRow key={f.userRepresentation.id}>
+                    <TableRow key={f.customUserRepresentation.userRepresentation.id}>
                       <TableCell>
-                        <div className="font-medium">{f.userRepresentation.username}</div>
+                        <div className="font-medium">{f.customUserRepresentation.userRepresentation.username}</div>
                         <div className="hidden text-sm text-muted-foreground md:inline">
-                          {f.userRepresentation.email}
+                          {f.customUserRepresentation.userRepresentation.email}
                         </div>
                       </TableCell>
                       <TableCell className="text-right">
-                      {new Date(f.userRepresentation.createdTimestamp).toLocaleDateString()}
+                      {new Date(f.customUserRepresentation.userRepresentation.createdTimestamp).toLocaleDateString()}
                       </TableCell>
                     </TableRow>
                   ))}
