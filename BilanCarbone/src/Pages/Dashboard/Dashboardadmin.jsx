@@ -42,6 +42,7 @@ const Dashboardadmin = () => {
   useEffect(()=>{
     getfacteur();
     getentreprise();
+    getusers();
   },[])
   const getfacteur=()=>{
     apiClient.get(`${API_FACTEUR.Facteur_ALL}`)
@@ -63,6 +64,7 @@ const Dashboardadmin = () => {
     apiClient.get(`/entreprises`)
       .then(response => response.data)
       .then(data => {
+        console.log(data)
         // Adjust the slice method according to your needs
         setentreprise(data.slice(0, 5)); // Example: limit to 10 items
         set_nbr_entreprise(data.length);
@@ -76,11 +78,13 @@ const Dashboardadmin = () => {
       });
   };
   const getusers=()=>{
-    apiClient.get(`/utilisateur?size=5`)
+    apiClient.get(`/utilisateur/list`)
       .then(response => response.data)
       .then(data => {
         // Adjust the slice method according to your needs
-        console.log(data); // Example: limit to 10 items
+        console.log(data)
+        set_nbr_user(data.length)
+        setuser(data)
       })
       .catch(error => {
         console.error("Error fetching data:", error);
@@ -123,13 +127,26 @@ const Dashboardadmin = () => {
             <UsersRound className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-            <div className="text-2xl font-bold">15</div>
+            <div className="text-2xl font-bold">{nbr_user}</div>
             </CardContent>
         </Card>
         </div>
         <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-        <Chart_dash/>
+        <Chart_dash User={user} entreprise={entreprise}/>
+        <div >
+        <Card className="mb-10 mt-8" style={{ boxShadow: '0px 1px 20px 5px #e5f1f7' }}>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+            nombre de Demandes
+            </CardTitle>
+            <ListChecks  className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+            <div className="text-2xl font-bold">{nbr_facteur}</div>
+            </CardContent>
+        </Card>
         <Chart_circle/>
+        </div>
         </div>
         <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
          <Card className="" style={{ boxShadow: '0px 1px 20px 5px #e5f1f7' }}>
@@ -219,7 +236,7 @@ const Dashboardadmin = () => {
                 </CardDescription>
               </div>
               <Button asChild size="sm" className="ml-auto gap-1">
-                <Link to="/facteur">
+                <Link to="/utilisateur/liste">
                 Afficher tout
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
@@ -234,15 +251,20 @@ const Dashboardadmin = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  <TableRow>
-                    <TableCell>
-                      <div className="font-medium">vsdfs</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">
-                        czds@dhj.vkk
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right">12-15-1225</TableCell>
-                  </TableRow>
+                {user.map(f => (
+                    <TableRow key={f.userRepresentation.id}>
+                      <TableCell>
+                        <div className="font-medium">{f.userRepresentation.username}</div>
+                        <div className="hidden text-sm text-muted-foreground md:inline">
+                          {f.userRepresentation.email}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-right">
+                      {new Date(f.userRepresentation.createdTimestamp).toLocaleDateString()}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+
                 </TableBody>
                </Table>
             </CardContent>

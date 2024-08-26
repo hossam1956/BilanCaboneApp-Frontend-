@@ -20,7 +20,7 @@ const ModifyForm=({onClose,UtilisateurInfo,UtilisateurRole})=>{
   useEffect(() => {
     const getEntreprises = async () => {
       try{
-        const response = await apiClient.get('/entreprise');
+        const response = await apiClient.get('/entreprises');
       setEntreprises(response.data);
       }
       catch(error){
@@ -193,9 +193,9 @@ const ModifyForm=({onClose,UtilisateurInfo,UtilisateurRole})=>{
               >
                 {
                   entreprises.map((entrepriseInfo)=>{
-                    const {id,nomEntreprise}=entrepriseInfo
+                    const {id,nom}=entrepriseInfo
                     return(
-                      <option key={id} value={`${id}`} selected={id==UtilisateurInfo.entreprise.id} >{nomEntreprise}</option>
+                      <option key={id} value={`${id}`} selected={id==UtilisateurInfo.entreprise.id} >{nom}</option>
                     )
                   })
                   

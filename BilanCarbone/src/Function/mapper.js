@@ -190,3 +190,36 @@ export function reverseTransformData(json, handleDataChange) {
 
   return { nodes_res, edges_res };
 }
+
+
+export function transformData(users, entreprises) {
+  // Helper function to extract the month name from a date string
+  function getMonthName(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleString('default', { month: 'long' });
+  }
+
+  // Initialize an object to store the counts
+  const countsByMonth = {};
+
+  // Process users
+  users.forEach(user => {
+    const month = getMonthName(user.userRepresentation.createdTimestamp);
+    if (!countsByMonth[month]) {
+      countsByMonth[month] = { month, User: 0, Entreprise: 0 };
+    }
+    countsByMonth[month].User += 1;
+  });
+
+  // Process entreprises
+  entreprises.forEach(entreprise => {
+    const month = getMonthName(entreprise.createdDate);
+    if (!countsByMonth[month]) {
+      countsByMonth[month] = { month, User: 0, Entreprise: 0 };
+    }
+    countsByMonth[month].Entreprise += 1;
+  });
+
+  // Convert the object to an array
+  return Object.values(countsByMonth);
+}
