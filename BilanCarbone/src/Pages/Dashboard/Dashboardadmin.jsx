@@ -35,6 +35,7 @@ const Dashboardadmin = () => {
   const [nbr_facteur,set_nbr_facteur]=useState(0)
   const [user,setuser]=useState([]);
   const [nbr_user,set_nbr_user]=useState(0);
+  const [nbr_demande,set_nbr_demande]=useState(0);
 
   const [entreprise, setentreprise]=useState([]);
   const [nbr_entreprise, set_nbr_entreprise]=useState(0);
@@ -43,12 +44,27 @@ const Dashboardadmin = () => {
     getfacteur();
     getentreprise();
     getusers();
+    getdemande();
   },[])
-  const getfacteur=()=>{
-    apiClient.get(`${API_FACTEUR.Facteur_ALL}`)
+  const getdemande =()=>{
+    //
+    apiClient.get(`/demande`)
       .then(response => response.data)
       .then(data => {
-        // Adjust the slice method according to your needs
+        set_nbr_demande(data.totalElements)
+     })
+      .catch(error => {
+        console.error("Error fetching data:", error);
+        const currentdate = new Date();
+        toast.error('Problème de chargement des données', {
+          description: `${currentdate.getDate()}/${currentdate.getMonth() + 1}/${currentdate.getFullYear()} - - - ${currentdate.getHours()}:${currentdate.getMinutes()}:${currentdate.getSeconds()}`,
+        });
+      });
+  }
+  const getfacteur=()=>{
+    apiClient.get(`${API_FACTEUR.Facteur_ALL}?all=true`)
+      .then(response => response.data)
+      .then(data => {
         setFacteur(data.slice(0, 5)); // Example: limit to 10 items
         set_nbr_facteur(data.length);
       })
@@ -81,10 +97,10 @@ const Dashboardadmin = () => {
     apiClient.get(`/utilisateur/list`)
       .then(response => response.data)
       .then(data => {
-        // Adjust the slice method according to your needs
         console.log(data)
+        // Adjust the slice method according to your needs
         set_nbr_user(data.length)
-        setuser(data)
+        setuser(data.slice(0,5))
       })
       .catch(error => {
         console.error("Error fetching data:", error);
@@ -138,13 +154,12 @@ const Dashboardadmin = () => {
             <ListChecks  className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-            <div className="text-2xl font-bold">{nbr_facteur}</div>
+            <div className="text-2xl font-bold">{nbr_demande}</div>
             </CardContent>
         </Card>
         </div>
-
         <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-        <Chart_dash User={user} entreprise={entreprise}/>
+        <Chart_dash User={user} Entre={entreprise} />
         <div className=" flex items-center justify-center">
         <Chart_circle User={user}/>
         </div>

@@ -229,7 +229,6 @@ export function Affichagefct() {
 
   const handleSave = () => {
     const res = transformData_json(nodes, edges);
-    console.log(res)
     apiClient
       .put(`${API_TYPE.Type}/${id}`, JSON.stringify(res[0], null, 2), {
         headers: { 'Content-Type': 'application/json' },

@@ -34,7 +34,6 @@ import { apiClient } from "@/KeycloakConfig/KeycloakConn";
   }, [currentPage, search, sortConfig,filterParam]);
 
   const getData = () => {
-    console.log(filterParam)
     let sorted = "";
     sortConfig.forEach(e => {
       sorted += `&sortBy=${e.key}&sortBy=${e.direction}`;

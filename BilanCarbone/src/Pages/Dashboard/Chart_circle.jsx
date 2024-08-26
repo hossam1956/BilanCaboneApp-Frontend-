@@ -46,12 +46,11 @@ export function Chart_circle({User}) {
     { browser: "MANAGER", visitors: 0, fill: "var(--color-MANAGER)" },
   ])
   React.useEffect(()=>{
-    console.log(convertToChartDatacircle(User))
     setchartData(convertToChartDatacircle(User))
-  })
+  },[User])
   const totalVisitors = React.useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
-  }, [])
+  }, [chartData])
 
   return (
     <Card className="flex flex-col">

@@ -42,7 +42,6 @@ const App = () => {
     else if(roles.includes("MANAGER")){sessionStorage.setItem('roleUser','MANAGER')}
     else if(roles.includes("RESPONSABLE")){sessionStorage.setItem('roleUser','RESPONSABLE')}
     else if(roles.includes("EMPLOYE")){sessionStorage.setItem('roleUser','EMPLOYE')}
-    console.log(sessionStorage.getItem("roleUser"))
     
   }
   else{
