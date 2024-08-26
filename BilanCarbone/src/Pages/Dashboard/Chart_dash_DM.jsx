@@ -20,10 +20,11 @@ import {
   ChartTooltip,
   ChartTooltipContent, } from "@/components/ui/chart"
 import { useEffect, useState } from "react"
-
+const daysOfWeek = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"]; 
 const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
 const today=new Date()
 const this_month=today.getMonth()
+console.log(today)
 function get_Month(index) {
     if (index < 0) {
         return months[(months.length + index) % months.length];

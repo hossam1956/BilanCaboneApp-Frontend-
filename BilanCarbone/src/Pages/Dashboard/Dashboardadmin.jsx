@@ -33,7 +33,7 @@ import { Link } from "react-router-dom"
 const Dashboardadmin = () => {
   const [facteur, setFacteur] = useState([]);
   const [nbr_facteur,set_nbr_facteur]=useState(0)
-  const [user,setuser]=useState([]);
+  const [user,setUser]=useState([]);
   const [nbr_user,set_nbr_user]=useState(0);
 
   const [entreprise, setentreprise]=useState([]);
@@ -42,6 +42,7 @@ const Dashboardadmin = () => {
   useEffect(()=>{
     getfacteur();
     getentreprise();
+    getusers();
   },[])
   const getfacteur=()=>{
     apiClient.get(`${API_FACTEUR.Facteur_ALL}`)
@@ -75,12 +76,12 @@ const Dashboardadmin = () => {
         });
       });
   };
-  const getusers=()=>{
-    apiClient.get(`/utilisateur?size=5`)
+  const getusers=async()=>{
+    await apiClient.get(`/utilisateur/list`)
       .then(response => response.data)
       .then(data => {
-        // Adjust the slice method according to your needs
-        console.log(data); // Example: limit to 10 items
+        setUser(data.slice(0,5))
+        set_nbr_user(data.length)
       })
       .catch(error => {
         console.error("Error fetching data:", error);
@@ -123,7 +124,7 @@ const Dashboardadmin = () => {
             <UsersRound className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-            <div className="text-2xl font-bold">15</div>
+            <div className="text-2xl font-bold">{nbr_user}</div>
             </CardContent>
         </Card>
         </div>
@@ -234,15 +235,22 @@ const Dashboardadmin = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  <TableRow>
-                    <TableCell>
-                      <div className="font-medium">vsdfs</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">
-                        czds@dhj.vkk
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right">12-15-1225</TableCell>
-                  </TableRow>
+                {user.map(u=>{
+                        const date=new Date(u.customUserRepresentation.userRepresentation.createdTimestamp);
+                        const formatedDate=`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} `;
+                        return(
+                            <TableRow>
+                            <TableCell>
+                              <div className="font-medium">{u.customUserRepresentation.userRepresentation.username}</div>
+                              <div className="hidden text-sm text-muted-foreground md:inline">
+                                {u.customUserRepresentation.userRepresentation.email}
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-right">{formatedDate}</TableCell>
+                          </TableRow>
+                        )
+                       
+                    })}
                 </TableBody>
                </Table>
             </CardContent>
