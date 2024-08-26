@@ -53,6 +53,13 @@ const List_Type = () => {
   };
 
   useEffect(() => {
+    if (activeTab === "tout") {
+      setFilterParam("my=true");
+    } else if (activeTab === "personnalise") {
+      setFilterParam("my=true&detail=true");
+    }else {
+      setFilterParam("");
+    }
     fetchData();
   }, [currentPage, search, sortConfig, filterParam]);
 

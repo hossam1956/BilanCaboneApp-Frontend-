@@ -27,5 +27,5 @@ export const useUserRole = () => {
 
 export const isAdmin = () => {
     const { role } = useUserRole();
-    return role === "ADMIN";
+    return role == "ADMIN";
   };

@@ -134,7 +134,6 @@ function ListeUtilisateur() {
       const getUserInfo=async(id)=>{
         try{
           const response=await apiClient.get(`/utilisateur/id?ID=${id}`)
-          console.log(response.data)
           setUtilisateurInfo(response.data)
         }
         catch(error){
@@ -164,7 +163,7 @@ function ListeUtilisateur() {
         const rolesData = {};
         const rolesPromises=utilisateurs.flatMap(utilisateur=>getRoleUtilisateur(utilisateur.userRepresentation.id)) 
         const rolesResults=await Promise.all(rolesPromises)
-        rolesResults.forEach((role, index) => {
+          rolesResults.forEach((role, index) => {
             rolesData[utilisateurs[index].userRepresentation.id] = role;
           });
           setRoles(rolesData);

@@ -193,3 +193,98 @@ export function reverseTransformData(json, handleDataChange) {
 
   return { nodes_res, edges_res };
 }
+
+
+export function convertToChartDatacircle(customUserObj) {
+  // Initialize the chart data array
+  const chartData = [];
+
+  // Iterate over each user object in the array
+  customUserObj.forEach(customUserObj => {
+    // Extract role information from the customUserObj
+    const role = customUserObj.role;
+
+    // Find if the role already exists in the chart data array
+    const existingRole = chartData.find(item => item.browser === role);
+
+    // If the role exists, increment the visitors count
+    if (existingRole) {
+      existingRole.visitors += 1;
+    } else {
+      // If the role doesn't exist, create a new entry
+      chartData.push({
+        browser: role,
+        visitors: 1,
+        fill: `var(--color-${role})`
+      });
+    }
+  });
+
+  return chartData;
+}
+export function filterChartData(chartData, days = null, startDate = null, endDate = null) {
+  let cutoffDate = null;
+  const today = new Date();
+
+  if (days !== null) {
+    // Calculate the cutoff date based on the selected number of days
+    cutoffDate = new Date(today.setDate(today.getDate() - days));
+  }
+
+  // Convert startDate and endDate to Date objects if provided
+  const start = startDate ? new Date(startDate) : null;
+  const end = endDate ? new Date(endDate) : today;
+
+  return chartData.filter(data => {
+    const dataDate = new Date(data.date);
+
+    // If days is provided, filter by days; otherwise, filter by the date range
+    if (days !== null) {
+      return dataDate >= cutoffDate;
+    } else if (start && end) {
+      return dataDate >= start && dataDate <= end;
+    }
+    return false;
+  });
+}
+
+
+
+export function convertDatatochart(entr, userData) {
+  // Step 1: Create a map to aggregate `entreprise` data
+  const entrepriseMap = new Map();
+  entr.forEach(entry => {
+    const date = entry.createdDate.split('T')[0]; // Extract date part from createdDate
+    if (!entrepriseMap.has(date)) {
+      entrepriseMap.set(date, { entreprise: 0, User: 0 });
+    }
+    entrepriseMap.get(date).entreprise += 1; // Increment the count
+  });
+
+  // Step 2: Create a map to aggregate `User` data
+  const userMap = new Map();
+  userData.forEach(user => {
+    const date = new Date(user.customUserRepresentation.userRepresentation.createdTimestamp).toISOString().split('T')[0];
+    if (!userMap.has(date)) {
+      userMap.set(date, { entreprise: 0, User: 0 });
+    }
+    userMap.get(date).User += 1; // Increment the count
+  });
+
+  // Step 3: Combine the maps into the final chartData array
+  const chartData = [];
+  const allDates = new Set([...entrepriseMap.keys(), ...userMap.keys()]);
+  
+  allDates.forEach(date => {
+    chartData.push({
+      date: date,
+      entreprise: entrepriseMap.has(date) ? entrepriseMap.get(date).entreprise : 0,
+      User: userMap.has(date) ? userMap.get(date).User : 0
+    });
+  });
+
+  // Sort by date if needed
+  chartData.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  return chartData;
+}

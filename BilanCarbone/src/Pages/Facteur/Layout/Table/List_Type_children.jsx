@@ -52,6 +52,7 @@ export const List_Type_children = ({
   setSortConfig, 
   handleDelete, 
   handleActivate, 
+
   handleDeactivate ,
   isGlobal 
 }) => {

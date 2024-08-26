@@ -28,7 +28,7 @@ const RegisterPage = () => {
   useEffect(() => {
     const getEntreprises = async () => {
       try{
-        const response = await apiClientWithoutToken.get("/entreprises");
+        const response = await axios.get('http://localhost:8081/api/entreprises');
       setEntreprises(response.data);
       }
       catch(error){
