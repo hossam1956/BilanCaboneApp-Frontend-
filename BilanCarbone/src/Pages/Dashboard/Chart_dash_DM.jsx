@@ -54,23 +54,23 @@ const chartData_7_days = [
 
   
 const chartData_3_month = [
-    { item: `${get_Month(this_month-2)}`, CO2: 186},
-    { item: `${get_Month(this_month-1)}`, CO2: 305},
-    { item: `${get_Month(this_month)}`, CO2: 237},
+    { item: `${get_Month(this_month-2)}`, CO2: 0},
+    { item: `${get_Month(this_month-1)}`, CO2: 0},
+    { item: `${get_Month(this_month)}`, CO2: 0},
   ]
 const chartData_year = [
-    { item: "Janvier", CO2: 186, mobile: 80 },
-    { item: "Février", CO2: 305, mobile: 200 },
-    { item: "Mars", CO2: 237, mobile: 120 },
-    { item: "Avril", CO2: 73, mobile: 190 },
-    { item: "Mai", CO2: 209, mobile: 130 },
-    { item: "Juin", CO2: 214, mobile: 140 },
-    { item: "Juillet", CO2: 4, mobile: 0 },
-    { item: "Août", CO2: 2, mobile: 0 },
-    { item: "Septembre", CO2: 66, mobile: 0 },
-    { item: "Octobre", CO2: 44, mobile: 0 },
-    { item: "Novembre", CO2: 20, mobile: 0 },
-    { item: "Décembre", CO2: 20, mobile: 0 }
+    { item: `${get_Month(this_month-11)}`, CO2: 0},
+    { item: `${get_Month(this_month-10)}`, CO2: 0},
+    { item: `${get_Month(this_month-9)}`, CO2: 0},
+    { item: `${get_Month(this_month-8)}`, CO2: 0},
+    { item: `${get_Month(this_month)-7}`, CO2: 0},
+    { item: `${get_Month(this_month)-6}`, CO2: 0},
+    { item: `${get_Month(this_month)-5}`, CO2: 0},
+    { item: `${get_Month(this_month-4)}`, CO2: 0},
+    { item: `${get_Month(this_month-3)}`, CO2: 0},
+    { item: `${get_Month(this_month-2)}`, CO2: 0},
+    { item: `${get_Month(this_month-1)}`, CO2: 0},
+    { item: `${get_Month(this_month)}`, CO2: 0}
   ]
 
 const chartConfig = {
@@ -140,9 +140,17 @@ export function Chart_dash_DM({nomEntreprise,idEntreprise}) {
                 const dateString = Object.keys(dataLast7Days)[index];
                 entry.CO2 = dataLast7Days[dateString] || 0; 
               });
-            console.log("==========DATA 7 Days===========")
-            console.log(chartData_7_days) 
-          
+             
+              chartData_3_month.forEach((entry,index)=>{
+
+                    entry.CO2=dataLast3Month[index] || 0
+              })
+
+              chartData_year.forEach((entry,index)=>{
+
+                entry.CO2=dataLastYear[index] || 0
+               })
+            
         }
        
         
