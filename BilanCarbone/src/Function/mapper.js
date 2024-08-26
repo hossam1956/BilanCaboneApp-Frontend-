@@ -47,9 +47,7 @@ export function transformData_json(nodes, edges) {
           if (parentType.type === 'Type_child') {
             grandparentTypeId = edges.find(edge => edge.target === parentTypeId)?.source;
             let child_node=nodes.find(file=>file.id==parentTypeId)
-            
-            childType = typeMap[grandparentTypeId]?.types.find(file => file.nom_type === child_node.data.label);
-
+            childType = typeMap[grandparentTypeId].types.find(file => file.nom_type === child_node.data.label);
 
           }
           if (childType) {
@@ -191,4 +189,67 @@ export function reverseTransformData(json, handleDataChange) {
   }
 
   return { nodes_res, edges_res };
+}
+
+
+export function transformData(users, entreprises) {
+  // Helper function to extract the month name from a date string
+  function getMonthName(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleString('default', { month: 'long' });
+  }
+
+  // Initialize an object to store the counts
+  const countsByMonth = {};
+
+  // Process users
+  users.forEach(user => {
+    const month = getMonthName(user.userRepresentation.createdTimestamp);
+    if (!countsByMonth[month]) {
+      countsByMonth[month] = { month, User: 0, Entreprise: 0 };
+    }
+    countsByMonth[month].User += 1;
+  });
+
+  // Process entreprises
+  entreprises.forEach(entreprise => {
+    const month = getMonthName(entreprise.createdDate);
+    if (!countsByMonth[month]) {
+      countsByMonth[month] = { month, User: 0, Entreprise: 0 };
+    }
+    countsByMonth[month].Entreprise += 1;
+  });
+
+  // Convert the object to an array
+  return Object.values(countsByMonth);
+}
+
+
+
+export function convertToChartDatacircle(customUserObj) {
+  // Initialize the chart data array
+  const chartData = [];
+
+  // Iterate over each user object in the array
+  customUserObj.forEach(customUserObj => {
+    // Extract role information from the customUserObj
+    const role = customUserObj.role;
+
+    // Find if the role already exists in the chart data array
+    const existingRole = chartData.find(item => item.browser === role);
+
+    // If the role exists, increment the visitors count
+    if (existingRole) {
+      existingRole.visitors += 1;
+    } else {
+      // If the role doesn't exist, create a new entry
+      chartData.push({
+        browser: role,
+        visitors: 1,
+        fill: `var(--color-${role})`
+      });
+    }
+  });
+
+  return chartData;
 }

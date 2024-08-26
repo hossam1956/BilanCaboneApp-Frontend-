@@ -3,8 +3,9 @@ import {
     ListChecks,
     Building2,
     UsersRound,
+    LoaderCircle
   } from "lucide-react"
-  
+
   import { Badge } from "@/Components/ui/badge"
   import { Button } from "@/Components/ui/button"
   import {
@@ -38,12 +39,8 @@ const DashboardNonAdmin=()=>{
 
   const [nomEntreprise, setnomEntreprise]=useState();
   const [idEntreprise, setIdEntreprise]=useState();
-  const [nbr_entreprise, set_nbr_entreprise]=useState(0);
 
-  useEffect(()=>{
-    getfacteur();
-    getusers();
-  },[])
+ 
   const getfacteur=()=>{
     apiClient.get(`${API_FACTEUR.Facteur_ALL}`)
       .then(response => response.data)
@@ -77,6 +74,10 @@ const DashboardNonAdmin=()=>{
         });
       });
   };
+  useEffect(()=>{
+    getfacteur();
+    getusers();
+  },[])
   return (
 <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-1">
         <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-2">
@@ -104,7 +105,12 @@ const DashboardNonAdmin=()=>{
         </Card>
         </div>
         <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-        <Chart_dash_DM nomEntreprise={nomEntreprise} idEntreprise={idEntreprise}/>
+       
+        {idEntreprise ? (
+        <Chart_dash_DM nomEntreprise={nomEntreprise} idEntreprise={idEntreprise} />
+        ) : (
+          <LoaderCircle size={60} strokeWidth={2.75} className='animate-spin' />
+        )}
         <Chart_circle_DM/>
         </div>
         <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-2">
