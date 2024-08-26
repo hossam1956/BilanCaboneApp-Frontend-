@@ -22,13 +22,17 @@ const Calendar = () => {
   }
   const getExistDate=async()=>{
     const response=await apiClient.get(`data/dates?IdUtilisateur=${localStorage.getItem('idUser')}`)
-    const dayList = response.data.map(date => date.split('-')[2]);
+    const dayList = response.data.filter(dateStr => {
+      const [year, month, day] = dateStr.split('-').map(Number);
+      return year === today.getFullYear() && month === today.getMonth()+1;
+    })
+    .map(dateStr => dateStr.split('-')[2]);
     setExistDay(dayList)
   }
   useEffect(()=>{
     getExistDate()
     
-  },[])
+  },[selectedDate])
   
   const handleDayClick = (day) => {
     handleFormVisibility()
@@ -36,7 +40,8 @@ const Calendar = () => {
                 setSelectedDate(select)
                 setFormatedDate(new Date(select.getFullYear(),select.getMonth(),select.getDate()+1).toISOString().split('T')[0])
   }
-
+  console.log("==========existDay========")
+  console.log(existDay)
   return (
     <div className="p-4 w-2/3 h-1/2 mx-auto ">
 
