@@ -14,7 +14,6 @@ const EntrepriseForm = () => {
     apiClient.get('entreprises')
       .then(response => {
         console.log("Data fetched successfully:", response.data);
-        // Vous pouvez utiliser les données récupérées ici si nécessaire
       })
       .catch(error => {
         console.error("Error fetching data:", error);

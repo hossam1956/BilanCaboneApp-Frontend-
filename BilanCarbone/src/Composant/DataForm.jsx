@@ -18,7 +18,7 @@ const DataForm=({date,IDs})=>{
             return response.data
         }
         catch(e){
-            console.log("Erreur:"+e)
+            console.error("Erreur:"+e)
         }
     }
     const fetchAndSetFacteurValues = async () => {

@@ -86,7 +86,7 @@ export const FacteurNode = ({ data, isConnectable }) => {
       }
     })
     
-    .catch((e)=>console.log(e))
+    .catch((e)=>console.error(e))
   }
   const handleBlur = (evt) => {
     check_data(evt.target.value);

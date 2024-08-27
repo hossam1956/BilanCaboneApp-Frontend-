@@ -28,7 +28,7 @@ export const TypeNode_Parent_Update = ({ data, isConnectable,editMode }) => {
           setError(null);
         }
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   }, []);
 
   const handleBlur = useCallback((evt) => {

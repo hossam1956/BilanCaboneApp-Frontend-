@@ -8,7 +8,6 @@ export const DownloadChartBar=()=>{
     const ChartBar =useContext(ChartBarCxt)
     const Download=()=>{
         const canvas=ChartBar.current
-        console.log(canvas)
         saveAs(canvas.toDataURL('image/png'),'chartBar.png')
 
     }
@@ -23,7 +22,6 @@ export const DownloadChartCercle=()=>{
     const ChartCerl =useContext(ChartCerlCxt)
     const Download=()=>{
         const canvas=ChartCerl.current
-        console.log(canvas)
         saveAs(canvas.toDataURL('image/png'),'chartCercle.png')
 
     }
@@ -39,7 +37,6 @@ export const DownloadChartLigne=()=>{
     const ChartLigne =useContext(ChartLigneCxt)
     const Download=()=>{
         const canvas=ChartLigne.current
-        console.log(canvas)
         saveAs(canvas.toDataURL('image/png'),'chartLigne.png')
 
     }
