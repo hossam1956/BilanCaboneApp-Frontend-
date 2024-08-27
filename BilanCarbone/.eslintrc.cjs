@@ -18,4 +18,7 @@ module.exports = {
       { allowConstantExport: true },
     ],
   },
+  "rules": {
+    "semi": "off"
+  }
 }

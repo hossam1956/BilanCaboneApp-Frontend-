@@ -12,13 +12,15 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
+import { isAdmin, isMANAGER } from "@/hooks/useUserRole";
 
 const Navbar = () => {
   const [isFacteurOpen, setIsFacteurOpen] = useState(false);
   const [isCustomersOpen, setIsCustomersOpen] = useState(false);
   const [isEntrepriseOpen, setIsEntrepriseOpen] = useState(false);
 
-  const roleUser = sessionStorage.getItem("roleUser");
+  const isAdminUser = isAdmin();
+  const isManagerUser = isMANAGER();
 
   const toggleAccordion = (section) => {
     if (section === "facteur") setIsFacteurOpen(!isFacteurOpen);
@@ -53,8 +55,7 @@ const Navbar = () => {
                 onClick={() => toggleAccordion("facteur")}
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary w-full text-left"
               >
-                <ClipboardList className="h-4 w-4" />
-                Facteur Global
+                <ClipboardList className="h-4 w-4" />{isAdminUser?"Facteur Global":"Facteur personnaliser"}
               </button>
               <AnimatePresence initial={false}>
                 {isFacteurOpen && (
@@ -124,20 +125,25 @@ const Navbar = () => {
                       <List className="h-4 w-4" />
                       Liste des Utilisateurs
                     </Link>
-                    <Link
-                      to="/utilisateur/demandes"
-                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                    >
-                      <Send className="h-4 w-4" />
-                      Liste des demandes
-                    </Link>
+                    {isAdminUser&& (
+                        <Link
+                        to="/utilisateur/demandes"
+                        className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                      >
+                        <Send className="h-4 w-4" />
+                        Liste des demandes
+                      </Link>
+
+                    )}
+                  
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
 
+
             <div>
-              {roleUser !== "MANAGER" && (
+              {!isManagerUser && (
                 <div>
                   <button
                     onClick={() => toggleAccordion("entreprise")}
@@ -183,7 +189,7 @@ const Navbar = () => {
                 </div>
               )}
               
-              {roleUser !== "ADMIN" && (
+              {!isAdminUser && (
                 <Link
                   to="/formulaire"
                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"

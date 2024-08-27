@@ -27,5 +27,13 @@ export const useUserRole = () => {
 
 export const isAdmin = () => {
     const { role } = useUserRole();
-    return role === "ADMIN";
+    return role == "ADMIN";
+  };
+  export const isMANAGER = () => {
+    const { role } = useUserRole();
+    return role == "MANAGER";
+  };
+  export const isRESPONSABLE = () => {
+    const { role } = useUserRole();
+    return role == "RESPONSABLE";
   };

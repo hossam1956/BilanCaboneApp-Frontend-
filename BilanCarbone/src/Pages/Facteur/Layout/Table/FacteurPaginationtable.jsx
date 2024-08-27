@@ -172,6 +172,7 @@ import {
                                 <DropdownMenuItem onClick={() => handleDeactivate(item.id, item.nom_facteur)} className="text-red-950">Désactiver</DropdownMenuItem>
                               ) : (
                                 <DropdownMenuItem onClick={() => handleActivate(item.id)} className="text-green-600">Activer</DropdownMenuItem>
+
                               )}
                               <DropdownMenuItem onClick={() => handleDeleteClick(item)} className="text-red-600">Supprimer</DropdownMenuItem>
                         </DropdownMenuContent>

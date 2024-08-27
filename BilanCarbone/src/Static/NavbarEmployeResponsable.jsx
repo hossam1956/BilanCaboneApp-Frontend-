@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import { isRESPONSABLE } from "@/hooks/useUserRole";
 
 
 const NavbarEmployeResponsable = () => {
@@ -18,7 +19,7 @@ const NavbarEmployeResponsable = () => {
     if (section === "customers") setIsCustomersOpen(!isCustomersOpen);
     if (section === "entreprise") setIsEntrepriseOpen(!isEntrepriseOpen);
   };
-
+  const isRESPONSABLEUser = isRESPONSABLE();
   const accordionVariants = {
     hidden: { height: 0, opacity: 0 },
     visible: { height: "auto", opacity: 1 },
@@ -41,7 +42,7 @@ const NavbarEmployeResponsable = () => {
               <Home className="h-4 w-4" />
               Tableau de bord
             </Link>
-            {(sessionStorage.getItem('roleUser')=="RESPONSABLE")&&(
+            {(isRESPONSABLEUser)&&(
             <Link
               to="/"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
@@ -50,7 +51,7 @@ const NavbarEmployeResponsable = () => {
               Consommation d'entreprise
             </Link>)}
             <Link
-              to="/"
+              to="/formulaire"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
             >
               <CalendarFold className="h-4 w-4" />

@@ -8,3 +8,4 @@ export const NOM_REGEX = /^[a-zA-Z]{2,20}$/;
 
 export const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
+export const NUMBER_REGEX=/^\D*$/;

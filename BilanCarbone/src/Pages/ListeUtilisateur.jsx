@@ -134,7 +134,6 @@ function ListeUtilisateur() {
       const getUserInfo=async(id)=>{
         try{
           const response=await apiClient.get(`/utilisateur/id?ID=${id}`)
-          console.log(response.data)
           setUtilisateurInfo(response.data)
         }
         catch(error){
@@ -164,7 +163,7 @@ function ListeUtilisateur() {
         const rolesData = {};
         const rolesPromises=utilisateurs.flatMap(utilisateur=>getRoleUtilisateur(utilisateur.userRepresentation.id)) 
         const rolesResults=await Promise.all(rolesPromises)
-        rolesResults.forEach((role, index) => {
+          rolesResults.forEach((role, index) => {
             rolesData[utilisateurs[index].userRepresentation.id] = role;
           });
           setRoles(rolesData);
@@ -309,7 +308,7 @@ function ListeUtilisateur() {
                           Status
                         </TableHead>
                         <TableHead>
-                            Action
+                          Action
                         </TableHead>
                       </TableRow>
                     </TableHeader>
@@ -320,7 +319,7 @@ function ListeUtilisateur() {
                         utilisateurs.map 
                         ((utilisateur)=>{
                             const {id,email,lastName,firstName,enabled,username,attributes}=utilisateur.userRepresentation;
-                            const{nomEntreprise}=utilisateur.entreprise
+                            const{nom}=utilisateur.entreprise
                             const role = roles[id];
                             return(
                               
@@ -335,7 +334,7 @@ function ListeUtilisateur() {
                                           {email}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
-                                      {nomEntreprise}
+                                      {nom}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
                                   {role}

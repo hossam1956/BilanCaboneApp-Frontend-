@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Alerts from "@/Composant/Alerts";
 import {validate} from '@/Validation/RegexValidation';
-import { apiClient } from '@/KeycloakConfig/KeycloakConn';
+import { apiClientWithoutToken } from '@/KeycloakConfig/KeycloakConn';
 
 const RegisterPage = () => {
   const navigate=useNavigate()
@@ -28,7 +28,7 @@ const RegisterPage = () => {
   useEffect(() => {
     const getEntreprises = async () => {
       try{
-        const response = await axios.get('http://localhost:8081/api/entreprise');
+        const response = await axios.get('http://localhost:8081/api/entreprises');
       setEntreprises(response.data);
       }
       catch(error){
@@ -62,7 +62,6 @@ const RegisterPage = () => {
         entreprise_id: entreprise,
         password: password
       }
-      console.log(bodyRequest)
       try{
         const sendDemande=async()=>{
           const response=await axios.post('http://localhost:8081/api/demande',bodyRequest)
@@ -213,9 +212,9 @@ const RegisterPage = () => {
               >
                 {
                   entreprises.map((entrepriseInfo)=>{
-                    const {id,nomEntreprise}=entrepriseInfo
+                    const {id,nom}=entrepriseInfo
                     return(
-                      <option key={id} value={`${id}`}>{nomEntreprise}</option>
+                      <option key={id} value={`${id}`}>{nom}</option>
                     )
                   })
                   

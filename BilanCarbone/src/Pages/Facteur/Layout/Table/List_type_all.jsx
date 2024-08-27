@@ -109,11 +109,11 @@ const ListTypeAll = ({
           <TableHeader>
             <TableRow>
               <TableHead className=" text-center	cursor-pointer w-1/6"><span onClick={() => requestSort('name')}>Nom</span> {getIconFor('name')}</TableHead>
-              <TableHead className="text-center	cursor-pointer hidden md:table-cell w-1/6">Type</TableHead>
-              <TableHead className="text-center	cursor-pointer hidden md:table-cell  w-1/6">Parent</TableHead>
-              <TableHead className="text-center	cursor-pointer hidden md:table-cell  w-1/6">Nomber de facteur</TableHead>
-              <TableHead className="text-center	cursor-pointer hidden md:table-cell  w-1/6"><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
-              <TableHead className="text-center	cursor-pointer hidden md:table-cell w-1/4"><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
+              <TableHead className="text-center	cursor-pointer  md:table-cell w-1/6">Type</TableHead>
+              <TableHead className="text-center	cursor-pointer  md:table-cell  w-1/6">Parent</TableHead>
+              <TableHead className="text-center	cursor-pointer  md:table-cell  w-1/6">Nomber de facteur</TableHead>
+              <TableHead className="text-center	cursor-pointer  md:table-cell  w-1/6"><span onClick={() => requestSort('active')}>Activate</span> {getIconFor('active')}</TableHead>
+              <TableHead className="text-center	cursor-pointer  md:table-cell w-1/4"><span onClick={() => requestSort('createdDate')}>Date</span> {getIconFor('createdDate')}</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -131,7 +131,7 @@ const ListTypeAll = ({
             ) : data.content && data.content.length === 0 ? (
               <TableRow>
                 <TableCell colSpan="7" className="text-2xl text-center py-4">
-                  Pas de Facteurs
+                  Pas de type
                 </TableCell>
               </TableRow>
             ) : (
