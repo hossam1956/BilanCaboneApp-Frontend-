@@ -60,7 +60,7 @@ const EntrepriseList = () => {
     const updatedEntreprise = { nom, adresse, type, bloque };
   
     try {
-      const response = await apiClient.put(`entreprises/${editEntrepriseId}`, updatedEntreprise);
+      const response = await  apiClient.put(`entreprises/${editEntrepriseId}`, updatedEntreprise);
   
       if (response.status === 200) {
         setEntreprises(entreprises.map((entreprise) =>
