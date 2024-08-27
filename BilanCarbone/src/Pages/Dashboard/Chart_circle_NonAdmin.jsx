@@ -1,69 +1,65 @@
 "use client"
 
 import * as React from "react"
-import { TrendingUp } from "lucide-react"
 import { Label, Pie, PieChart } from "recharts"
-
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 import {
   ChartContainer,
   ChartTooltip,
-  ChartTooltipContent ,
+  ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
 } from "@/components/ui/chart"
-import { convertToChartDatacircle } from "@/Function/mapper"
+import { DatePickerWithRange } from "./DateRangePicker"
 
 
-const chartConfig = {
-  visitors: {
-    label: "User",
-  },
-  EMPLOYE: {
-    label: "EMPLOYE",
-    color: "hsl(var(--chart-1))",
-  },
-  RESPONSABLE: {
-    label: "RESPONSABLE ",
-    color: "hsl(var(--chart-2))",
-  },
-  MANAGER: {
-    label: "MANAGER",
-    color: "hsl(var(--chart-5))",
-  }
-} 
-
-export function Chart_circle({User}) {
-  const [chartData,setchartData]=React.useState([
-    { browser: "EMPLOYE", visitors: 0, fill: "var(--color-EMPLOYE)" },
-    { browser: "RESPONSABLE", visitors: 0, fill: "var(--color-RESPONSABLE)" },
-    { browser: "MANAGER", visitors: 0, fill: "var(--color-MANAGER)" },
-  ])
-  React.useEffect(()=>{
-    setchartData(convertToChartDatacircle(User))
-  },[User])
-  const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
-  }, [chartData])
+export function Chart_circle_NA({idEntreprise,idUtilisateur}) {
+const role =sessionStorage.getItem("roleUser")
+const [data,setData]=React.useState()
+const [chartData,setchartdata]=React.useState([])
+const [chartConfig,setchartdataconfig]=React.useState({})
+React.useEffect(()=>{
+  setchartdata(data
+    ? Object.entries(data).map(([type, CO2], index) => ({
+        type,
+        CO2,
+        fill: `var(--color-${type})`,
+      }))
+    : [])
+    setchartdataconfig(data
+      ? Object.entries(data).reduce((config, [type, CO2], index) => {
+          config[`${type}`] = {
+            label: `${type}`,
+            color: `hsl(var(--chart-${index + 1}))`,
+          };
+          return config;
+        }, {})
+      : {})
+},[data])
+  
+  console.log(chartData)
+  console.log(chartConfig)
+  const totalEmission=data?chartData.reduce((acc, curr) => acc + curr.CO2, 0):0
 
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Graphique circulaire</CardTitle>
-        <CardDescription>
-        Numéro d’utilisateur dans l’application
-        </CardDescription>
+        <CardTitle>Emission CO2 par Type</CardTitle>
+
+      <DatePickerWithRange idEntreprise={idEntreprise} setData={setData} role={role} idUtilisateur={idUtilisateur}/>
+
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
+          className="mx-auto aspect-square max-h-[300px]"
         >
           <PieChart>
             <ChartTooltip
@@ -72,8 +68,8 @@ export function Chart_circle({User}) {
             />
             <Pie
               data={chartData}
-              dataKey="visitors"
-              nameKey="browser"
+              dataKey="CO2"
+              nameKey="type"
               innerRadius={60}
               strokeWidth={5}
             >
@@ -92,24 +88,25 @@ export function Chart_circle({User}) {
                           y={viewBox.cy}
                           className="fill-foreground text-3xl font-bold"
                         >
-                          {totalVisitors.toLocaleString()}
+                          {totalEmission.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Utilsateur
+                          Emission CO2
                         </tspan>
-                      </text>
+                      </text> 
                     )
                   }
                 }}
               />
             </Pie>
+            
+            
             <ChartLegend
-              content={<ChartLegendContent nameKey="browser" />}
-              className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
+              className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center text-lg"
             />
           </PieChart>
         </ChartContainer>
@@ -117,3 +114,5 @@ export function Chart_circle({User}) {
     </Card>
   )
 }
+
+

@@ -42,6 +42,7 @@ const App = () => {
   if(keycloak.authenticated){
     
     sessionStorage.setItem('token',keycloak.token)
+    sessionStorage.setItem('refresh_token',keycloak.refreshToken)
     const roles=getRolesFromToken(sessionStorage.getItem("token"))
     if(roles.includes("ADMIN")){sessionStorage.setItem('roleUser','ADMIN')}
     else if(roles.includes("MANAGER")){sessionStorage.setItem('roleUser','MANAGER')}

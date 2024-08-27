@@ -196,7 +196,6 @@ const RegisterPage = () => {
                 onChange={handleRoleChange}              
               >
                 <option value="MANAGER">Admin Entreprise(MANAGER)</option>
-                <option value="RESPONSABLE">Responsable</option>
                 <option value="EMPLOYE">Employe</option>
               </select>
             </div>

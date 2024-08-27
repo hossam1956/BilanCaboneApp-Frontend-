@@ -92,7 +92,15 @@ const CalenderForm = ({ onClose, date }) => {
 
         updatedFacteursSelected[userId][date] = updatedFacteursSelected[userId][date].filter(
           (selectedId) => selectedId !== id
-        );
+        );  
+        if (updatedFacteursSelected[userId][date].length === 0) {
+          delete updatedFacteursSelected[userId][date];
+          apiClient.delete(`data?IdFacteur=${id}&IdUtilisateur=${localStorage.getItem("idUser")}&date=${date}`)
+
+      }
+       
+      
+        
       } else {
 
         updatedFacteursSelected[userId][date].push(id);
