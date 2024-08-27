@@ -11,7 +11,7 @@ export function transformData_json(nodes, edges) {
         nom_type: node.data.label,
         types: [],
         facteurs: [],
-        active: true,
+        active: node.data.active,
         id: node.data.id_type
       };
     }
@@ -27,7 +27,7 @@ export function transformData_json(nodes, edges) {
             nom_type: node.data.label,
             types: [],
             facteurs: [],
-            active: true,
+            active: node.data.active,
             id: node.data.id_type || null
           });
         }
@@ -47,7 +47,9 @@ export function transformData_json(nodes, edges) {
           if (parentType.type === 'Type_child') {
             grandparentTypeId = edges.find(edge => edge.target === parentTypeId)?.source;
             let child_node=nodes.find(file=>file.id==parentTypeId)
-            childType = typeMap[grandparentTypeId].types.find(file => file.nom_type === child_node.data.label);
+            
+            childType = typeMap[grandparentTypeId]?.types.find(file => file.nom_type === child_node.data.label);
+
 
           }
           if (childType) {
@@ -55,7 +57,7 @@ export function transformData_json(nodes, edges) {
               nom_facteur: node.data.nom,
               unit: node.data.type,
               emissionFactor: node.data.facteur_emission,
-              active: true,
+              active: node.data.active,
               id: node.data.id_facteur || null
             });
           }
@@ -68,7 +70,8 @@ export function transformData_json(nodes, edges) {
   return transformToRequestFormat(Object.values(typeMap));
 }
 const transformToRequestFormat = (data) => {
-  return data.map(type => ({
+  return data
+  .map(type => ({
     nom_type: type.nom_type,
     types: type.types ? transformToRequestFormat(type.types) : [],
     facteurs: type.facteurs.map(facteur => ({
@@ -192,40 +195,6 @@ export function reverseTransformData(json, handleDataChange) {
 }
 
 
-export function transformData(users, entreprises) {
-  // Helper function to extract the month name from a date string
-  function getMonthName(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleString('default', { month: 'long' });
-  }
-
-  // Initialize an object to store the counts
-  const countsByMonth = {};
-
-  // Process users
-  users.forEach(user => {
-    const month = getMonthName(user.userRepresentation.createdTimestamp);
-    if (!countsByMonth[month]) {
-      countsByMonth[month] = { month, User: 0, Entreprise: 0 };
-    }
-    countsByMonth[month].User += 1;
-  });
-
-  // Process entreprises
-  entreprises.forEach(entreprise => {
-    const month = getMonthName(entreprise.createdDate);
-    if (!countsByMonth[month]) {
-      countsByMonth[month] = { month, User: 0, Entreprise: 0 };
-    }
-    countsByMonth[month].Entreprise += 1;
-  });
-
-  // Convert the object to an array
-  return Object.values(countsByMonth);
-}
-
-
-
 export function convertToChartDatacircle(customUserObj) {
   // Initialize the chart data array
   const chartData = [];
@@ -250,6 +219,72 @@ export function convertToChartDatacircle(customUserObj) {
       });
     }
   });
+
+  return chartData;
+}
+export function filterChartData(chartData, days = null, startDate = null, endDate = null) {
+  let cutoffDate = null;
+  const today = new Date();
+
+  if (days !== null) {
+    // Calculate the cutoff date based on the selected number of days
+    cutoffDate = new Date(today.setDate(today.getDate() - days));
+  }
+
+  // Convert startDate and endDate to Date objects if provided
+  const start = startDate ? new Date(startDate) : null;
+  const end = endDate ? new Date(endDate) : today;
+
+  return chartData.filter(data => {
+    const dataDate = new Date(data.date);
+
+    // If days is provided, filter by days; otherwise, filter by the date range
+    if (days !== null) {
+      return dataDate >= cutoffDate;
+    } else if (start && end) {
+      return dataDate >= start && dataDate <= end;
+    }
+    return false;
+  });
+}
+
+
+
+export function convertDatatochart(entr, userData) {
+  // Step 1: Create a map to aggregate `entreprise` data
+  const entrepriseMap = new Map();
+  entr.forEach(entry => {
+    const date = entry.createdDate.split('T')[0]; // Extract date part from createdDate
+    if (!entrepriseMap.has(date)) {
+      entrepriseMap.set(date, { entreprise: 0, User: 0 });
+    }
+    entrepriseMap.get(date).entreprise += 1; // Increment the count
+  });
+
+  // Step 2: Create a map to aggregate `User` data
+  const userMap = new Map();
+  userData.forEach(user => {
+    const date = new Date(user.customUserRepresentation.userRepresentation.createdTimestamp).toISOString().split('T')[0];
+    if (!userMap.has(date)) {
+      userMap.set(date, { entreprise: 0, User: 0 });
+    }
+    userMap.get(date).User += 1; // Increment the count
+  });
+
+  // Step 3: Combine the maps into the final chartData array
+  const chartData = [];
+  const allDates = new Set([...entrepriseMap.keys(), ...userMap.keys()]);
+  
+  allDates.forEach(date => {
+    chartData.push({
+      date: date,
+      entreprise: entrepriseMap.has(date) ? entrepriseMap.get(date).entreprise : 0,
+      User: userMap.has(date) ? userMap.get(date).User : 0
+    });
+  });
+
+  // Sort by date if needed
+  chartData.sort((a, b) => new Date(a.date) - new Date(b.date));
 
   return chartData;
 }

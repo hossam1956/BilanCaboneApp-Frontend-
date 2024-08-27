@@ -47,10 +47,11 @@ export function Chart_circle({User}) {
   ])
   React.useEffect(()=>{
     setchartData(convertToChartDatacircle(User))
-},[User])
+  },[User])
   const totalVisitors = React.useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
   }, [chartData])
+
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
