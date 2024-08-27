@@ -1,9 +1,11 @@
 import * as React from "react"
 import Calendar from "@/Composant/Calendar"
 import NoAutorisePage from "./NoAutorisePage"
+import { isAdmin } from "@/hooks/useUserRole"
 const FormulaireEmloye=()=>{
+    const isAdminuser=isAdmin()
 return (
-    (sessionStorage.getItem("roleUser")!="ADMIN")?( <Calendar/>):<NoAutorisePage/>
+    (!isAdmin)?( <Calendar/>):<NoAutorisePage/>
 ) 
 }
 export default FormulaireEmloye

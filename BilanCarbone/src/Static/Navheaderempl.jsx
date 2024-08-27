@@ -32,7 +32,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/Components/ui/sheet";
 import { Link } from "react-router-dom";
 import keycloak from "@/KeycloakConfig/keycloak";
 import { SearchContext } from "./SearchProvider";
-import { isRESPONSABLE } from "@/hooks/useUserRole";
+import { isAdmin, isRESPONSABLE } from "@/hooks/useUserRole";
 
 
 const Navheaderempl = () => {
@@ -40,7 +40,6 @@ const Navheaderempl = () => {
   const [isFacteurOpen, setIsFacteurOpen] = useState(false);
   const [isCustomersOpen, setIsCustomersOpen] = useState(false);
   const [isEntrepriseOpen, setIsEntrepriseOpen] = useState(false);
-  const roleUser = sessionStorage.getItem("roleUser");
   
   const toggleAccordion = (section) => {
     if (section === "facteur") setIsFacteurOpen(!isFacteurOpen);
@@ -48,7 +47,7 @@ const Navheaderempl = () => {
     if (section === "entreprise") setIsEntrepriseOpen(!isEntrepriseOpen);
   };
   const isRESPONSABLEUser = isRESPONSABLE();
-
+  const isAdminuser =isAdmin()
   const accordionVariants = {
     hidden: { height: 0, opacity: 0 },
     visible: { height: "auto", opacity: 1 },
@@ -108,7 +107,7 @@ const Navheaderempl = () => {
         <DropdownMenuContent align="end">
             <DropdownMenuLabel>{keycloak.tokenParsed.preferred_username}</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {(sessionStorage.getItem("roleUser")!="ADMIN")&&
+            {(!isAdminuser)&&
             <DropdownMenuItem onClick={()=>{navigate("parameter")}}>Profile</DropdownMenuItem>}
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={()=>{keycloak.logout();sessionStorage.setItem('token', undefined);}}>Logout</DropdownMenuItem>
