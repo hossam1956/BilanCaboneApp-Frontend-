@@ -22,6 +22,7 @@ import Page404 from './Pages/error/Page404';
 import { getRolesFromToken } from './KeycloakConfig/UserRole';
 import NoAutorisePage from './Pages/NoAutorisePage';
 import FormulaireEmloye from './Pages/FormulaireEmploye';
+import DeletedEntrepriseList from './Pages/Entreprise/DeletedEntrepriseList';
 
 
 
@@ -127,7 +128,12 @@ const App = () => {
               path: "ajouter",
               element:(sessionStorage.getItem("roleUser")=="ADMIN")?<EntrepriseForm/>:<NoAutorisePage/>
               
-            },            
+            },
+            {
+              path: "trash",
+              element: (sessionStorage.getItem("roleUser") == "ADMIN") ? <DeletedEntrepriseList/> : <NoAutorisePage />
+
+            }            
           ]
           }
       ],

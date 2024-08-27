@@ -170,6 +170,13 @@ const Navbar = () => {
                           <List className="h-4 w-4" />
                           List Entreprise
                         </Link>
+                        <Link
+                      to="/entreprise/trash"
+                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      Déchets
+                    </Link>
                       </motion.div>
                     )}
                   </AnimatePresence>
