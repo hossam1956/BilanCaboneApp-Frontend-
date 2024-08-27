@@ -1,9 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { TrendingUp } from "lucide-react"
 import { Label, Pie, PieChart } from "recharts"
-
 import {
   Card,
   CardContent,
@@ -16,56 +14,52 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
 } from "@/components/ui/chart"
-const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 190, fill: "var(--color-other)" },
-]
+import { DatePickerWithRange } from "./DateRangePicker"
 
-const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  chrome: {
-    label: "Chrome",
-    color: "hsl(var(--chart-1))",
-  },
-  safari: {
-    label: "Safari",
-    color: "hsl(var(--chart-2))",
-  },
-  firefox: {
-    label: "Firefox",
-    color: "hsl(var(--chart-3))",
-  },
-  edge: {
-    label: "Edge",
-    color: "hsl(var(--chart-4))",
-  },
-  other: {
-    label: "Other",
-    color: "hsl(var(--chart-5))",
-  },
-} 
 
-export function Chart_circle_DM() {
-  const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
-  }, [])
+export function Chart_circle_NA({idEntreprise,idUtilisateur}) {
+const role =sessionStorage.getItem("roleUser")
+const [data,setData]=React.useState()
+const [chartData,setchartdata]=React.useState([])
+const [chartConfig,setchartdataconfig]=React.useState({})
+React.useEffect(()=>{
+  setchartdata(data
+    ? Object.entries(data).map(([type, CO2], index) => ({
+        type,
+        CO2,
+        fill: `var(--color-${type})`,
+      }))
+    : [])
+    setchartdataconfig(data
+      ? Object.entries(data).reduce((config, [type, CO2], index) => {
+          config[`${type}`] = {
+            label: `${type}`,
+            color: `hsl(var(--chart-${index + 1}))`,
+          };
+          return config;
+        }, {})
+      : {})
+},[data])
+  
+  console.log(chartData)
+  console.log(chartConfig)
+  const totalEmission=data?chartData.reduce((acc, curr) => acc + curr.CO2, 0):0
 
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart - Donut with Text</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Emission CO2 par Type</CardTitle>
+
+      <DatePickerWithRange idEntreprise={idEntreprise} setData={setData} role={role} idUtilisateur={idUtilisateur}/>
+
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
+          className="mx-auto aspect-square max-h-[300px]"
         >
           <PieChart>
             <ChartTooltip
@@ -74,8 +68,8 @@ export function Chart_circle_DM() {
             />
             <Pie
               data={chartData}
-              dataKey="visitors"
-              nameKey="browser"
+              dataKey="CO2"
+              nameKey="type"
               innerRadius={60}
               strokeWidth={5}
             >
@@ -94,32 +88,31 @@ export function Chart_circle_DM() {
                           y={viewBox.cy}
                           className="fill-foreground text-3xl font-bold"
                         >
-                          {totalVisitors.toLocaleString()}
+                          {totalEmission.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Visitors
+                          Emission CO2
                         </tspan>
-                      </text>
+                      </text> 
                     )
                   }
                 }}
               />
             </Pie>
+            
+            
+            <ChartLegend
+              className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center text-lg"
+            />
           </PieChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
-        </div>
-      </CardFooter>
     </Card>
   )
 }
+
+
