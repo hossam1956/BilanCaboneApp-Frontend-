@@ -12,6 +12,7 @@ import {
  
 import { Button } from '@/Components/ui/button';
 import { ArchiveRestore } from 'lucide-react';
+import { apiClient } from '@/KeycloakConfig/KeycloakConn';
 
 const DeletedEntrepriseList = () => {
     const [deletedEntreprises, setDeletedEntreprises] = useState([]);
@@ -19,7 +20,7 @@ const DeletedEntrepriseList = () => {
     useEffect(() => {
         const fetchDeletedEntreprises = async () => {
             try {
-                const response = await axios.get('http://localhost:8081/api/entreprises/deleted');
+                const response = await apiClient.get('/entreprises/deleted');
                 const sortedEntreprises = response.data.sort((a, b) => a.nom.localeCompare(b.nom));
                 setDeletedEntreprises(sortedEntreprises);
             } catch (error) {
@@ -32,7 +33,7 @@ const DeletedEntrepriseList = () => {
 
     const restoreEntreprise = async (id) => {
         try {
-            await axios.put(`http://localhost:8081/api/entreprises/${id}/restore`);
+            await apiClient.put(`/entreprises/${id}/restore`);
             setDeletedEntreprises(deletedEntreprises.filter((entreprise) => entreprise.id !== id));
         } catch (error) {
             console.error('Erreur lors de la restauration de l\'entreprise:', error);
