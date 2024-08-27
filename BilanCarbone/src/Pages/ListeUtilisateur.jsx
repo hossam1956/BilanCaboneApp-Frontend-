@@ -134,7 +134,6 @@ function ListeUtilisateur() {
       const getUserInfo=async(id)=>{
         try{
           const response=await apiClient.get(`/utilisateur/id?ID=${id}`)
-          console.log(response.data)
           setUtilisateurInfo(response.data)
         }
         catch(error){

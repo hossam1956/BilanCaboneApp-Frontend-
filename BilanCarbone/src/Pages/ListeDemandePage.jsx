@@ -283,7 +283,7 @@ function ListDemandePage() {
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                       <AlertDialogCancel>Annuler</AlertDialogCancel>
-                                      <AlertDialogAction className="bg-black hover:bg-red-600" onClick={()=>{setcurrentId(parseInt(id));console.log(currentId)}}>Refuser</AlertDialogAction>
+                                      <AlertDialogAction className="bg-black hover:bg-red-600" onClick={()=>{setcurrentId(parseInt(id));}}>Refuser</AlertDialogAction>
                                     </AlertDialogFooter>
                                   </AlertDialogContent>
                                 </AlertDialog>                                

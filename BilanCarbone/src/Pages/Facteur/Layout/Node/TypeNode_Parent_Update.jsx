@@ -28,7 +28,7 @@ export const TypeNode_Parent_Update = ({ data, isConnectable,editMode }) => {
           setError(null);
         }
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   }, []);
 
   const handleBlur = useCallback((evt) => {
@@ -42,7 +42,6 @@ export const TypeNode_Parent_Update = ({ data, isConnectable,editMode }) => {
           placeholder="Type"
           value={data.label}
           onChange={onChange}
-          onBlur={handleBlur}
           className={error ? 'border-red-500' : ''}
           disabled={!data.editMode}
         />

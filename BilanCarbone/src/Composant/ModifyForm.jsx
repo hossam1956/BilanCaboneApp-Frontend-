@@ -61,7 +61,6 @@ const ModifyForm=({onClose,UtilisateurInfo,UtilisateurRole})=>{
         role : role,
         entreprise_id:entreprise
         }
-      console.log(bodyRequest)
       const update=async()=>{
         const response=await apiClient.put(`/utilisateur?ID=${UtilisateurInfo.userRepresentation.id}`,bodyRequest)
         setAlert(true)

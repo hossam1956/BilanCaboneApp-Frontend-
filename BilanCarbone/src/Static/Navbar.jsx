@@ -11,13 +11,16 @@ import {
   Trash2,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
-
+import { Link } from "react-router-dom";
+import { isAdmin, isMANAGER } from "@/hooks/useUserRole";
 
 const Navbar = () => {
   const [isFacteurOpen, setIsFacteurOpen] = useState(false);
   const [isCustomersOpen, setIsCustomersOpen] = useState(false);
   const [isEntrepriseOpen, setIsEntrepriseOpen] = useState(false);
+
+  const isAdminUser = isAdmin();
+  const isManagerUser = isMANAGER();
 
   const toggleAccordion = (section) => {
     if (section === "facteur") setIsFacteurOpen(!isFacteurOpen);
@@ -52,8 +55,7 @@ const Navbar = () => {
                 onClick={() => toggleAccordion("facteur")}
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary w-full text-left"
               >
-                <ClipboardList className="h-4 w-4" />
-                Facteur Global
+                <ClipboardList className="h-4 w-4" />{isAdminUser?"Facteur Global":"Facteur personnaliser"}
               </button>
               <AnimatePresence initial={false}>
                 {isFacteurOpen && (
@@ -123,13 +125,17 @@ const Navbar = () => {
                       <List className="h-4 w-4" />
                       Liste des Utilisateurs
                     </Link>
-                    <Link
-                      to="/utilisateur/demandes"
-                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                    >
-                      <Send className="h-4 w-4" />
-                      Liste des demandes
-                    </Link>
+                    {isAdminUser&& (
+                        <Link
+                        to="/utilisateur/demandes"
+                        className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                      >
+                        <Send className="h-4 w-4" />
+                        Liste des demandes
+                      </Link>
+
+                    )}
+                  
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -137,13 +143,12 @@ const Navbar = () => {
 
 
             <div>
-              {(sessionStorage.getItem("roleUser")!="MANAGER")&&
-                (
+              {!isManagerUser && (
                 <div>
                   <button
-                  onClick={() => toggleAccordion("entreprise")}
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary w-full text-left"
-                      >   
+                    onClick={() => toggleAccordion("entreprise")}
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary w-full text-left"
+                  >
                     <Building2 className="h-4 w-4" />
                     Entreprise
                   </button>
@@ -158,11 +163,11 @@ const Navbar = () => {
                         className="pl-6 mt-2 overflow-hidden"
                       >
                         <Link
-                          to="/entreprise/add" // Example path
+                          to="/entreprise/ajouter"
                           className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                         >
                           <PlusCircle className="h-4 w-4" />
-                          ajouter Entreprise
+                          Ajouter Entreprise
                         </Link>
                         <Link
                           to="/entreprise"
@@ -172,29 +177,27 @@ const Navbar = () => {
                           List Entreprise
                         </Link>
                         <Link
-                          to="/entreprise/trash" // Example path
-                          className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                          déchets
-                        </Link>
+                      to="/entreprise/trash"
+                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      Déchets
+                    </Link>
                       </motion.div>
                     )}
                   </AnimatePresence>
                 </div>
-                )
-              }
+              )}
               
-              {(sessionStorage.getItem("roleUser")!="ADMIN")&&
-               <Link
-               to="/formulaire"
-               className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-             >
-               <CalendarFold className="h-4 w-4" />
-               Formulaire
-             </Link>
-              }
-             
+              {!isAdminUser && (
+                <Link
+                  to="/formulaire"
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                >
+                  <CalendarFold className="h-4 w-4" />
+                  Formulaire
+                </Link>
+              )}
             </div>
           </nav>
         </div>
