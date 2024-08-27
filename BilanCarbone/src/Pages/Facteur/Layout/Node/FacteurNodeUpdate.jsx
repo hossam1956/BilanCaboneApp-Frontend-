@@ -44,7 +44,7 @@ export const FacteurNodeUpdate = ({ data, isConnectable }) => {
           setErrorinput(null);
         }
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   }, []);
 
   const handleBlur = useCallback((event) => {

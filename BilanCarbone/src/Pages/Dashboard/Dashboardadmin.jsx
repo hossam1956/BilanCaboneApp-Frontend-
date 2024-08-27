@@ -79,8 +79,6 @@ const Dashboardadmin = () => {
     apiClient.get(`/entreprises`)
       .then(response => response.data)
       .then(data => {
-        console.log(data)
-        // Adjust the slice method according to your needs
         setentreprise(data.slice(0, 5)); // Example: limit to 10 items
         set_nbr_entreprise(data.length);
       })
@@ -96,8 +94,6 @@ const Dashboardadmin = () => {
     apiClient.get(`/utilisateur/list`)
       .then(response => response.data)
       .then(data => {
-        console.log(data)
-        // Adjust the slice method according to your needs
         set_nbr_user(data.length)
         setuser(data.slice(0,5))
       })

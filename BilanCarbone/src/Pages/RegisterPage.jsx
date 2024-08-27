@@ -62,7 +62,6 @@ const RegisterPage = () => {
         entreprise_id: entreprise,
         password: password
       }
-      console.log(bodyRequest)
       try{
         const sendDemande=async()=>{
           const response=await axios.post('http://localhost:8081/api/demande',bodyRequest)
