@@ -155,7 +155,7 @@ function ListDemandePage() {
       if (problemAlert) {
         const timer = setTimeout(() => {
           setProblemAlert(false);
-        }, 3000);
+        }, 4000);
   
         return () => {clearTimeout(timer)}
       }
@@ -370,7 +370,7 @@ function ListDemandePage() {
           </Tabs>    
         </main>
       </div>
-     <Alerts alert={alert} alertProblem={problemAlert} titre_succes={"Demande Acceptée"} message_succes={"Demande Acceptée avec succès" } message_erreur={`Une erreur est survenue lors de traitement de la demande \n ->Peut être un compte manager existant pour cette entreprise. \n ->Peut être ce username déja existant `
+     <Alerts alert={alert} alertProblem={problemAlert} titre_succes={"Demande Acceptée"} message_succes={"Demande Acceptée avec succès" } message_erreur={`Une erreur est survenue lors de traitement de la demande  \n ->Peut être un compte manager existant pour cette entreprise. \n ->Peut être ce username déja existant \n ->Peut être un manager pour cette entreprise est déja existant `
       .split('\n')
       .map((line, index) => (
         <React.Fragment key={index}>

@@ -37,11 +37,11 @@ const DashboardMANAGER=()=>{
   const [nbr_facteur,set_nbr_facteur]=useState(0)
   const [user,setUser]=useState([]);
   const [nbr_user,set_nbr_user]=useState(0);
-
+  const [nbr_demande,set_nbr_demande]=useState(0);
   const [nomEntreprise, setnomEntreprise]=useState();
   const [idEntreprise, setIdEntreprise]=useState();
 
- 
+  
   const getfacteur=()=>{
     apiClient.get(`${API_FACTEUR.Facteur_ALL}`)
       .then(response => response.data)
@@ -75,13 +75,29 @@ const DashboardMANAGER=()=>{
         });
       });
   };
+  const getdemande =()=>{
+    //
+    apiClient.get(`/demande`)
+      .then(response => response.data)
+      .then(data => {
+        set_nbr_demande(data.totalElements)
+     })
+      .catch(error => {
+        console.error("Error fetching data:", error);
+        const currentdate = new Date();
+        toast.error('Problème de chargement des données', {
+          description: `${currentdate.getDate()}/${currentdate.getMonth() + 1}/${currentdate.getFullYear()} - - - ${currentdate.getHours()}:${currentdate.getMinutes()}:${currentdate.getSeconds()}`,
+        });
+      });
+  }
   useEffect(()=>{
     getfacteur();
     getusers();
+    getdemande();
   },[])
   return (
 <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-1">
-        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
         <Card className="" style={{ boxShadow: '0px 1px 20px 5px #e5f1f7' }}>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -104,6 +120,17 @@ const DashboardMANAGER=()=>{
             <div className="text-2xl font-bold">{nbr_user}</div>
             </CardContent>
         </Card>
+        <Card className="" style={{ boxShadow: '0px 1px 20px 5px #ffdbb4' }}>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">
+          nombre de Demandes
+          </CardTitle>
+          <ListChecks  className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+          <div className="text-2xl font-bold">{nbr_demande}</div>
+          </CardContent>
+      </Card>
         </div>
        
        
