@@ -41,7 +41,7 @@ const DashboardEMPLOYE=({idUtilisateur,nomUtilisateur})=>{
         const data=response.data
         const today = new Date();
         const currentYearMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
-        const filteredData = Object.keys(data).filter(date => date.startsWith(currentYearMonth));
+        const filteredData = data.filter(date => (date.startsWith(currentYearMonth)));
         const number=Object.keys(filteredData).length
         setNbDaysUserAnswer(number) 
     }
