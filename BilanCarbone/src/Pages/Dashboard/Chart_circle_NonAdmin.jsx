@@ -44,8 +44,6 @@ React.useEffect(()=>{
       : {})
 },[data])
   
-  console.log(chartData)
-  console.log(chartConfig)
   const totalEmission=data?chartData.reduce((acc, curr) => acc + curr.CO2, 0):0
 
   return (

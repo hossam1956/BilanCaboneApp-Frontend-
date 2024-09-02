@@ -29,7 +29,10 @@ const CalenderForm = ({ onClose, date }) => {
   const [facteurs, setFacteurs] = useState([]);
   const [facteursSelected, setFacteursSelected] = useState({});
   const [isOn,setIsOn]=useState(false)
-  
+  //This map provide the number of factor of each parent type
+  const [resultMap,setResultMap]=useState(() => new Map())
+  //This set help to provide one button to add the factors that are related directly with parent type
+  const [renderedButtons, setRenderedButtons] = useState(new Set());
   useEffect(() => {
     fetchType();
     const storedData = JSON.parse(localStorage.getItem("dataMaps")) || {};
@@ -55,6 +58,27 @@ const CalenderForm = ({ onClose, date }) => {
       console.error("Error fetching types: " + e);
     }
   };
+  
+  const checkIfParentTypeHasFacteur = async (index) => {
+      try {
+          const response = await apiClient.get(`/facteur/all?parent=${index}`);
+          const length = Object.keys(response.data).length;
+          setResultMap(prevMap => {
+            const newMap = new Map(prevMap);
+            newMap.set(index,length!=0);
+            return newMap;
+        });
+      } catch (error) {
+          console.error(`Error fetching data for index ${index}:`, error);
+          resultMap.set(index, 0);
+      }
+  };
+
+  useEffect(() => {
+    types.forEach(type => {
+        checkIfParentTypeHasFacteur(type.id);
+    });
+  }, [types]);
 
   const fetchFacteur = async (index) => {
     try {
@@ -98,9 +122,7 @@ const CalenderForm = ({ onClose, date }) => {
           apiClient.delete(`data?IdFacteur=${id}&IdUtilisateur=${localStorage.getItem("idUser")}&date=${date}`)
 
       }
-       
-      
-        
+ 
       } else {
 
         updatedFacteursSelected[userId][date].push(id);
@@ -111,9 +133,70 @@ const CalenderForm = ({ onClose, date }) => {
       return updatedFacteursSelected;
     });
   };
-              
-          
-              
+  
+  const renderButtonForType = (type) => {
+    
+    if (!renderedButtons.has(type.id) && resultMap.get(type.id) !== undefined) {
+      if (resultMap.get(type.id)) {
+        
+        setRenderedButtons(prev => new Set(prev).add(type.id));
+        console.log("render "+type.nom_type)
+        
+        return (
+        <div
+          key={type.id}
+          className="rounded-md border px-4 py-3 font-mono text-sm w-full text-center flex justify-between"
+        >
+          <div className="flex flex-col">
+            Ajouter un facteur de {type.nom_type}
+          </div>
+          <Dialog>
+            <DialogTrigger asChild>
+              <button
+                onClick={() => {
+                  fetchFacteur(type.id);
+                }}
+                className="border border-solid bg-black text-white text-xs rounded-full h-fit"
+              >
+                <Plus />
+              </button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>{type.nom_type}</DialogTitle>
+                <DialogDescription>
+                  Vous pouvez ajouter des facteurs
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                {facteurs.map((facteur, index) => (
+                  <div key={index} className="flex justify-between">
+                    <input
+                      type="checkbox"
+                      id={`${index}`}
+                      className="mt-1 mx-2 w-6 h-6 checked:bg-black"
+                      onChange={() => handleCheckboxChange(facteur.id)}
+                      checked={
+                        facteursSelected[localStorage.getItem("idUser")]?.[date]?.includes(facteur.id) || false
+                      }
+                    />
+                    <label htmlFor={`${index}`} className="text-xl w-full">
+                      {facteur.nom_facteur}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
+        );
+      }
+    }
+    return null;
+  };
+  
+
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg relative w-1/2 h-fit">
@@ -162,6 +245,7 @@ const CalenderForm = ({ onClose, date }) => {
             </div>
             <div>
               {types.map((type, index) => (
+                
                 <Collapsible
                   key={index}
                   open={!!isOpen[index]}
@@ -181,60 +265,65 @@ const CalenderForm = ({ onClose, date }) => {
                     {
                     type.files ?  
                     type.files.map((file, index) => (
-                      <div
-                        key={index}
-                        className="rounded-md border px-4 py-3 font-mono text-sm w-full text-center flex justify-between"
-                      >
-                        <div className="flex flex-col">{file.nom_type}</div>
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <button
-                              onClick={() => {
-                                fetchFacteur(file.id);
-                              }}
-                              className="border border-solid bg-black text-white text-xs rounded-full h-fit"
-                            >
-                              <Plus />
-                            </button>
-                          </DialogTrigger>
-                          <DialogContent className="sm:max-w-[425px]">
-                            <DialogHeader>
-                              <DialogTitle>{file.nom_type}</DialogTitle>
-                              <DialogDescription>
-                                Vous pouvez ajouter des facteurs
-                              </DialogDescription>
-                            </DialogHeader>
-                            <div className="grid gap-4 py-4">
-                              {facteurs.map((facteur, index) => (
-                                <div
-                                  key={index}
-                                  className="flex justify-between"
-                                >
-                                  <input
-                                    type="checkbox"
-                                    id={`${index}`}
-                                    className="mt-1 mx-2 w-6 h-6 checked:bg-black"
-                                    onChange={() =>
-                                      handleCheckboxChange(facteur.id)
-                                    }
-                                    checked={
-                                      facteursSelected[localStorage.getItem(
-                                        "idUser"
-                                      )]?.[date]?.includes(facteur.id) || false
-                                    }
-                                  />
-                                  <label
-                                    htmlFor={`${index}`}
-                                    className="text-xl w-full"
+                      <div key={index}>
+                        <div
+                          className="rounded-md border px-4 py-3 font-mono text-sm w-full text-center flex justify-between"
+                        >
+                          <div className="flex flex-col">{file.nom_type}</div>
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <button
+                                onClick={() => {
+                                  fetchFacteur(file.id);
+                                }}
+                                className="border border-solid bg-black text-white text-xs rounded-full h-fit"
+                              >
+                                <Plus />
+                              </button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[425px]">
+                              <DialogHeader>
+                                <DialogTitle>{file.nom_type}</DialogTitle>
+                                <DialogDescription>
+                                  Vous pouvez ajouter des facteurs
+                                </DialogDescription>
+                              </DialogHeader>
+                              <div className="grid gap-4 py-4">
+                                {facteurs.map((facteur, index) => (
+                                  <div
+                                    key={index}
+                                    className="flex justify-between"
                                   >
-                                    {facteur.nom_facteur}
-                                  </label>
+                                    <input
+                                      type="checkbox"
+                                      id={`${index}`}
+                                      className="mt-1 mx-2 w-6 h-6 checked:bg-black"
+                                      onChange={() =>
+                                        handleCheckboxChange(facteur.id)
+                                      }
+                                      checked={
+                                        facteursSelected[localStorage.getItem(
+                                          "idUser"
+                                        )]?.[date]?.includes(facteur.id) || false
+                                      }
+                                    />
+                                    <label
+                                      htmlFor={`${index}`}
+                                      className="text-xl w-full"
+                                    >
+                                      {facteur.nom_facteur}
+                                    </label>
+                                    
+                                  </div>
                                   
-                                </div>
-                              ))}
-                            </div>
-                          </DialogContent>
-                        </Dialog>
+                                ))}
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                        </div>
+                        {
+                         (resultMap.get(type.id))&&(renderButtonForType(type))
+                        } 
                       </div>
                     ))
                     :

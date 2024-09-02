@@ -40,8 +40,6 @@ const Calendar = () => {
                 setSelectedDate(select)
                 setFormatedDate(new Date(select.getFullYear(),select.getMonth(),select.getDate()+1).toISOString().split('T')[0])
   }
-  console.log("==========existDay========")
-  console.log(existDay)
   return (
     <div className="p-4 w-2/3 h-1/2 mx-auto ">
 
@@ -58,12 +56,14 @@ const Calendar = () => {
         {Array.from({ length: startDayOfWeek }).map((_, i) => (
           <div key={`empty-${i}`} />
         ))}
-        {daysArray.map((day) => (
-          <button
+        {daysArray.map((day) => {
+          console.log(day);
+          return(
+            <button
             disabled={day > today.getDate()}
             key={day}
             className={
-            (existDay.includes(`${day}`))?` ${
+            (existDay.includes(`${day}`)|| existDay.includes(`0${day}`)) ?` ${
               (day === selectedDate.getDate()) ?'bg-green-950 text-white text-2xl px-2 py-5 rounded-full'
               : 'bg-green-500 text-white text-2xl px-2 py-5 rounded-full'
               }`
@@ -71,11 +71,12 @@ const Calendar = () => {
               `text-2xl px-2 py-5 rounded-full ${
               day === selectedDate.getDate() && 'bg-black text-white' 
               } ${day > today.getDate() && 'bg-gray-500 hover:bg-gray-500 '}`}
-            onClick={() => handleDayClick(day)}
+              onClick={() => handleDayClick(day)}
           >
             {day}
           </button>
-        ))}
+          )
+      })}
       </div>
     </div>
   );

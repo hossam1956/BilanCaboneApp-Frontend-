@@ -125,7 +125,7 @@ const Navbar = () => {
                       <List className="h-4 w-4" />
                       Liste des Utilisateurs
                     </Link>
-                    {isAdminUser&& (
+                    
                         <Link
                         to="/utilisateur/demandes"
                         className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
@@ -134,7 +134,7 @@ const Navbar = () => {
                         Liste des demandes
                       </Link>
 
-                    )}
+                    
                   
                   </motion.div>
                 )}
