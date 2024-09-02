@@ -38,7 +38,11 @@ const DashboardEMPLOYE=({idUtilisateur,nomUtilisateur})=>{
     const [nbDaysUserAnswer,setNbDaysUserAnswer]=useState()
     const NumberOfDaysThatUserAnswer=async()=>{
         const response= await apiClient.get(`data/dates?IdUtilisateur=${idUtilisateur}`)
-        const number=Object.keys(response.data).length
+        const data=response.data
+        const today = new Date();
+        const currentYearMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
+        const filteredData = Object.keys(data).filter(date => date.startsWith(currentYearMonth));
+        const number=Object.keys(filteredData).length
         setNbDaysUserAnswer(number) 
     }
     NumberOfDaysThatUserAnswer()
